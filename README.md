@@ -5,9 +5,27 @@
 ## Monorepo layout
 
 - frontend/ — Next.js app (Demo Tour mode), Storybook, tests, CI.
-- scripts/, docs/, etc. — Repo-level utilities and documentation.
+- scripts/ — Developer utilities, analyzers, and test scripts
+  - scripts/data — Input/output JSON produced by scripts
+  - scripts/results — Test run outputs
+- docs/ — Documentation
 
 For Demo Tour mode, setup, and local development details, see frontend/README.md.
+
+## Branching and CI
+
+- Branches
+  - main (production): locked down. Requires PR, 1 approval, and passing CI.
+  - staging (pre-prod): PRs required, 0 approvals, passing CI required.
+  - dev (integration): open. Feature PRs target dev.
+- Flow
+  - feature/* -> PR -> dev
+  - dev -> PR -> staging (CI must pass)
+  - staging -> PR -> main (CI + 1 approval)
+- CI (one workflow): .github/workflows/ci.yml
+  - Type-check, lint, unit tests, E2E, Storybook build + checks
+  - Artifacts: coverage, playwright-report, storybook-static
+  - Deploys Storybook to GitHub Pages on pushes to main/master
 
 ## 🎯 What is Harvest.ai?
 
