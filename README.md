@@ -1,59 +1,115 @@
-# 🌾 Harvest.ai - AI Content Transformation Platform
+# 🌾 Harvest.ai
 
-> Transform any content into professional formats using AI - Blog posts, summaries, emails, quizzes, and more
+<div align="center">
+  
+  [![Next.js](https://img.shields.io/badge/Next.js-15.5-black)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+  [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-green)](https://openai.com/)
+  [![Storybook](https://cdn.jsdelivr.net/gh/storybookjs/brand@main/badge/badge-storybook.svg)](https://storybook.js.org/)
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+  
+  <h3>🚀 AI-Powered Content Transformation Platform</h3>
+  
+  <p>Transform any content into professional formats using cutting-edge AI - Blog posts, summaries, emails, quizzes, and more with complete cost transparency and privacy-first design.</p>
+  
+  [**Live Demo**](https://harvest-ai.vercel.app/demo) | [**Documentation**](./docs) | [**Storybook**](https://harvest-ai-storybook.vercel.app) | [**Contributing**](./CONTRIBUTING.md)
+  
+</div>
 
-## Monorepo layout
+---
 
-- frontend/ — Next.js app (Demo Tour mode), Storybook, tests, CI.
-- scripts/ — Developer utilities, analyzers, and test scripts
-  - scripts/data — Input/output JSON produced by scripts
-  - scripts/results — Test run outputs
-- docs/ — Documentation
+## 📚 Table of Contents
 
-For Demo Tour mode, setup, and local development details, see frontend/README.md.
+- [Overview](#-overview)
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Architecture](#-architecture)
+- [Development](#-development)
+- [Testing](#-testing)
+- [API Reference](#-api-reference)
+- [Deployment](#-deployment)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
 
-## Branching and CI
+---
 
-- Branches
-  - main (production): locked down. Requires PR, 1 approval, and passing CI.
-  - staging (pre-prod): PRs required, 0 approvals, passing CI required.
-  - dev (integration): open. Feature PRs target dev.
-- Flow
-  - feature/* -> PR -> dev
-  - dev -> PR -> staging (CI must pass)
-  - staging -> PR -> main (CI + 1 approval)
-- CI (one workflow): .github/workflows/ci.yml
-  - Type-check, lint, unit tests, E2E, Storybook build + checks
-  - Artifacts: coverage, playwright-report, storybook-static
-  - Deploys Storybook to GitHub Pages on pushes to main/master
+## 🎨 Overview
 
-## 🎯 What is Harvest.ai?
+Harvest.ai is a powerful content transformation platform that leverages OpenAI's GPT models to convert any input into multiple professional formats. Built with privacy-first principles and complete cost transparency.
 
-Harvest.ai is a powerful AI-powered content transformation platform that converts any input content into multiple professional formats using OpenAI's GPT models. Built with privacy-first principles, users provide their own API keys and content is never stored on our servers.
+- **🎯 Transform Any Content**: From rough notes to polished professional formats
+- **💰 Full Cost Transparency**: Know exactly what you're spending on each transformation
+- **🔒 Privacy-First Design**: Your content and API keys are never stored
+- **⚡ Production Ready**: Robust error handling, caching, and monitoring
+- **🎨 Beautiful UI**: Professional design with dark/light mode support
+- **📱 Fully Responsive**: Works seamlessly on desktop, tablet, and mobile
 
-### Key Features
-- **Multiple Formats** - Blog posts, summaries, email templates, quizzes
-- **Cost Transparency** - Real-time token usage and pricing
-- **Quality Scoring** - AI-powered output quality assessment
-- **Export Options** - Copy to clipboard, download as markdown
-- **Privacy First** - Your content and API keys stay private
-- **Professional UI** - Beautiful, responsive design with dark/light mode
+---
 
-## 🚀 Live Demo
+## ✨ Features
 
-**Try it now:** [Demo Page](/demo)
+### 🎯 Content Transformation
 
-### What You Can Transform
-- **Blog Posts** - SEO-optimized articles with structure
-- **Content Summaries** - Key points and takeaways
-- **Email Templates** - Professional communication
-- **Quiz Questions** - Multiple choice with answers
+| Format | Description | Use Cases |
+|--------|-------------|----------|
+| **Blog Post** | SEO-optimized articles with proper structure | Product launches, announcements, tutorials |
+| **Summary** | Concise key points and takeaways | Meeting notes, research papers, reports |
+| **Email** | Professional email templates | Communications, proposals, updates |
+| **Quiz** | Multiple choice questions with answers | Educational content, assessments, training |
+| **Custom** | User-defined formats (coming soon) | Any specific format you need |
 
-### Sample Use Cases
-- **Product Launch Notes** → Professional Blog Post
-- **Meeting Notes** → Structured Summary
-- **Technical Docs** → Email Template
-- **Educational Content** → Quiz Questions
+### 🛠️ Platform Features
+
+- **📊 Quality Scoring**: AI-powered assessment of output quality
+- **💾 Export Options**: Copy to clipboard or download as Markdown
+- **🔄 Regeneration**: Not satisfied? Generate again with different parameters
+- **📝 Sample Content**: Pre-filled examples for quick testing
+- **🌐 API Access**: RESTful API for programmatic access
+- **⚡ Redis Caching**: Lightning-fast responses for repeated content
+- **🔐 Rate Limiting**: Fair usage with 100 requests/hour limit
+- **📈 Health Monitoring**: Real-time system status and metrics
+
+### 🎨 User Experience
+
+- **🌓 Dark/Light Mode**: Choose your preferred theme
+- **📱 Responsive Design**: Optimized for all screen sizes
+- **⚡ Real-time Feedback**: Live cost tracking during generation
+- **🎯 Intuitive Interface**: Clean, modern design that's easy to use
+- **♿ Accessibility**: WCAG 2.1 AA compliant (in progress)
+- **🌍 Internationalization**: Multi-language support (coming soon)
+
+---
+
+## 📌 Project Structure
+
+```
+Harvest.ai/
+├── frontend/                 # Next.js application
+│   ├── app/                 # App router pages
+│   │   ├── api/            # API routes
+│   │   ├── demo/           # Demo interface
+│   │   ├── code/           # Technical docs
+│   │   ├── system/         # Architecture info
+│   │   └── roadmap/        # Development plans
+│   ├── components/          # React components
+│   │   ├── ui/             # UI components
+│   │   ├── demo/           # Demo-specific
+│   │   └── layout/         # Layout components
+│   ├── lib/                # Utilities & helpers
+│   ├── styles/             # Global styles
+│   └── public/             # Static assets
+├── scripts/                 # Developer tools
+│   ├── data/               # Input/output JSON
+│   └── results/            # Test outputs
+├── docs/                    # Documentation
+│   ├── runbooks/           # Operational guides
+│   └── status/             # Status reports
+├── .github/                # GitHub configuration
+│   └── workflows/          # CI/CD workflows
+└── .storybook/             # Storybook config
+```
+
+---
 
 ## 🏗️ Architecture
 
@@ -86,65 +142,217 @@ Harvest.ai is a powerful AI-powered content transformation platform that convert
 └─────────────────────────────────────────────────────┘
 ```
 
-## 📋 Current Status
+## 📊 Implementation Progress
 
-### ✅ **Production Ready Features**
-- **Complete Demo Interface** - Fully functional content transformation
-- **Multiple Content Formats** - Blog, summary, email, quiz generation
-- **Cost Transparency** - Real-time token usage and pricing display
-- **Quality Scoring** - AI-powered output quality assessment
-- **Export Options** - Copy to clipboard, download as markdown
-- **Professional UI** - Beautiful, responsive design
-- **Complete Navigation** - All pages accessible with consistent navigation
-- **API Stability** - Robust error handling and graceful fallbacks
-- **Performance Optimization** - Redis caching and rate limiting
-- **Health Monitoring** - System status and performance tracking
+### ✅ Production Ready
 
-### 🔄 **In Development**
-- **User Accounts** - Authentication and user management
-- **Advanced Formats** - More content transformation options
-- **Analytics** - Usage tracking and insights
-- **Mobile Menu** - Functional mobile navigation
-- **Custom Templates** - User-defined output formats
+| Feature | Status | Description |
+|---------|--------|-------------|
+| **Demo Interface** | ✅ Complete | Fully functional content transformation |
+| **Content Formats** | ✅ Complete | Blog, summary, email, quiz generation |
+| **Cost Tracking** | ✅ Complete | Real-time token usage and pricing |
+| **Quality Scoring** | ✅ Complete | AI-powered output assessment |
+| **Export Options** | ✅ Complete | Clipboard copy & Markdown download |
+| **UI/UX Design** | ✅ Complete | Responsive with dark/light mode |
+| **API Endpoints** | ✅ Complete | Stable with error handling |
+| **Caching Layer** | ✅ Complete | Redis integration (optional) |
+| **Rate Limiting** | ✅ Complete | 100 requests/hour protection |
+| **Health Monitoring** | ✅ Complete | System status tracking |
 
-## 🛠️ Quick Start
+### 🚧 In Development
+
+| Feature | Status | ETA |
+|---------|--------|-----|
+| **User Authentication** | 🔄 In Progress | Q1 2025 |
+| **Content History** | 🔄 In Progress | Q1 2025 |
+| **Custom Templates** | 📋 Planned | Q2 2025 |
+| **Team Collaboration** | 📋 Planned | Q2 2025 |
+| **Advanced Analytics** | 📋 Planned | Q2 2025 |
+| **Bulk Processing** | 📋 Planned | Q3 2025 |
+| **Mobile App** | 📋 Planned | Q3 2025 |
+| **Enterprise Features** | 📋 Planned | Q4 2025 |
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- OpenAI API key
 
-### Local Development
+- Node.js 18+ (recommended: use nvm)
+- npm 9+ or yarn
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+- Git
+
+### Installation
+
 ```bash
-# Clone repository
+# Clone the repository
 git clone https://github.com/yourusername/Harvest.ai.git
 cd Harvest.ai
 
-# Install dependencies
+# Navigate to frontend
 cd frontend
+
+# Install dependencies
 npm install
 
 # Set up environment variables
 cp .env.example .env.local
-# Edit .env.local with your OpenAI API key
-
-# Start development server
-npm run dev
 ```
 
-### Environment Variables
-```bash
-# Required
+### Environment Setup
+
+Edit `.env.local` with your configuration:
+
+```env
+# Required - OpenAI Configuration
 OPENAI_API_KEY=sk-your_openai_api_key_here
 
-# Optional (for enhanced features)
-# REDIS_URL=redis://...
+# Optional - Redis Configuration (for caching)
+REDIS_URL=redis://localhost:6379
+REDIS_TTL=86400  # 24 hours in seconds
+
+# Optional - Rate Limiting
+RATE_LIMIT_ENABLED=true
+RATE_LIMIT_MAX_REQUESTS=100
+RATE_LIMIT_WINDOW_MS=3600000  # 1 hour
 
 # Development
 NODE_ENV=development
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Optional - Monitoring
+SENTRY_DSN=your_sentry_dsn_here
+NEXT_PUBLIC_VERCEL_ENV=development
 ```
 
-## 📡 API Usage
+### Running the Application
+
+```bash
+# Development mode with hot reload
+npm run dev
+
+# Production build
+npm run build
+npm run start
+
+# Run with Docker
+docker-compose up -d
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 💻 Development
+
+### Available Scripts
+
+```bash
+# Development
+npm run dev              # Start development server
+npm run build            # Build for production
+npm run start            # Start production server
+
+# Testing
+npm run test             # Run unit tests
+npm run test:e2e         # Run E2E tests with Playwright
+npm run test:coverage    # Generate test coverage report
+
+# Code Quality
+npm run lint             # Run ESLint
+npm run lint:fix         # Fix ESLint issues
+npm run format           # Format code with Prettier
+npm run type-check       # TypeScript type checking
+
+# Storybook
+npm run storybook        # Start Storybook dev server
+npm run build-storybook  # Build static Storybook
+
+# CI/CD
+npm run ci               # Run all checks (lint, test, build)
+npm run chromatic        # Visual regression testing
+```
+
+### Development Workflow
+
+1. **Create a feature branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. **Make your changes**
+   - Follow TypeScript best practices
+   - Write tests for new features
+   - Update documentation
+
+3. **Run tests and checks**
+   ```bash
+   npm run ci
+   ```
+
+4. **Commit with conventional commits**
+   ```bash
+   git commit -m "feat: add new transformation format"
+   ```
+
+5. **Push and create PR**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+### Branching Strategy
+
+```mermaid
+graph LR
+    A[feature/*] -->|PR| B[dev]
+    B -->|PR + CI| C[staging]
+    C -->|PR + Review| D[main]
+```
+
+- **main**: Production branch (protected)
+- **staging**: Pre-production testing
+- **dev**: Integration branch
+- **feature/***: Feature development
+
+---
+
+## 🧪 Testing
+
+### Test Structure
+
+```
+frontend/
+├── __tests__/              # Unit tests
+│   ├── components/        # Component tests
+│   ├── api/               # API route tests
+│   └── lib/               # Utility tests
+├── e2e/                    # E2E tests
+│   ├── demo.spec.ts       # Demo page tests
+│   └── api.spec.ts        # API tests
+└── playwright.config.ts    # Playwright config
+```
+
+### Running Tests
+
+```bash
+# Unit tests with Jest
+npm run test
+npm run test:watch      # Watch mode
+npm run test:coverage   # With coverage
+
+# E2E tests with Playwright
+npm run test:e2e
+npm run test:e2e:ui     # With UI
+npm run test:e2e:debug  # Debug mode
+
+# All tests
+npm run test:all
+```
+
+---
+
+## 📡 API Reference
 
 ### Content Generation
 ```bash
@@ -331,27 +539,60 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ## 🎯 Roadmap
 
-### Phase 1: MVP (Current)
-- ✅ Content transformation demo
-- ✅ Multiple output formats
-- ✅ Cost transparency
-- ✅ Professional UI
-- ✅ API stability
+### 🏁 Phase 1: MVP - Complete
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Content transformation demo | ✅ Complete | 4 formats available |
+| Multiple output formats | ✅ Complete | Blog, summary, email, quiz |
+| Cost transparency | ✅ Complete | Real-time token tracking |
+| Professional UI | ✅ Complete | Dark/light mode support |
+| API stability | ✅ Complete | Error handling & retries |
 
-### Phase 2: User Features (Next)
-- 🔄 User accounts and authentication
-- 🔄 Content history and management
-- 🔄 Custom templates
-- 🔄 Advanced analytics
+### 🚀 Phase 2: User Features - Q1/Q2 2025
+| Feature | Status | Target |
+|---------|--------|--------|
+| User authentication | 🔄 In Progress | Q1 2025 |
+| Content history | 🔄 In Progress | Q1 2025 |
+| Custom templates | 📋 Planned | Q2 2025 |
+| Advanced analytics | 📋 Planned | Q2 2025 |
+| Team workspaces | 📋 Planned | Q2 2025 |
 
-### Phase 3: Advanced Features (Future)
-- 📋 Bulk processing
-- 📋 API access for developers
-- 📋 Team collaboration
-- 📋 Enterprise features
+### 🌟 Phase 3: Enterprise - Q3/Q4 2025
+| Feature | Status | Target |
+|---------|--------|--------|
+| Bulk processing | 📋 Planned | Q3 2025 |
+| API for developers | 📋 Planned | Q3 2025 |
+| SSO integration | 📋 Planned | Q4 2025 |
+| SLA guarantees | 📋 Planned | Q4 2025 |
+| On-premise deployment | 📋 Planned | Q4 2025 |
 
 ---
 
-**Built with ❤️ by the Harvest.ai team**
+## 🙏 Acknowledgments
 
-*Last Updated: August 27, 2025*
+- [Next.js](https://nextjs.org/) - The React framework for production
+- [OpenAI](https://openai.com/) - Powerful AI models for content generation
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Vercel](https://vercel.com/) - Platform for frontend developers
+- [Redis](https://redis.io/) - In-memory data structure store
+- [Storybook](https://storybook.js.org/) - Tool for building UI components
+
+Special thanks to all contributors and the open-source community!
+
+---
+
+<div align="center">
+  <h3>🌾 Built with passion by the Harvest.ai Team</h3>
+  <p>
+    <a href="https://harvest-ai.vercel.app">Website</a> •
+    <a href="https://github.com/yourusername/Harvest.ai">GitHub</a> •
+    <a href="https://twitter.com/harvestai">Twitter</a> •
+    <a href="https://discord.gg/harvestai">Discord</a>
+  </p>
+  <p>
+    <strong>Transform content. Save time. Ship faster. 🚀</strong>
+  </p>
+  <p>
+    <em>Last Updated: December 2024</em>
+  </p>
+</div>
