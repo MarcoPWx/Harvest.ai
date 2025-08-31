@@ -1,51 +1,47 @@
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# General
+.DS_Store
+*.log
+*.log.*
 
-# Production build files
-dist/
-build/
-.next/
-out/
-
-# Environment variables
+# Env files
 .env
-.env*.local
+.env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# Node
+node_modules/
+frontend/node_modules/
+.npmrc
 
-# OS files
-.DS_Store
-Thumbs.db
+# Build artifacts
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/build/
+frontend/.turbo/
+frontend/.vercel/
 
-# Testing
-coverage/
-.nyc_output
+# Storybook/coverage/test reports (not committed)
+frontend/storybook-static/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
 
-# TypeScript
-*.tsbuildinfo
+# Tooling caches
+frontend/.eslintcache
+frontend/.cache/
+frontend/.parcel-cache/
 
-# Cache
-.cache/
-.parcel-cache/
-.eslintcache
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
 
-# Temporary files
-tmp/
-temp/
-*.log
+# Misc
+.tmp/
+.temp/
 
-# Package manager
-.npm
-.yarn-integrity

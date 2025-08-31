@@ -2,9 +2,18 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, staging, dev ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ "**" ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 defaults:
   run:
@@ -19,12 +28,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Commitlint (PR commits)
         uses: wagoid/commitlint-github-action@v5
-        with:
-          configFile: commitlint.config.cjs
 
   build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
 
     steps:
       - name: Checkout
@@ -46,7 +53,7 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Run unit tests
+      - name: Run unit tests with coverage
         run: npm test -- --ci --coverage
 
       - name: Upload coverage report
@@ -71,34 +78,22 @@ jobs:
           name: playwright-report
           path: frontend/playwright-report
 
-      - name: Write CI status JSON for Storybook
-        run: |
-          mkdir -p docs/status
-          cat > docs/status/ci-status.json <<'JSON'
-          {
-            "summary": {
-              "unit": "passed",
-              "e2e": "passed",
-              "storybookInteractions": "passed"
-            },
-            "links": {
-              "coverage": "./coverage/index.html",
-              "playwrightReport": "./playwright-report/index.html"
-            },
-            "generatedAt": "${{ github.run_id }}"
-          }
-          JSON
-
       - name: Build Storybook
         run: npm run build-storybook
 
       - name: Run Storybook Test Runner
         run: npm run storybook:test
 
-      - name: Upload Storybook static site
+      - name: Upload Storybook static as artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: storybook-static
+          path: frontend/storybook-static
+
+      - name: Upload Storybook Pages artifact (for deploy)
+        uses: actions/upload-pages-artifact@v3
+        with:
           path: frontend/storybook-static
 
       - name: Link check docs (optional)
@@ -117,10 +112,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           workingDir: frontend
 
-      - name: Post-deploy smoke (optional)
-        if: ${{ env.SMOKE_BASE_URL != '' }}
-        env:
-          SMOKE_BASE_URL: ${{ env.SMOKE_BASE_URL }}
-          SMOKE_TRY_GENERATE: ${{ env.SMOKE_TRY_GENERATE }}
-        run: node scripts/smoke.mjs
+  deploy:
+    needs: build-and-test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    environment:
+      name: github-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
