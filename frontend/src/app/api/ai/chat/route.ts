@@ -5,7 +5,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 
 // Provider configurations
 const PROVIDER_CONFIGS = {
@@ -36,7 +35,7 @@ const PROVIDER_CONFIGS = {
 export async function POST(request: NextRequest) {
   try {
     // 1. Authenticate user
-    const supabase = createClient(cookies());
+    const supabase = await createClient();
     const {
       data: { user },
       error: authError,

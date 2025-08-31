@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 
 // GET /api/generate/:id
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const supabase = await createClient();
     const {
       data: { user },
@@ -12,7 +13,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
       return Response.json({ error: "Authentication required" }, { status: 401 });
     }
 
-    let query = supabase.from("content_generations").select("*").eq("id", params.id);
+    let query = supabase.from("content_generations").select("*").eq("id", id);
     if (user?.id) {
       query = query.eq("user_id", user.id);
     }
@@ -29,8 +30,9 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
 }
 
 // DELETE /api/generate/:id
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const supabase = await createClient();
     const {
       data: { user },
@@ -44,7 +46,7 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
     const result = await (supabase
       .from("content_generations")
       .delete()
-      .eq("id", params.id)
+      .eq("id", id)
       .eq("user_id", user?.id || "")
       .select() as any);
 

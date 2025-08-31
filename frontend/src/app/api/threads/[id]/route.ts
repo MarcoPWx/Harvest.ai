@@ -3,9 +3,10 @@ import { __getThreadStore } from "@/app/api/threads/route";
 
 export const runtime = "nodejs";
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const threads = __getThreadStore();
-  const t = threads.get(params.id);
+  const t = threads.get(id);
   if (!t)
     return new Response(JSON.stringify({ error: "thread not found" }), {
       status: 404,
@@ -16,7 +17,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       },
     });
-  return new Response(JSON.stringify({ id: params.id, ...t }), {
+  return new Response(JSON.stringify({ id, ...t }), {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",

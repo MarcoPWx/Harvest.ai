@@ -15,9 +15,10 @@ function composeReply(prompt: string) {
   return `Here is a refined take:\n\n${prompt}\n\n— Assistant`;
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const threads = __getThreadStore();
-  const t = threads.get(params.id);
+  const t = threads.get(id);
   if (!t)
     return new Response(JSON.stringify({ error: "thread not found" }), {
       status: 404,
@@ -67,7 +68,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   logInfo("thread_message_start", {
     request_id,
-    thread_id: params.id,
+    thread_id: id,
     provider,
     content_len: content.length,
   });
@@ -99,7 +100,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
 
   if (accept.includes("text/event-stream")) {
     return createSseStream(async (w) => {
-      w.send("meta", { model: "mock-gpt", thread_id: params.id, provider, request_id });
+      w.send("meta", { model: "mock-gpt", thread_id: id, provider, request_id });
       const parts = reply.split(/(\s+)/);
       let acc = "";
       for (let i = 0; i < parts.length; i++) {
@@ -108,12 +109,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         await new Promise((r) => setTimeout(r, 20));
       }
       t.messages.push({ role: "assistant", content: acc, at: new Date().toISOString() });
-      w.send("final", { content: acc, thread_id: params.id, provider, request_id });
+      w.send("final", { content: acc, thread_id: id, provider, request_id });
       w.send("done", { ok: true });
       w.close();
       logInfo("thread_message_done", {
         request_id,
-        thread_id: params.id,
+        thread_id: id,
         provider,
         length: acc.length,
       });
@@ -124,12 +125,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   t.messages.push({ role: "assistant", content: reply, at: new Date().toISOString() });
   logInfo("thread_message_done", {
     request_id,
-    thread_id: params.id,
+    thread_id: id,
     provider,
     length: reply.length,
   });
   return new Response(
-    JSON.stringify({ content: reply, thread_id: params.id, provider, request_id }),
+    JSON.stringify({ content: reply, thread_id: id, provider, request_id }),
     {
       headers: {
         "Content-Type": "application/json",
