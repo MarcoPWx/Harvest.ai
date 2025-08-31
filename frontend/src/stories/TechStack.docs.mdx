@@ -1,0 +1,558 @@
+import * as React from "react";
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  layout: "fullscreen",
+  repoDocPath: "/docs/TECH_STACK_CHEATSHEET.md",
+  repoDocLabel: "Tech Stack Cheat Sheet",
+};
+
+# Tech Stack & API Playground
+
+This page summarizes the tech stack and provides a small interactive API mock playground. The playground uses MSW in Storybook to simulate backend responses.
+
+## Stack Overview
+
+- Next.js 15 (App Router) + React 19 + TypeScript 5
+- Styling: Tailwind CSS, Radix UI, framer-motion, lucide-react
+- Forms & Validation: react-hook-form, zod
+- Data: @tanstack/react-query; fetch (standardized)
+- Realtime (mock-first): mock-socket; fallback design (WS → SSE → polling)
+- Mocks: msw, @mswjs/data, @faker-js/faker
+- Docs: @next/mdx, swagger-ui-react
+- Testing: Jest + RTL, Playwright; Storybook 9 with addons; optional Chromatic
+- Rate limit/cache: simple in-memory (dev) or DB-backed (optional)
+
+## Quick Trade-offs
+
+> Tip: You can also experiment with latency/error profiles in the Network Playground (/dev/network) and in docs below.
+
+| Area         | Option A         | Option B  | Notes                                      |
+| ------------ | ---------------- | --------- | ------------------------------------------ |
+| Auth         | Supabase         | Keycloak  | MVP-friendly vs enterprise IAM             |
+| Redis client | redis (official) | ioredis   | Official modern API vs feature-rich client |
+| Realtime     | ws               | socket.io | Minimal WS vs feature-rich w/ fallback     |
+
+---
+
+## API Mock Playground
+
+function GeneratePlayground() {
+  const [trigger, setTrigger] = React.useState('none');
+  const [input, setInput] = React.useState('Hello from Storybook');
+  const [status, setStatus] = React.useState('');
+  const [body, setBody] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+async function callApi() {
+setLoading(true);
+setStatus('');
+setBody('');
+const payload = { input: trigger === 'none' ? input : trigger, format: 'blog' };
+try {
+const res = await fetch('/api/generate', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(payload) });
+setStatus(`HTTP ${res.status}`);
+try {
+const json = await res.json();
+setBody(JSON.stringify(json, null, 2));
+} catch (\_) {
+setBody('(no JSON body)');
+}
+} catch (e) {
+setStatus('Network error');
+setBody(String(e));
+} finally {
+setLoading(false);
+}
+}
+
+return (
+
+<div style={{ maxWidth: 720 }}>
+  <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
+    <label>Trigger</label>
+    <select value={trigger} onChange={(e) => setTrigger(e.target.value)}>
+      <option value="none">none</option>
+      <option value="TRIGGER_RATE_LIMIT">TRIGGER*RATE_LIMIT (429)</option>
+      <option value="TRIGGER_ERROR">TRIGGER_ERROR (error)</option>
+      <option value="TRIGGER_CACHED">TRIGGER_CACHED (cached)</option>
+    </select>
+  </div>
+  {trigger === "none" && (
+    <div style={{ marginBottom: 8 }}>
+      <label style={{ display: "block", fontSize: 12 }}>Input</label>
+      <input
+        style={{ width: "100%", padding: "8px", border: "1px solid #ddd", borderRadius: 6 }}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Write me a short blog post about Harvest.ai"
+      />
+    </div>
+  )}
+  <button onClick={callApi} disabled={loading} style={{ padding: "8px 14px" }}>
+    {loading ? "Calling…" : "POST /api/generate"}
+  </button>
+  {status && (
+    <div style={{ marginTop: 10 }}>
+      <div style={{ fontFamily: "monospace" }}>{status}</div>
+      <pre
+        style={{
+          fontSize: 12,
+          background: "#f8f8f8",
+          padding: 8,
+          borderRadius: 6,
+          overflow: "auto",
+        }}
+      >
+        {body}
+      </pre>
+    </div>
+  )}
+  <p style={{ fontSize: 12, color: "#666" }}>
+    Note: This uses MSW in Storybook to simulate the backend. Use TRIGGER*\* inputs to test specific
+    paths.
+  </p>
+</div>
+); }
+
+<Meta title="Docs/Tech Stack & API Playground" />
+
+### Try it
+
+<Canvas>
+  <GeneratePlayground />
+</Canvas>
+
+---
+
+<LastUpdated file="src/stories/TechStack.stories.mdx" />
+
+## WS vs SSE Fallback Demo (Simulated)
+
+function TransportDemo() {
+  const [simulateWsFailure, setSimulateWsFailure] = React.useState(false);
+  const [running, setRunning] = React.useState(false);
+lse);
+  const [transport, setTransport] = React.useState('');
+('');
+  const [events, setEvents] = React.useState([]);
+([]);
+  const timerRef = React.useRef(null);
+
+React.useEffect(() => {
+return () => {
+if (timerRef.current) clearInterval(timerRef.current);
+};
+}, []);
+
+function start() {
+if (timerRef.current) clearInterval(timerRef.current);
+setEvents([]);
+setRunning(true);
+
+    if (!simulateWsFailure) {
+      setTransport('WebSocket');
+      let progress = 0;
+      timerRef.current = setInterval(() => {
+        progress += 10;
+        setEvents(prev => [...prev, `WS progress: ${progress}%`]);
+        if (progress >= 100) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+          setRunning(false);
+          setEvents(prev => [...prev, 'WS complete']);
+        }
+      }, 300);
+    } else {
+      // Simulate WS failure, then fallback to SSE
+      setTransport('SSE (fallback)');
+      let progress = 0;
+      timerRef.current = setInterval(() => {
+        progress += 15;
+        setEvents(prev => [...prev, `SSE progress: ${progress}%`]);
+        if (progress >= 100) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+          setRunning(false);
+          setEvents(prev => [...prev, 'SSE complete']);
+        }
+      }, 350);
+    }
+
+}
+
+return (
+
+<div style={{ maxWidth: 720 }}>
+  <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
+    <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
+      <input
+        type="checkbox"
+        checked={simulateWsFailure}
+        onChange={(e) => setSimulateWsFailure(e.target.checked)}
+      />
+      Simulate WS failure → use SSE fallback
+    </label>
+    <button onClick={start} disabled={running} style={{ padding: "6px 10px" }}>
+      Start demo
+    </button>
+  </div>
+  <div style={{ fontSize: 12, color: "#555", marginBottom: 6 }}>
+    Active transport: <b>{transport || "(none)"}</b>
+  </div>
+  <div
+    style={{
+      border: "1px solid #eee",
+      borderRadius: 6,
+      padding: 8,
+      minHeight: 100,
+      fontFamily: "monospace",
+      fontSize: 12,
+    }}
+  >
+    {events.length ? events.map((e, i) => <div key={i}>{e}</div>) : "No events yet"}
+  </div>
+  <p style={{ fontSize: 12, color: "#666", marginTop: 8 }}>
+    Note: This is a simulation for Storybook. In the app, WS is attempted first and then falls back
+    to SSE/polling as documented in the Ops guide.
+  </p>
+</div>
+); }
+
+### Transport fallback (demo)
+
+<Canvas>
+  <TransportDemo />
+</Canvas>
+
+---
+
+## Live WS → SSE Fallback (Real SSE)
+
+function LiveTransportDemo() {
+  const [wsUrl, setWsUrl] = React.useState('ws://localhost:3002/ws/generation');
+  const [sseUrl, setSseUrl] = React.useState('http://localhost:3002/api/sse-demo');
+  const [simulateWsFailure, setSimulateWsFailure] = React.useState(true);
+  const [transport, setTransport] = useState('');
+  const [events, setEvents] = useState([]);
+  const [running, setRunning] = useState(false);
+  const wsRef = React.useRef(null);
+  const esRef = React.useRef(null);
+
+function cleanup() {
+if (wsRef.current) {
+try { wsRef.current.close() } catch {}
+wsRef.current = null;
+}
+if (esRef.current) {
+try { esRef.current.close() } catch {}
+esRef.current = null;
+}
+}
+
+function push(line) {
+setEvents(prev => [...prev, line]);
+}
+
+async function start() {
+cleanup();
+setEvents([]);
+setTransport('');
+setRunning(true);
+
+    // Try WS first (unless forced failure)
+    if (!simulateWsFailure) {
+      try {
+        const ws = new WebSocket(wsUrl);
+        wsRef.current = ws;
+        let opened = false;
+        const timeout = setTimeout(() => {
+          if (!opened) {
+            try { ws.close() } catch {}
+            fallbackToSSE('WS timeout');
+          }
+        }, 1200);
+        ws.onopen = () => {
+          opened = true;
+          clearTimeout(timeout);
+          setTransport('WebSocket');
+          push('[WS] open');
+        };
+        ws.onmessage = (ev) => {
+          push(`[WS] ${ev.data?.toString?.() || ''}`);
+        };
+        ws.onerror = () => {
+          clearTimeout(timeout);
+          push('[WS] error → fallback to SSE');
+          try { ws.close() } catch {}
+          fallbackToSSE('WS error');
+        };
+        ws.onclose = () => {
+          if (!opened) return; // likely closed by timeout/error
+          push('[WS] closed');
+        };
+        return; // If WS handled, return
+      } catch (e) {
+        push('[WS] exception → fallback to SSE');
+      }
+    }
+
+    // Otherwise, go SSE directly
+    fallbackToSSE(simulateWsFailure ? 'Simulated WS failure' : 'WS not attempted');
+
+}
+
+function fallbackToSSE(reason) {
+setTransport('SSE');
+push(`[SSE] starting (${reason})`);
+try {
+const es = new EventSource(sseUrl);
+esRef.current = es;
+es.onmessage = (e) => {
+try {
+const obj = JSON.parse(e.data);
+if (obj.type === 'progress') push(`[SSE] progress: ${obj.value}%`);
+else if (obj.type === 'complete') { push('[SSE] complete'); setRunning(false); }
+else push(`[SSE] ${e.data}`);
+} catch {
+push(`[SSE] ${e.data}`);
+}
+};
+es.onerror = () => {
+push('[SSE] error');
+setRunning(false);
+try { es.close() } catch {}
+};
+} catch (e) {
+push(`[SSE] exception: ${String(e)}`);
+setRunning(false);
+}
+}
+
+function stop() {
+cleanup();
+setRunning(false);
+push('[demo] stopped');
+}
+
+return (
+
+<div style={{ maxWidth: 820 }}>
+  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 8 }}>
+    <div>
+      <label style={{ display: "block", fontSize: 12 }}>WebSocket URL</label>
+      <input
+        style={{ width: "100%", padding: 6, border: "1px solid #ddd", borderRadius: 6 }}
+        value={wsUrl}
+        onChange={(e) => setWsUrl(e.target.value)}
+      />
+    </div>
+    <div>
+      <label style={{ display: "block", fontSize: 12 }}>SSE URL</label>
+      <input
+        style={{ width: "100%", padding: 6, border: "1px solid #ddd", borderRadius: 6 }}
+        value={sseUrl}
+        onChange={(e) => setSseUrl(e.target.value)}
+      />
+    </div>
+  </div>
+  <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
+    <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
+      <input
+        type="checkbox"
+        checked={simulateWsFailure}
+        onChange={(e) => setSimulateWsFailure(e.target.checked)}
+      />
+      Simulate WS failure → use SSE
+    </label>
+    <button onClick={start} disabled={running} style={{ padding: "6px 10px" }}>
+      Start
+    </button>
+    <button onClick={stop} disabled={!running} style={{ padding: "6px 10px" }}>
+      Stop
+    </button>
+  </div>
+  <div style={{ fontSize: 12, color: "#555", marginBottom: 6 }}>
+    Active transport: <b>{transport || "(none)"}</b>
+  </div>
+  <div
+    style={{
+      border: "1px solid #eee",
+      borderRadius: 6,
+      padding: 8,
+      minHeight: 120,
+      fontFamily: "monospace",
+      fontSize: 12,
+    }}
+  >
+    {events.length ? events.map((e, i) => <div key={i}>{e}</div>) : "No events yet"}
+  </div>
+  <p style={{ fontSize: 12, color: "#666", marginTop: 8 }}>
+    Tip: Start your Next dev:mock server (npm run dev:mock) so the SSE URL works. CORS is enabled on
+    the demo route.
+  </p>
+</div>
+); }
+
+### Live fallback demo
+
+<Canvas>
+  <LiveTransportDemo />
+</Canvas>
+
+---
+
+## SSE Client (connects to /api/sse-demo)
+
+function SSEClient() {
+  const [url, setUrl] = React.useState('http://localhost:3002/api/sse-demo');
+  const [running, setRunning] = React.useState(false);
+  const [lines, setLines] = React.useState([]);
+  const esRef = React.useRef(null);
+
+function start() {
+if (running) return;
+try {
+const es = new EventSource(url);
+esRef.current = es;
+setLines([]);
+setRunning(true);
+es.onmessage = (e) => setLines(prev => [...prev, e.data]);
+es.onerror = () => {
+setLines(prev => [...prev, '[error]']);
+try { es.close() } catch {}
+esRef.current = null;
+setRunning(false);
+}
+} catch (e) {
+setLines(prev => [...prev, `[exception] ${String(e)}`]);
+}
+}
+
+function stop() {
+try { esRef.current?.close() } catch {}
+esRef.current = null;
+setRunning(false);
+}
+
+return (
+
+<div style={{ maxWidth: 720 }}>
+  <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
+    <input
+      style={{ flex: 1, padding: "6px", border: "1px solid #ddd", borderRadius: 6 }}
+      value={url}
+      onChange={(e) => setUrl(e.target.value)}
+    />
+    <button onClick={start} disabled={running} style={{ padding: "6px 10px" }}>
+      Start
+    </button>
+    <button onClick={stop} disabled={!running} style={{ padding: "6px 10px" }}>
+      Stop
+    </button>
+  </div>
+  <div
+    style={{
+      border: "1px solid #eee",
+      borderRadius: 6,
+      padding: 8,
+      minHeight: 120,
+      fontFamily: "monospace",
+      fontSize: 12,
+    }}
+  >
+    {lines.length ? lines.map((l, i) => <div key={i}>{l}</div>) : "No events yet"}
+  </div>
+</div>
+); }
+
+<Canvas>
+  <SSEClient />
+</Canvas>
+
+---
+
+## Latency & Error Profiles (demo)
+
+function LatencyProfiles() {
+  const [delay, setDelay] = React.useState(500);
+  const [errorRate, setErrorRate] = React.useState(0);
+  const [status, setStatus] = React.useState('');
+  const [body, setBody] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+
+async function call() {
+setLoading(true);
+setStatus('');
+setBody('');
+try {
+const res = await fetch('/api/generate', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+...(delay > 0 ? { 'x-mock-delay': String(delay) } : {}),
+...(errorRate > 0 ? { 'x-mock-error-rate': String(errorRate) } : {}) },
+body: JSON.stringify({ input: 'Latency profile test', format: 'blog' }) });
+setStatus(`HTTP ${res.status}`);
+try { setBody(JSON.stringify(await res.json(), null, 2)); } catch { setBody('(no JSON)'); }
+} catch (e) {
+setStatus('Network error');
+setBody(String(e));
+} finally {
+setLoading(false);
+}
+}
+
+return (
+
+<div style={{ maxWidth: 720 }}>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr auto",
+      gap: 12,
+      alignItems: "end",
+      marginBottom: 8,
+    }}
+  >
+    <div>
+      <label style={{ display: "block", fontSize: 12 }}>x-mock-delay (ms)</label>
+      <input
+        type="number"
+        value={delay}
+        onChange={(e) => setDelay(parseInt(e.target.value || "0", 10))}
+        style={{ width: "100%", padding: 6, border: "1px solid #ddd", borderRadius: 6 }}
+      />
+    </div>
+    <div>
+      <label style={{ display: "block", fontSize: 12 }}>x-mock-error-rate (0..1)</label>
+      <input
+        type="number"
+        step={0.1}
+        min={0}
+        max={1}
+        value={errorRate}
+        onChange={(e) => setErrorRate(parseFloat(e.target.value || "0"))}
+        style={{ width: "100%", padding: 6, border: "1px solid #ddd", borderRadius: 6 }}
+      />
+    </div>
+    <button onClick={call} disabled={loading} style={{ padding: "6px 10px" }}>
+      {loading ? "Calling…" : "Call /api/generate"}
+    </button>
+  </div>
+  <div style={{ fontFamily: "monospace", marginBottom: 6 }}>{status}</div>
+  <pre
+    style={{ fontSize: 12, background: "#f8f8f8", padding: 8, borderRadius: 6, overflow: "auto" }}
+  >
+    {body}
+  </pre>
+</div>
+); }
+
+<Canvas>
+  <LatencyProfiles />
+</Canvas>

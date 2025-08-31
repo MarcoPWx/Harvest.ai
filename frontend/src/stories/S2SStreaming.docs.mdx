@@ -1,0 +1,299 @@
+import * as React from "react";
+const { useEffect, useRef, useState } = React;
+import { Meta, Canvas, Story } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = { repoDocPath: "/docs/api/REST_API.md", repoDocLabel: "REST API" };
+
+# S2S Gateway — Streaming & Threads (Live)
+
+<Meta title="Command Center/S2S — Streaming & Threads" />
+
+This page exercises the server-to-server endpoints added to the Next.js app. It talks to your dev server directly (not MSW), so please run:
+
+```bash path=null start=null
+npm run dev:mock  # starts Next on http://localhost:3002 with mock-first features
+npm run storybook # starts Storybook on http://localhost:6006
+```
+
+By default, the controls below target http://localhost:3002. You can change the base URL if needed.
+
+export function useSSE() {
+  const controllerRef = useRef<AbortController | null>(null)
+
+async function stream(url: string, init: RequestInit, onEvent: (e: { event: string, data: any }) => void) {
+const ctrl = new AbortController()
+controllerRef.current = ctrl
+const res = await fetch(url, { ...init, signal: ctrl.signal })
+if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`)
+const reader = res.body.getReader()
+const decoder = new TextDecoder()
+let buffer = ''
+let currentEvent = 'message'
+try {
+while (true) {
+const { value, done } = await reader.read()
+if (done) break
+buffer += decoder.decode(value, { stream: true })
+let idx
+while ((idx = buffer.indexOf('\n\n')) !== -1) {
+const raw = buffer.slice(0, idx)
+buffer = buffer.slice(idx + 2)
+const lines = raw.split('\n')
+let ev = currentEvent
+let data = ''
+for (const line of lines) {
+if (line.startsWith('event:')) ev = line.slice(6).trim()
+else if (line.startsWith('data:')) data += line.slice(5).trim()
+}
+if (data) {
+let obj: any = data
+try { obj = JSON.parse(data) } catch {}
+onEvent({ event: ev, data: obj })
+}
+currentEvent = 'message'
+}
+}
+} finally {
+controllerRef.current = null
+}
+}
+
+function cancel() {
+try { controllerRef.current?.abort() } catch {}
+controllerRef.current = null
+}
+
+return { stream, cancel }
+}
+
+export function GenerateSSEPanel() {
+  const [base, setBase] = useState('http://localhost:3002')
+  const [input, setInput] = useState('Write a short note about Harvest.ai streaming and threads.')
+  const [format, setFormat] = useState('blog')
+  const [bypass, setBypass] = useState(false)
+  const [streaming, setStreaming] = useState(false)
+  const [log, setLog] = useState<Array<{ t: string, v: any }>>([])
+  const [json, setJson] = useState<any>(null)
+  const { stream, cancel } = useSSE()
+
+function push(t: string, v: any) { setLog(prev => [...prev, { t, v }]) }
+
+async function callJSON() {
+setJson(null)
+setLog([])
+const res = await fetch(`${base}/api/generate`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ input, format }) })
+const j = await res.json().catch(() => null)
+setJson(j)
+}
+
+async function callSSE() {
+setJson(null)
+setLog([])
+setStreaming(true)
+try {
+await stream(`${base}/api/generate`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream', ...(bypass ? { 'x-cache-bypass': '1' } : {}) },
+body: JSON.stringify({ input, format }) }, (e) => push(e.event, e.data))
+} catch (e) {
+push('error', String(e))
+} finally {
+setStreaming(false)
+}
+}
+
+return (
+
+<div style={{ border: "1px solid #eee", borderRadius: 8, padding: 12, display: "grid", gap: 8 }}>
+  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+    <input
+      value={base}
+      onChange={(e) => setBase(e.target.value)}
+      placeholder="Dev base URL (http://localhost:3002)"
+    />
+    <select value={format} onChange={(e) => setFormat(e.target.value)}>
+      {["blog", "email", "summary", "presentation"].map((f) => (
+        <option key={f} value={f}>
+          {f}
+        </option>
+      ))}
+    </select>
+  </div>
+  <textarea value={input} onChange={(e) => setInput(e.target.value)} style={{ minHeight: 80 }} />
+  <label style={{ fontSize: 12 }}>
+    <input type="checkbox" checked={bypass} onChange={(e) => setBypass(e.target.checked)} />{" "}
+    x-cache-bypass (bypass cache)
+  </label>
+  <div style={{ display: "flex", gap: 8 }}>
+    <button onClick={callJSON} disabled={streaming}>
+      Call JSON
+    </button>
+    <button onClick={callSSE} disabled={streaming}>
+      Stream SSE
+    </button>
+    <button
+      onClick={() => {
+        cancel();
+        setStreaming(false);
+      }}
+      disabled={!streaming}
+    >
+      Cancel
+    </button>
+  </div>
+  {!!log.length && (
+    <div>
+      <div style={{ fontWeight: 600, marginBottom: 6 }}>SSE events</div>
+      <pre
+        style={{
+          maxHeight: 220,
+          overflow: "auto",
+          background: "#fafafa",
+          padding: 8,
+          borderRadius: 6,
+        }}
+      >
+        {log
+          .map((l, i) => `[${l.t}] ${typeof l.v === "string" ? l.v : JSON.stringify(l.v)}\n`)
+          .join("")}
+      </pre>
+    </div>
+  )}
+  {json && (
+    <div>
+      <div style={{ fontWeight: 600, marginBottom: 6 }}>JSON result</div>
+      <pre
+        style={{
+          maxHeight: 220,
+          overflow: "auto",
+          background: "#fafafa",
+          padding: 8,
+          borderRadius: 6,
+        }}
+      >
+        {JSON.stringify(json, null, 2)}
+      </pre>
+    </div>
+  )}
+  <div style={{ fontSize: 12, color: "#666" }}>
+    Triggers: include TRIGGER_RATE_LIMIT or TRIGGER_ERROR in input to test 429/500 flows.
+  </div>
+</div>
+) }
+
+export function ThreadsSSEPanel() {
+  const [base, setBase] = useState('http://localhost:3002')
+  const [threadId, setThreadId] = useState('')
+  const [message, setMessage] = useState('Refine this to be more concise and action-oriented.')
+  const [streaming, setStreaming] = useState(false)
+  const [transcript, setTranscript] = useState<Array<{ role: string, content: string }>>([])
+  const { stream, cancel } = useSSE()
+
+async function createThread() {
+const r = await fetch(`${base}/api/threads`, { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ title: 'S2S Demo' }) })
+const j = await r.json().catch(()=>null)
+if (j?.thread_id) setThreadId(j.thread_id)
+}
+
+async function sendMessageSSE() {
+if (!threadId) return
+setStreaming(true)
+setTranscript(prev => [...prev, { role:'user', content: message }])
+try {
+await stream(`${base}/api/threads/${encodeURIComponent(threadId)}/messages`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
+body: JSON.stringify({ role:'user', content: message }) }, (e) => {
+if (e.event === 'final' && e.data?.content) {
+setTranscript(prev => [...prev, { role:'assistant', content: e.data.content }])
+}
+})
+} catch (e) {
+setTranscript(prev => [...prev, { role:'assistant', content: `ERROR: ${String(e)}` }])
+} finally {
+setStreaming(false)
+}
+}
+
+return (
+
+<div style={{ border: "1px solid #eee", borderRadius: 8, padding: 12, display: "grid", gap: 8 }}>
+  <div
+    style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center" }}
+  >
+    <input
+      value={base}
+      onChange={(e) => setBase(e.target.value)}
+      placeholder="Dev base URL (http://localhost:3002)"
+    />
+    <button onClick={createThread} disabled={!!threadId}>
+      Create thread
+    </button>
+    <span style={{ fontSize: 12, color: "#666" }}>
+      {threadId ? `thread: ${threadId}` : "no thread yet"}
+    </span>
+  </div>
+  <textarea
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    style={{ minHeight: 80 }}
+  />
+  <div style={{ display: "flex", gap: 8 }}>
+    <button onClick={sendMessageSSE} disabled={!threadId || streaming}>
+      Send & Stream
+    </button>
+    <button
+      onClick={() => {
+        cancel();
+        setStreaming(false);
+      }}
+      disabled={!streaming}
+    >
+      Cancel
+    </button>
+  </div>
+  {!!transcript.length && (
+    <div>
+      <div style={{ fontWeight: 600, marginBottom: 6 }}>Transcript</div>
+      <div style={{ display: "grid", gap: 6 }}>
+        {transcript.map((m, i) => (
+          <div
+            key={i}
+            style={{
+              padding: 8,
+              border: "1px solid #eee",
+              borderRadius: 6,
+              background: m.role === "assistant" ? "#f8fafc" : "#fff",
+            }}
+          >
+            <div style={{ fontSize: 12, color: "#666" }}>{m.role}</div>
+            <div style={{ whiteSpace: "pre-wrap" }}>{m.content}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+) }
+
+## Generate (JSON + SSE)
+
+<Canvas>
+  <Story name="Generate (SSE & JSON)">
+    <GenerateSSEPanel />
+  </Story>
+</Canvas>
+
+## Threads (multi-turn, SSE)
+
+<Canvas>
+  <Story name="Threads (SSE)">
+    <ThreadsSSEPanel />
+  </Story>
+</Canvas>
+
+<LastUpdated file="src/stories/S2SStreaming.stories.mdx" />

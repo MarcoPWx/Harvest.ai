@@ -1,0 +1,133 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+import LastUpdated from "../components/LastUpdated";
+
+# Local Memory Lab
+
+<Meta title="Labs/Local Memory Lab" />
+
+Hands-on exercises for the in-memory index/search endpoints used during development.
+
+export function LocalMemoryPanel() {
+  const [mode, setMode] = React.useState<'msw' | 'dev'>('msw')
+  const [base, setBase] = React.useState('http://localhost:3002')
+  const [namespace, setNamespace] = React.useState('lab')
+  const [docId, setDocId] = React.useState('nq-1')
+  const [text, setText] = React.useState('Harvest.ai makes content transformation easy.')
+  const [query, setQuery] = React.useState('transformation')
+  const [topK, setTopK] = React.useState(3)
+  const [log, setLog] = React.useState<string[]>([])
+
+  function push(line: string) {
+    setLog(prev => [new Date().toLocaleTimeString() + ' ' + line, ...prev].slice(0, 300))
+  }
+
+  function url(path: string) {
+    return mode === 'msw' ? path : `${base}${path}`
+  }
+
+  async function indexDoc() {
+    push('Index: start')
+    const res = await fetch(url('/api/local-memory/index'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ namespace, id: docId, text })
+    })
+    push(`Index: HTTP ${res.status}`)
+  }
+
+  async function searchDocs() {
+    push('Search: start')
+    const res = await fetch(url('/api/local-memory/search'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ namespace, query, topK })
+    })
+    const j = await res.json().catch(() => null)
+    push(`Search: HTTP ${res.status} ${j ? JSON.stringify(j).slice(0, 120) + '…' : ''}`)
+  }
+
+  return (
+    <div style={{ border: '1px solid #eee', borderRadius: 8, padding: 12, display: 'grid', gap: 8 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: 8, alignItems: 'center' }}>
+        <label style={{ fontSize: 12 }}>Mode</label>
+        <select value={mode} onChange={e => setMode(e.target.value as any)}>
+          <option value="msw">MSW (Storybook)</option>
+          <option value="dev">Dev server</option>
+        </select>
+        {mode === 'dev' && (
+          <input value={base} onChange={e => setBase(e.target.value)} placeholder="http://localhost:3002" />
+        )}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+        <div>
+          <div style={{ fontWeight: 600, marginBottom: 6 }}>Index</div>
+          <input value={namespace} onChange={e => setNamespace(e.target.value)} placeholder="namespace" />
+          <input value={docId} onChange={e => setDocId(e.target.value)} placeholder="id" />
+          <textarea value={text} onChange={e => setText(e.target.value)} style={{ minHeight: 70 }} />
+          <button onClick={indexDoc} style={{ marginTop: 6 }}>Index</button>
+        </div>
+        <div>
+          <div style={{ fontWeight: 600, marginBottom: 6 }}>Search</div>
+          <input value={namespace} onChange={e => setNamespace(e.target.value)} placeholder="namespace" />
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="query" />
+          <input type="number" min={1} max={20} value={topK} onChange={e => setTopK(parseInt(e.target.value || '3', 10))} />
+          <button onClick={searchDocs} style={{ marginTop: 6 }}>Search</button>
+        </div>
+      </div>
+
+      <div>
+        <div style={{ fontWeight: 600, marginBottom: 6 }}>Log</div>
+        <pre style={{ maxHeight: 220, overflow: 'auto', background: '#fafafa', padding: 8, borderRadius: 6, fontSize: 12 }}>{log.join('\n')}</pre>
+      </div>
+    </div>
+  )
+}
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#index", label: "Index documents" },
+    { href: "#search", label: "Search" },
+    { href: "#journeys", label: "Journeys integration" },
+  ]}
+/>
+
+## Overview {#overview}
+
+- Endpoints (dev-only):
+  - POST /api/local-memory/index — upsert { namespace, id, text }
+  - POST /api/local-memory/search — query { namespace, query, topK }
+
+## Index documents {#index}
+
+```bash
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"namespace":"lab","id":"nq-1","text":"Harvest.ai makes content transformation easy."}' \
+  http://localhost:3002/api/local-memory/index | jq
+```
+
+## Search {#search}
+
+```bash
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"namespace":"lab","query":"transformation","topK":3}' \
+  http://localhost:3002/api/local-memory/search | jq
+```
+
+## Journeys integration {#journeys}
+
+- See Docs/User Journeys → “LocalMemory flow” button for a scripted demo
+- Extend with negative tests (missing namespace, empty text)
+
+## Interactive panel
+
+<Canvas>
+  <Story name="LocalMemory (MSW or Dev)">
+    <LocalMemoryPanel />
+  </Story>
+</Canvas>
+
+<LastUpdated file="src/stories/Labs/LocalMemoryLab.docs.mdx" />
+

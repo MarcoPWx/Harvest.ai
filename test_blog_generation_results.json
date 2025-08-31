@@ -1,0 +1,61 @@
+{
+  "test_date": "2025-08-28T16:30:00Z",
+  "insights_used": {
+    "total_patterns": 3,
+    "platforms_analyzed": [
+      "medium",
+      "dev_to",
+      "hashnode"
+    ],
+    "title_insights": {
+      "avg_title_length": 61.666666666666664,
+      "avg_word_count": 10.666666666666666,
+      "format_distribution": {
+        "how-to": 1,
+        "listicle": 1,
+        "question": 1
+      },
+      "has_numbers_percentage": 100.0,
+      "has_colon_percentage": 66.66666666666666
+    },
+    "section_insights": {
+      "avg_headings": 14.0,
+      "has_intro_percentage": 100.0,
+      "has_conclusion_percentage": 100.0,
+      "avg_section_length": 2.1055555555555556
+    },
+    "content_insights": {
+      "avg_paragraphs": 16.333333333333332,
+      "has_cta_percentage": 66.66666666666666,
+      "avg_lists": 11.0,
+      "avg_code_blocks": 1.3333333333333333
+    },
+    "seo_insights": {
+      "has_meta_desc_percentage": 0.0,
+      "has_canonical_percentage": 0.0
+    },
+    "engagement_insights": {
+      "has_social_percentage": 66.66666666666666,
+      "has_comments_percentage": 33.33333333333333,
+      "has_cta_percentage": 66.66666666666666
+    }
+  },
+  "sample_input": "\n    Web scraping is a powerful technique for extracting data from websites. \n    It can be used for market research, competitive analysis, content aggregation, \n    and many other business applications. However, it's important to follow ethical \n    guidelines and respect robots.txt files. Python libraries like BeautifulSoup, \n    Scrapy, and Selenium make web scraping accessible to developers of all skill levels.\n    ",
+  "enhanced_prompt": "Create a professional blog post based on the following content.\n\nBLOG PATTERN INSIGHTS (from analyzing 100+ successful blogs):\n- Average title length: 62 characters\n- Average title word count: 11 words\n- 100% of successful blogs have introductions\n- 100% of successful blogs have conclusions\n- 67% of successful blogs have call-to-actions\n- Average number of headings: 14\n\nCONTENT TO TRANSFORM:\n\n    Web scraping is a powerful technique for extracting data from websites. \n    It can be used for market research, competitive analysis, content aggregation, \n    and many other business applications. However, it's important to follow ethical \n    guidelines and respect robots.txt files. Python libraries like BeautifulSoup, \n    Scrapy, and Selenium make web scraping accessible to developers of all skill levels.\n    \n\nREQUIRED STRUCTURE:\n1. Title: 62 characters, 11 words, engaging and descriptive\n2. Introduction: Hook the reader, explain what they'll learn\n3. Body: 14 sections with clear subheadings\n4. Conclusion: Summarize key points and include call-to-action\n5. Call-to-Action: Encourage engagement (comment, share, subscribe)\n\nFORMAT: Markdown with proper heading structure (H1, H2, H3)\nTONE: Professional but engaging\nLENGTH: Comprehensive but scannable\n\nFocus on creating value for the reader while following proven blog patterns.",
+  "mock_response": {
+    "result": "# The Complete Guide to Web Scraping: Ethical Data Extraction for Business Growth\n\n## Introduction\nWeb scraping has become an essential tool for businesses looking to gain competitive advantages through data-driven insights. In this comprehensive guide, we'll explore how to implement ethical web scraping techniques that respect website policies while extracting valuable information.\n\n## Understanding Web Scraping Fundamentals\nBefore diving into implementation, it's crucial to understand what web scraping is and how it works.\n\n### What is Web Scraping?\nWeb scraping is the automated extraction of data from websites using specialized tools and libraries.\n\n### Common Use Cases\n- Market research and competitive analysis\n- Content aggregation and monitoring\n- Price comparison and tracking\n- Lead generation and contact collection\n\n## Ethical Considerations and Best Practices\nResponsible web scraping requires adherence to ethical guidelines and legal requirements.\n\n### Respecting Robots.txt\nAlways check and follow the robots.txt file of any website you plan to scrape.\n\n### Rate Limiting and Politeness\nImplement delays between requests to avoid overwhelming servers.\n\n### Terms of Service Compliance\nReview and respect the terms of service of target websites.\n\n## Technical Implementation with Python\nPython offers several powerful libraries for web scraping projects.\n\n### BeautifulSoup for HTML Parsing\nBeautifulSoup provides an intuitive interface for navigating and searching HTML documents.\n\n### Scrapy for Large-Scale Scraping\nScrapy is a comprehensive framework for building scalable web scrapers.\n\n### Selenium for Dynamic Content\nSelenium can handle JavaScript-rendered content that static scrapers might miss.\n\n## Business Applications and ROI\nWeb scraping can provide significant value across various business functions.\n\n### Market Intelligence\nMonitor competitor pricing, product offerings, and marketing strategies.\n\n### Content Strategy\nAggregate and analyze content from industry leaders and competitors.\n\n### Lead Generation\nIdentify potential customers and partners from public business directories.\n\n## Conclusion\nWeb scraping is a powerful technique that, when implemented ethically and responsibly, can provide significant business value. By following best practices and using the right tools, you can extract valuable insights while maintaining good relationships with website owners.\n\n**Ready to start scraping?** Join our community of ethical web scrapers and share your experiences in the comments below!\n\n---\n*Meta Description: Learn how to implement ethical web scraping techniques using Python libraries like BeautifulSoup, Scrapy, and Selenium for business growth and competitive advantage.*\n*Keywords: web scraping, data extraction, Python, BeautifulSoup, Scrapy, Selenium, ethical scraping, business intelligence*",
+    "cost": {
+      "tokens_used": 1250,
+      "estimated_cost": 0.0375,
+      "model_used": "gpt-4"
+    },
+    "quality_score": 92,
+    "processing_time": 3500,
+    "metadata": {
+      "format": "blog",
+      "input_length": 423,
+      "output_length": 1850,
+      "generated_at": "2025-08-28T16:30:00Z"
+    }
+  }
+}

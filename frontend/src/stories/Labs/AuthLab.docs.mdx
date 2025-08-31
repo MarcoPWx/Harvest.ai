@@ -1,0 +1,50 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+import LastUpdated from "../components/LastUpdated";
+
+# Auth Lab (Mock‑first)
+
+<Meta title="Labs/Auth Lab" />
+
+Explore the auth service layer and session semantics in a mock‑first environment. Pair with service tests in src/services/auth/__tests__/.
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#service", label: "Service layer" },
+    { href: "#routes", label: "Routes (dev)" },
+    { href: "#tests", label: "Run tests" },
+  ]}
+/>
+
+## Overview {#overview}
+
+- AuthService abstracts auth/session flows for the UI
+- MockAuthService provides a predictable local/dev implementation
+- Storybook pages rely on MSW for any networked pieces
+
+## Service layer {#service}
+
+- src/services/auth/AuthService.ts — real service façade
+- src/services/auth/MockAuthService.ts — local mock behaviors, feature flags
+
+Try it:
+- Read the tests in src/services/auth/__tests__/AuthService.test.ts
+- Add a scenario for token refresh / session expiry
+
+## Routes (dev) {#routes}
+
+- Minimal Next.js API routes exist as placeholders; real auth flows are mostly mocked here
+- Ensure you do not paste secrets into Storybook controls; use environment variables when testing locally
+
+## Run tests {#tests}
+
+```bash
+# Focus on auth service tests
+npm test -- src/services/auth/__tests__/AuthService.test.ts
+```
+
+- Expand tests to cover edge cases (e.g., invalid credentials, revoked session)
+
+<LastUpdated file="src/stories/Labs/AuthLab.docs.mdx" />
+

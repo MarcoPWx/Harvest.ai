@@ -1,0 +1,82 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+import LastUpdated from "../components/LastUpdated";
+
+# Security Lab
+
+<Meta title="Labs/Security Lab" />
+
+A practical overview of security headers and policies used in this app, plus a talk track you can present during interviews.
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#headers", label: "Headers & policies" },
+    { href: "#providers", label: "Providers & CSP (connect-src)" },
+    { href: "#checks", label: "Local checks" },
+    { href: "#hardening", label: "Hardening checklist" },
+    { href: "#talk", label: "Interview talk track" },
+  ]}
+/>
+
+## Overview {#overview}
+
+- We apply secure defaults at the edge via Next.js headers()
+- CSP restricts what we can load/connect to; we whitelist known AI provider endpoints
+- COOP/COEP enable cross‑origin isolation (for advanced APIs); adjust only if truly needed
+
+## Headers & policies {#headers}
+
+Source: next.config.mjs → headers()
+
+- Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+- Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.openai.com https://api.anthropic.com; frame-ancestors 'none'; base-uri 'none'
+- Referrer-Policy: strict-origin-when-cross-origin
+- X-Content-Type-Options: nosniff
+- Permissions-Policy: geolocation=(), microphone=(), camera=()
+- Cross-Origin-Opener-Policy: same-origin
+- Cross-Origin-Embedder-Policy: require-corp
+
+Notes:
+- 'unsafe-inline' for styles is a pragmatic dev choice; consider removing with CSS-only approach if feasible
+- Add connect-src entries only when enabling providers in dev/preview; keep production tight
+
+## Providers & CSP (connect-src) {#providers}
+
+When toggling real provider SDKs, connect-src must allow their API domains.
+
+- OpenAI: https://api.openai.com
+- Anthropic: https://api.anthropic.com
+- Gemini (Google): typically https://generativelanguage.googleapis.com (add if turning on real Gemini)
+
+Tip: In dev, use PROVIDERS_ON=1 with API keys configured via environment variables (never commit secrets). Without keys, adapters simulate output and CSP remains minimal.
+
+## Local checks {#checks}
+
+- Inspect headers in the browser devtools (Network → a page → Headers)
+- Curl example:
+
+```bash
+curl -sI http://localhost:3002 | grep -E 'Strict-Transport|Content-Security-Policy|Referrer-Policy|Permissions-Policy|Cross-Origin'
+```
+
+- Verify CSP errors in console when attempting blocked connections (expected when providers are off)
+
+## Hardening checklist {#hardening}
+
+- Remove 'unsafe-inline' from style-src when feasible
+- Consider nonces/hashes for any inline scripts
+- Keep frame-ancestors 'none' unless embedding is a requirement
+- Review Permissions-Policy for only what you need
+- Keep COOP/COEP only if cross-origin isolation is required; otherwise relax to reduce friction
+- Periodically audit connect-src entries; avoid wildcards
+
+## Interview talk track {#talk}
+
+- Start with the default header set and why each is present (HSTS, CSP, referrer, MIME sniffing)
+- Explain mock-first: most development does not require broad CSP allowances; we add domains only when enabling real providers
+- Show how to verify headers locally and how Storybook’s S2S labs still function (they call the dev server on 3002)
+- Outline a plan to tighten CSP further and where it might impact DX, along with mitigations (nonces, CSS extraction)
+
+<LastUpdated file="src/stories/Labs/SecurityLab.docs.mdx" />
+

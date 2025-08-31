@@ -1,0 +1,37 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+
+# S2S Journeys (Streaming & Threads)
+
+<Meta title="Lab/S2S Journeys" />
+
+Curated steps for exercising server-to-server JSON and SSE flows, plus multi-turn threads.
+
+<InlineToc
+  items={[
+    { href: "#json-generate", label: "JSON generate" },
+    { href: "#sse-generate", label: "SSE generate" },
+    { href: "#triggers", label: "Error & rate-limit triggers" },
+    { href: "#threads", label: "Threads (JSON)" },
+  ]}
+/>
+
+## JSON generate {#json-generate}
+- POST /api/generate with `{ input, format }`
+- Expect: result, cost, quality, processing_time, metadata
+
+## SSE generate {#sse-generate}
+- POST /api/generate with header `Accept: text/event-stream`
+- Expect: events `meta`, `token`, `final`, `done`
+- Tip: Use the app playground or a small client panel to visualize events
+
+## Error & rate-limit triggers {#triggers}
+- Include `TRIGGER_RATE_LIMIT` in input for 429 (with Retry-After)
+- Include `TRIGGER_ERROR` in input for 500 error JSON
+- Include `TRIGGER_CACHED` to simulate cache hit in mocks
+
+## Threads (JSON) {#threads}
+- POST /api/threads { title }
+- POST /api/threads/{id}/messages with user message
+- Read latest message from the response or GET the thread
+

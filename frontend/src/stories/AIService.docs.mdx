@@ -1,0 +1,48 @@
+import { Meta, Source } from "@storybook/addon-docs";
+
+<Meta title="Docs/AI Service" />
+
+## Fallback Chain
+
+<Source language="ts">
+{`
+const candidates = [
+  { key: 'openai', run: () => generateWithOpenAI(...) },
+  { key: 'anthropic', run: () => generateWithAnthropic(...) },
+  { key: 'gemini', run: () => generateWithGemini(...) },
+]
+
+for (const c of candidates) {
+if (!c.available) continue
+if (exclude.includes(c.key)) continue
+try { return await c.run() } catch (e) { errors.push(e as Error) }
+}
+
+throw new Error('All AI providers failed: ' + errors.map(e => e.message).join(', '))
+`}
+
+</Source>
+
+## Caching & Usage
+
+<Source language="ts">
+{`
+// Check cache
+const cacheKey = sha256({ input: input.slice(0, 100), options })
+const { data: cached } = await supabase.from('cache').select('value').eq('key', cacheKey).single()
+if (cached?.value) return { ...cached.value, cached: true }
+
+// After generation, upsert cache and log usage
+await supabase.from('cache').upsert({ key: cacheKey, value: result, expires_at })
+await supabase.from('usage_logs').insert({ user_id, endpoint: '/api/generate', method: 'POST', tokens_used: result.tokensUsed, cost: result.cost })
+`}
+
+</Source>
+
+## Error Classes
+
+- 429 (rate limit): advise retryAfter
+- 401 (invalid API key): prompt for key update
+- 402 (quota exceeded): direct user to provider billing
+
+See `/api/generate` route for how errors are translated to HTTP.

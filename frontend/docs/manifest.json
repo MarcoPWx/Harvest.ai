@@ -1,0 +1,360 @@
+{
+  "generatedAt": "2025-08-30T12:03:37.011Z",
+  "root": "/docs",
+  "tree": [
+    {
+      "type": "file",
+      "name": "MOCK_FIRST_STRATEGY.md",
+      "title": "🎭 Mock-First Implementation Strategy",
+      "path": "/docs/MOCK_FIRST_STRATEGY.md"
+    },
+    {
+      "type": "file",
+      "name": "IMPLEMENTATION_STRATEGY.md",
+      "title": "🎯 Harvest.ai - Complete Implementation Strategy",
+      "path": "/docs/IMPLEMENTATION_STRATEGY.md"
+    },
+    {
+      "type": "file",
+      "name": "IMPLEMENTATION_SUMMARY.md",
+      "title": "🎯 Harvest.ai Implementation Summary",
+      "path": "/docs/IMPLEMENTATION_SUMMARY.md"
+    },
+    {
+      "type": "file",
+      "name": "FINAL_ASSESSMENT.md",
+      "title": "📋 Harvest.ai - Final Pragmatic Assessment",
+      "path": "/docs/FINAL_ASSESSMENT.md"
+    },
+    {
+      "type": "file",
+      "name": "REALITY_CHECK.md",
+      "title": "🔍 Harvest.ai - Reality Check Document",
+      "path": "/docs/REALITY_CHECK.md"
+    },
+    {
+      "type": "file",
+      "name": "MAKE_IT_WORK.md",
+      "title": "🔧 How to Make Harvest.ai Actually Work",
+      "path": "/docs/MAKE_IT_WORK.md"
+    },
+    {
+      "type": "file",
+      "name": "BETA_LAUNCH_CHECKLIST.md",
+      "title": "🚀 BYOK Beta Launch Checklist",
+      "path": "/docs/BETA_LAUNCH_CHECKLIST.md"
+    },
+    {
+      "type": "file",
+      "name": "ALIGNMENT_ANALYSIS.md",
+      "title": "Alignment Analysis: North Star vs Reality",
+      "path": "/docs/ALIGNMENT_ANALYSIS.md"
+    },
+    {
+      "type": "file",
+      "name": "BETA_PRODUCTION_READINESS.md",
+      "title": "Beta Production Readiness",
+      "path": "/docs/BETA_PRODUCTION_READINESS.md"
+    },
+    {
+      "type": "file",
+      "name": "DEVLOG.md",
+      "title": "DEVLOG (Index)",
+      "path": "/docs/DEVLOG.md"
+    },
+    {
+      "type": "file",
+      "name": "INDEX.md",
+      "title": "Docs Index (auto-generated)",
+      "path": "/docs/INDEX.md"
+    },
+    {
+      "type": "file",
+      "name": "INTERVIEW_BRIEF.md",
+      "title": "Harvest.ai — Interview Brief",
+      "path": "/docs/INTERVIEW_BRIEF.md"
+    },
+    {
+      "type": "file",
+      "name": "README_HONEST.md",
+      "title": "Harvest.ai Documentation - REALITY CHECK",
+      "path": "/docs/README_HONEST.md"
+    },
+    {
+      "type": "file",
+      "name": "README.md",
+      "title": "Harvest.ai Documentation Hub",
+      "path": "/docs/README.md"
+    },
+    {
+      "type": "file",
+      "name": "MOCK_STATUS.md",
+      "title": "Mock & Test Status (What Actually Works)",
+      "path": "/docs/MOCK_STATUS.md"
+    },
+    {
+      "type": "file",
+      "name": "PRODUCT_BRIEF.md",
+      "title": "Product Brief — Harvest.ai",
+      "path": "/docs/PRODUCT_BRIEF.md"
+    },
+    {
+      "type": "file",
+      "name": "S2S_STORIES.md",
+      "title": "S2S Stories (Server-to-Server)",
+      "path": "/docs/S2S_STORIES.md"
+    },
+    {
+      "type": "file",
+      "name": "SYSTEM_STATUS.md",
+      "title": "System Status - ACTUAL State",
+      "path": "/docs/SYSTEM_STATUS.md"
+    },
+    {
+      "type": "file",
+      "name": "TECH_STACK_CHEATSHEET.md",
+      "title": "Tech Stack Cheat Sheet (Harvest.ai)",
+      "path": "/docs/TECH_STACK_CHEATSHEET.md"
+    },
+    {
+      "type": "file",
+      "name": "USER_STORIES.md",
+      "title": "User Stories (Source of Truth)",
+      "path": "/docs/USER_STORIES.md"
+    },
+    {
+      "type": "dir",
+      "name": "api",
+      "children": [
+        {
+          "type": "file",
+          "name": "COMPLETE_API_SPEC.md",
+          "title": "🔌 Harvest.ai Complete API Specification",
+          "path": "/docs/api/COMPLETE_API_SPEC.md"
+        },
+        {
+          "type": "file",
+          "name": "BYOK_API.md",
+          "title": "BYOK (Bring Your Own Key) API Documentation",
+          "path": "/docs/api/BYOK_API.md"
+        },
+        {
+          "type": "file",
+          "name": "REST_API.md",
+          "title": "REST API Documentation",
+          "path": "/docs/api/REST_API.md"
+        },
+        {
+          "type": "file",
+          "name": "SWAGGER_FALLBACK.md",
+          "title": "Swagger — Live vs Snapshot Fallback",
+          "path": "/docs/api/SWAGGER_FALLBACK.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "architecture",
+      "children": [
+        {
+          "type": "file",
+          "name": "MOCK_FIRST_BACKEND.md",
+          "title": "🎭 Mock-First Backend Architecture",
+          "path": "/docs/architecture/MOCK_FIRST_BACKEND.md"
+        },
+        {
+          "type": "file",
+          "name": "GENERATION_FLOW.md",
+          "title": "Generation Flow & AI Gateway",
+          "path": "/docs/architecture/GENERATION_FLOW.md"
+        },
+        {
+          "type": "file",
+          "name": "HELP_PANEL.md",
+          "title": "Help Panel — Behavior & Wiring",
+          "path": "/docs/architecture/HELP_PANEL.md"
+        },
+        {
+          "type": "file",
+          "name": "SYSTEM_ARCHITECTURE.md",
+          "title": "System Architecture",
+          "path": "/docs/architecture/SYSTEM_ARCHITECTURE.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "demo",
+      "children": [
+        {
+          "type": "file",
+          "name": "TOUR_GUIDE.md",
+          "title": "🚀 BYOK Demo Tour - Complete Guide",
+          "path": "/docs/demo/TOUR_GUIDE.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "engineering",
+      "children": [
+        {
+          "type": "file",
+          "name": "MDX_AUTHORING.md",
+          "title": "Authoring MDX in Storybook (MDX 3)",
+          "path": "/docs/engineering/MDX_AUTHORING.md"
+        },
+        {
+          "type": "file",
+          "name": "PERFORMANCE_BUNDLING.md",
+          "title": "Performance & Bundling Guide (Storybook + Next.js)",
+          "path": "/docs/engineering/PERFORMANCE_BUNDLING.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "epics",
+      "children": [
+        {
+          "type": "file",
+          "name": "epic-001-byok-foundation.md",
+          "title": "Epic 001: BYOK Foundation & Demo Mode",
+          "path": "/docs/epics/epic-001-byok-foundation.md"
+        },
+        {
+          "type": "file",
+          "name": "byok-demo-tour.md",
+          "title": "Epic: BYOK Demo Tour",
+          "path": "/docs/epics/byok-demo-tour.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "roadmap",
+      "children": [
+        {
+          "type": "file",
+          "name": "BETA_ROADMAP.md",
+          "title": "🚀 Beta Roadmap - Path to Production",
+          "path": "/docs/roadmap/BETA_ROADMAP.md"
+        },
+        {
+          "type": "file",
+          "name": "EPICS.md",
+          "title": "🚀 Harvest.ai Epics and Tasks",
+          "path": "/docs/roadmap/EPICS.md"
+        },
+        {
+          "type": "file",
+          "name": "EPIC_MANAGEMENT_SPEC.md",
+          "title": "Epic Management — Deep Dive",
+          "path": "/docs/roadmap/EPIC_MANAGEMENT_SPEC.md"
+        },
+        {
+          "type": "file",
+          "name": "EPIC_TRACKING.md",
+          "title": "Epic Tracking - TDD Implementation Progress",
+          "path": "/docs/roadmap/EPIC_TRACKING.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "runbooks",
+      "children": [
+        {
+          "type": "file",
+          "name": "OPERATIONS_BOOK.md",
+          "title": "📘 Harvest.ai Operations Book",
+          "path": "/docs/runbooks/OPERATIONS_BOOK.md"
+        },
+        {
+          "type": "file",
+          "name": "PRODUCTION_CHECKLIST.md",
+          "title": "🚀 Production Checklist",
+          "path": "/docs/runbooks/PRODUCTION_CHECKLIST.md"
+        },
+        {
+          "type": "file",
+          "name": "DEVELOPMENT.md",
+          "title": "Development Runbook",
+          "path": "/docs/runbooks/DEVELOPMENT.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "status",
+      "children": [
+        {
+          "type": "file",
+          "name": "implementation-progress.md",
+          "title": "📊 Implementation Progress Log",
+          "path": "/docs/status/implementation-progress.md"
+        },
+        {
+          "type": "file",
+          "name": "LOCAL_DEV_GUIDE.md",
+          "title": "🧭 Harvest.ai Local Development Guide",
+          "path": "/docs/status/LOCAL_DEV_GUIDE.md"
+        },
+        {
+          "type": "file",
+          "name": "EPICS_STATUS.md",
+          "title": "Delivery Epics and Status",
+          "path": "/docs/status/EPICS_STATUS.md"
+        },
+        {
+          "type": "file",
+          "name": "SYSTEM_STATUS_AGGREGATOR.md",
+          "title": "System Status Aggregator & Polling",
+          "path": "/docs/status/SYSTEM_STATUS_AGGREGATOR.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "testing",
+      "children": [
+        {
+          "type": "file",
+          "name": "TESTING_STRATEGY.md",
+          "title": "[DEPRECATED] Harvest.ai Testing Strategy (See docs/testing/TESTING.md)",
+          "path": "/docs/testing/TESTING_STRATEGY.md"
+        },
+        {
+          "type": "file",
+          "name": "TEST_STATUS.md",
+          "title": "[DEPRECATED] Testing Status Report (See docs/testing/TESTING.md)",
+          "path": "/docs/testing/TEST_STATUS.md"
+        },
+        {
+          "type": "file",
+          "name": "TESTING.md",
+          "title": "🧪 Testing & CI (Consolidated)",
+          "path": "/docs/testing/TESTING.md"
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "user-journeys",
+      "children": [
+        {
+          "type": "file",
+          "name": "USER_FLOWS.md",
+          "title": "🚀 Harvest.ai User Journeys & Flows",
+          "path": "/docs/user-journeys/USER_FLOWS.md"
+        },
+        {
+          "type": "file",
+          "name": "CONTENT_TRANSFORMATION.md",
+          "title": "Content Transformation User Journey",
+          "path": "/docs/user-journeys/CONTENT_TRANSFORMATION.md"
+        }
+      ]
+    }
+  ]
+}

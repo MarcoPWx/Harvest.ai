@@ -1,0 +1,116 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+
+<Meta title="Overview/Product Core & North Star" />
+
+# Product Core & North Star
+
+This page captures the product’s North Star, core definition, consolidated technology list, and the connected user journeys.
+
+## North Star
+
+- Be the most trusted way to turn raw input into a publishable draft in under 90 seconds, with full cost transparency and zero lock‑in.
+
+### metric
+
+- Time to First Useful Output (TTFUO) P90 ≤ 90 seconds
+
+### Trust guardrails (supporting KPIs)
+
+- Transparency Trust Score: price-verification rate ≤ 5%
+- Export Success Rate: 100% (no lock-in)
+- Crisis Return Rate: ≥ 90% of users come back during their next urgent need
+- Quality Acceptance Rate: ≥ 80% outputs accepted without major rework
+
+### Why this fits
+
+- It directly ties to the core promise across docs: crisis-first value, radical transparency, and trust. Panic/Flow/Power journeys all serve the 90-second-to-useful-draft goal, while BYOK + export guarantee the trust posture.
+
+---
+
+## Core of the product
+
+- What it is: An AI content transformation platform that turns any source (notes, docs, URLs, files) into professional outputs (blog posts, summaries, emails, quizzes, presentations), with a trust-first posture.
+- Trust-first principles:
+  - BYOK privacy: users bring their own AI provider keys; no vendor lock-in; export everything.
+  - Radical transparency: clear, per-request cost breakdown and quality scoring.
+  - Honest UX: realistic expectations, explicit errors, and easy exit (full export).
+- Delivery surfaces:
+  - Web app: simple “demo” and production UX with real-time streaming, quality/cost metrics, caching, and rate-limiting.
+  - Developer platform: REST/SSE endpoints (and future SDK/webhooks) for integration and batch.
+- Multi-provider engine:
+  - OpenAI, Anthropic, Google AI supported with fallback and provider selection.
+  - Streaming via SSE for real-time token/partial output; caching for repeat requests.
+- Modes that meet users where they are:
+  - Panic Mode: one-click “help me now” emergency flow.
+  - Flow Mode: guided, low-friction creative workflow.
+  - Power Mode: advanced controls, batching, templates, and team workflows.
+- Enterprise track:
+  - Security/compliance (BYOK, SOC2 posture, auditability), trust packages, pilot playbooks, and SLAs.
+- Product ambition:
+  - Be there exactly when needed (crisis timing), deliver exactly what’s promised (transparency), and scale from single-output wins to enterprise bulk.
+
+---
+
+## Technology list (consolidated)
+
+- Core app
+  - Next.js (App Router), TypeScript, React, Tailwind CSS, Radix UI, Framer Motion
+  - MDX docs in-app; Storybook for interactive docs and playgrounds
+- Data & networking (frontend)
+  - React Query, fetch; date-fns; zod + react-hook-form (validation)
+- Realtime and streaming
+  - SSE for streaming; mock-socket in dev; progressive enhancement WS → SSE → polling (documented)
+- AI providers and backend logic
+  - Provider adapters: OpenAI, Anthropic, Google Generative AI; fallback and env-gated
+  - Request correlation IDs, cost/quality metrics, caching, and rate-limits
+- Persistence and platform (current/planned)
+  - Supabase (auth, Postgres) for accounts, usage, and collaboration (planned/partly implemented)
+  - Redis (optional) for cache and rate limiting (dev/ops path described)
+- Observability and security
+  - Sentry, Vercel Analytics, custom metrics and health; CORS and API hardening
+- Testing, mocks, and docs
+  - Jest + Testing Library, Playwright E2E, MSW for REST mocks, Storybook 9, optional Chromatic
+  - Swagger UI at /docs/api backed by /api/openapi.json (contract-first docs)
+- CI/CD and ops
+  - GitHub Actions (type-check, lint, coverage thresholds, E2E, Storybook build)
+  - Vercel deployment; Cloudflare/CDN posture; runbooks for deployment, troubleshooting, development
+- Dev tools
+  - Headers for mock network controls (delay/error rate), SSE viewer, API playground, smoke scripts
+
+---
+
+## User journeys and how they connect
+
+- Acquisition to Activation (trust-first and crisis-aware)
+  - Landing → Rapid trust checks (cost transparency, honest quality scores) → Quick “Try the Demo”
+  - Crisis-aware entry: if urgent patterns detected, show Panic Mode (“Save my night”; minimal inputs; cost visible)
+- Onboarding (when accounts are enabled)
+  - Signup → Email verification → Onboarding survey (use case, formats, volume) → BYOK configuration and validation
+  - Trust ladder: progressively reveal power, surface costs/quality honestly, offer no-risk retries
+- First value delivery: content generation flow
+  - Select format → Provide source (text/URL/file) → Configure options/model → Generate
+  - Realtime streaming (SSE): meta/tokens/partials → Quality + cost + latency metrics → Edit → Export (copy/download)
+  - Caching enables instant subsequent runs; rate limits enforced with clear retry guidance
+- Growth and return usage
+  - Flow Mode: guided drafting and refining; saves time and educates user on best practices
+  - Power Mode: batch generation, templates, histories, and (later) team collaboration
+  - Nudges and timing: proactive suggestions aligned with calendars and prior behavior
+- Monetization and plans (when enabled)
+  - Free tier caps → Upgrade prompt → Plan selection → Payment → Unlock Pro/Team features
+- Developer integration journey
+  - Read API docs (Swagger UI) → Create API key(s) → Quick-start client → POST /api/generate or /generate/stream (SSE)
+  - Webhooks/async jobs for batch and long-running flows; monitoring for rate/latency/usage
+- Enterprise adoption journey
+  - Security/compliance review (BYOK, auditability, DPA, posture docs) → Pilot program with success metrics → Rollout plan and SLAs
+- Error and recovery flows (trust-preserving)
+  - Input validation (clear messages), rate limit and quota handling (timers/backoff), provider failover, retries
+  - Export and leave paths are explicit and easy; support touchpoints are direct and human
+- Lifecycle connection (single narrative)
+  - Attract (trust-first, timely value) → Onboard (BYOK, survey) → Activate (first generation success)
+  - Retain (Flow/Power modes, templates, caching) → Monetize (plans) → Expand (teams, batch, API)
+  - Enterprise: parallel “trust package → pilot → rollout” track that shares the same generation core
+
+---
+
+<small>Last updated: {new Date().toISOString().slice(0, 10)}</small>

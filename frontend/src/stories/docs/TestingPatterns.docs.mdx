@@ -1,0 +1,441 @@
+import { Meta } from "@storybook/addon-docs";
+import { Canvas, Story } from "@storybook/addon-docs";
+
+<Meta title="Docs/Testing Patterns & Examples" />
+
+# Testing Patterns & Examples
+
+> 🧪 **Real-world testing patterns** used throughout Harvest.ai with working examples
+
+## 📋 Test Categories
+
+### Unit Tests - The Foundation
+
+Unit tests verify individual functions and components in isolation.
+
+```typescript path=/Users/betolbook/Documents/github/NatureQuest/Harvest.ai/frontend/__tests__/unit/services/ai-service.test.ts start=1
+import { AIService } from "@/lib/ai/service";
+import { createTestGenerationRequest } from "@/test-utils/factories";
+
+describe("AIService", () => {
+  let service: AIService;
+
+  beforeEach(() => {
+    service = new AIService();
+    jest.clearAllMocks();
+  });
+
+  describe("generate", () => {
+    it("should generate content successfully", async () => {
+      // Arrange
+      const request = createTestGenerationRequest({
+        input: "Test content",
+        format: "blog",
+      });
+
+      // Act
+      const result = await service.generate(request);
+
+      // Assert
+      expect(result).toHaveProperty("content");
+      expect(result.format).toBe("blog");
+      expect(result.provider).toBeDefined();
+    });
+
+    it("should fallback to secondary provider on failure", async () => {
+      // Arrange
+      mockOpenAI.mockRejectedValueOnce(new Error("Rate limit"));
+      const request = createTestGenerationRequest();
+
+      // Act
+      const result = await service.generate(request);
+
+      // Assert
+      expect(result.provider).toBe("anthropic");
+      expect(mockAnthropic).toHaveBeenCalled();
+    });
+  });
+});
+```
+
+### Integration Tests - API Contracts
+
+Integration tests verify that different parts of the system work together.
+
+```typescript path=/Users/betolbook/Documents/github/NatureQuest/Harvest.ai/frontend/__tests__/integration/api/generate.test.ts start=1
+import { createMocks } from "node-mocks-http";
+import handler from "@/app/api/generate/route";
+import { createTestUser, createTestGenerationRequest } from "@/test-utils/factories";
+
+describe("/api/generate", () => {
+  it("should handle authenticated request", async () => {
+    // Given - authenticated user
+    const user = createTestUser();
+    const request = createTestGenerationRequest();
+
+    const { req, res } = createMocks({
+      method: "POST",
+      headers: {
+        authorization: "Bearer test-token",
+      },
+      body: request,
+    });
+
+    // When - generate content
+    await handler(req, res);
+
+    // Then - success response
+    expect(res._getStatusCode()).toBe(200);
+    const data = JSON.parse(res._getData());
+    expect(data).toHaveProperty("content");
+    expect(data).toHaveProperty("usage");
+  });
+
+  it("should cache repeated requests", async () => {
+    // Given - same request twice
+    const request = createTestGenerationRequest();
+
+    // When - first request
+    const { req: req1, res: res1 } = createMocks({
+      method: "POST",
+      body: request,
+    });
+    await handler(req1, res1);
+
+    // When - second request
+    const { req: req2, res: res2 } = createMocks({
+      method: "POST",
+      body: request,
+    });
+    await handler(req2, res2);
+
+    // Then - second is cached
+    expect(res2.getHeader("x-cache")).toBe("hit");
+  });
+});
+```
+
+### E2E Tests - User Journeys
+
+E2E tests verify complete user workflows.
+
+```typescript path=/Users/betolbook/Documents/github/NatureQuest/Harvest.ai/frontend/tests/e2e/generation-flow.spec.ts start=1
+import { test, expect } from "@playwright/test";
+import { selectors, helpers } from "../helpers/selectors";
+
+test.describe("Content Generation Flow", () => {
+  test("should generate blog post from text input", async ({ page }) => {
+    // User navigates to demo
+    await page.goto("/demo");
+
+    // User enters content
+    await page.fill(selectors.demo.inputField, "AI is transforming how we create content");
+
+    // User selects format
+    await page.selectOption(selectors.demo.formatSelect, "blog");
+
+    // User generates content
+    await page.click(selectors.demo.generateButton);
+
+    // System shows progress
+    await expect(page.locator(selectors.demo.progressBar)).toBeVisible();
+
+    // Content is generated
+    await expect(page.locator(selectors.demo.output)).toBeVisible({ timeout: 10000 });
+
+    // User can copy content
+    await page.click(selectors.demo.copyButton);
+    await expect(page.locator(selectors.ui.success)).toContainText("Copied");
+  });
+
+  test("should handle errors gracefully", async ({ page }) => {
+    // Simulate error condition
+    await page.route("/api/generate", (route) => {
+      route.fulfill({
+        status: 429,
+        json: { error: "Rate limit exceeded" },
+      });
+    });
+
+    await page.goto("/demo");
+    await page.fill(selectors.demo.inputField, "Test");
+    await page.click(selectors.demo.generateButton);
+
+    // Error is shown to user
+    await expect(page.locator(selectors.ui.error)).toContainText("Rate limit");
+  });
+});
+```
+
+## 🎯 Testing Patterns
+
+### Pattern 1: Test Data Factories
+
+Use factories to create consistent test data:
+
+```typescript path=/Users/betolbook/Documents/github/NatureQuest/Harvest.ai/frontend/test-utils/factories.ts start=1
+export const createTestUser = (overrides = {}) => ({
+  id: faker.string.uuid(),
+  email: faker.internet.email(),
+  name: faker.person.fullName(),
+  plan: "free",
+  ...overrides,
+});
+
+// Usage in tests
+const user = createTestUser({ plan: "pro" });
+const admin = createTestUser({ role: "admin" });
+```
+
+### Pattern 2: Custom Matchers
+
+Create domain-specific matchers:
+
+```typescript path=null start=null
+// Custom matcher for API responses
+expect.extend({
+  toBeValidGeneration(received) {
+    const pass = received.content && received.format && received.provider && received.usage;
+
+    return {
+      pass,
+      message: () =>
+        pass ? "Valid generation response" : `Missing required fields: ${JSON.stringify(received)}`,
+    };
+  },
+});
+
+// Usage
+expect(response).toBeValidGeneration();
+```
+
+### Pattern 3: Test Hooks
+
+Use hooks for setup and teardown:
+
+```typescript path=null start=null
+describe("Feature Tests", () => {
+  let testUser;
+  let testData;
+
+  beforeAll(async () => {
+    // Global setup
+    await setupTestDatabase();
+  });
+
+  beforeEach(async () => {
+    // Per-test setup
+    testUser = await createTestUser();
+    testData = await seedTestData();
+  });
+
+  afterEach(async () => {
+    // Cleanup
+    await cleanupTestData(testUser.id);
+  });
+
+  afterAll(async () => {
+    // Global cleanup
+    await teardownTestDatabase();
+  });
+});
+```
+
+### Pattern 4: Page Object Model
+
+Encapsulate page interactions:
+
+```typescript path=null start=null
+class DemoPage {
+  constructor(private page: Page) {}
+
+  async navigate() {
+    await this.page.goto("/demo");
+  }
+
+  async generateContent(input: string, format: string) {
+    await this.page.fill(selectors.demo.inputField, input);
+    await this.page.selectOption(selectors.demo.formatSelect, format);
+    await this.page.click(selectors.demo.generateButton);
+    await this.waitForGeneration();
+  }
+
+  async waitForGeneration() {
+    await this.page.waitForSelector(selectors.demo.output);
+  }
+
+  async getGeneratedContent() {
+    return this.page.locator(selectors.demo.output).textContent();
+  }
+}
+
+// Usage
+test("generate blog post", async ({ page }) => {
+  const demoPage = new DemoPage(page);
+  await demoPage.navigate();
+  await demoPage.generateContent("Test input", "blog");
+  const content = await demoPage.getGeneratedContent();
+  expect(content).toContain("Test");
+});
+```
+
+## 🔧 Testing Utilities
+
+### Mock Service Worker (MSW)
+
+```typescript path=null start=null
+// Setup MSW handlers
+export const handlers = [
+  rest.post("/api/generate", (req, res, ctx) => {
+    return res(
+      ctx.delay(500), // Simulate network delay
+      ctx.json({
+        content: "Generated content",
+        format: req.body.format,
+      }),
+    );
+  }),
+];
+
+// Use in tests
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+```
+
+### Test Database
+
+```typescript path=null start=null
+// Test database utilities
+export async function createTestDatabase() {
+  const db = new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.TEST_DATABASE_URL,
+      },
+    },
+  });
+
+  await db.$connect();
+  return db;
+}
+
+export async function seedTestData(db: PrismaClient) {
+  return db.user.create({
+    data: createTestUser(),
+  });
+}
+
+export async function cleanupTestData(db: PrismaClient) {
+  await db.$executeRaw`TRUNCATE TABLE users CASCADE`;
+}
+```
+
+## 📊 Coverage Requirements
+
+### Minimum Coverage by Type
+
+| Test Type   | Coverage Target | Current | Status              |
+| ----------- | --------------- | ------- | ------------------- |
+| Unit Tests  | 95%             | 82.8%   | 🔴 Need improvement |
+| Integration | 90%             | 0%      | 🔴 Not started      |
+| E2E         | 80%             | Unknown | 🟡 Being verified   |
+| Overall     | 90%             | ~60%    | 🔴 Below target     |
+
+### Coverage Commands
+
+```bash
+# Run with coverage
+npm run test:coverage
+
+# Unit tests only
+npm run test:unit -- --coverage
+
+# Integration tests
+npm run test:integration -- --coverage
+
+# E2E with report
+npm run test:e2e:report
+
+# Generate HTML report
+npm run coverage:report
+```
+
+## 🚨 Common Pitfalls & Solutions
+
+### Pitfall 1: Flaky Tests
+
+**Problem**: Tests pass sometimes, fail others
+**Solution**: Use proper waits and avoid timing dependencies
+
+```typescript
+// ❌ Bad - arbitrary wait
+await page.waitForTimeout(5000);
+
+// ✅ Good - wait for specific condition
+await page.waitForSelector('[data-testid="content"]');
+await expect(page.locator('[data-testid="content"]')).toBeVisible();
+```
+
+### Pitfall 2: Test Interdependence
+
+**Problem**: Tests affect each other
+**Solution**: Isolate test state
+
+```typescript
+// ❌ Bad - shared state
+let globalUser;
+beforeAll(() => {
+  globalUser = createUser();
+});
+
+// ✅ Good - isolated state
+beforeEach(() => {
+  const user = createUser();
+});
+```
+
+### Pitfall 3: Testing Implementation
+
+**Problem**: Tests break when refactoring
+**Solution**: Test behavior, not implementation
+
+```typescript
+// ❌ Bad - testing implementation
+expect(component.state.isLoading).toBe(true);
+
+// ✅ Good - testing behavior
+expect(screen.getByTestId("loading")).toBeVisible();
+```
+
+## 🎯 Testing Checklist
+
+Before merging any feature:
+
+- [ ] Unit tests written and passing
+- [ ] Integration tests for API endpoints
+- [ ] E2E test for user journey
+- [ ] Coverage meets threshold (90%)
+- [ ] No console errors in tests
+- [ ] Tests run in CI/CD
+- [ ] Documentation updated
+- [ ] Performance benchmarks pass
+
+## 📚 Resources
+
+### Internal Guides
+
+- [TDD Master Plan](?path=/docs/docs-tdd-master-plan--docs)
+- [Test Utilities](/test-utils)
+- [Mock Strategies](/mocks)
+
+### External Resources
+
+- [Testing Library](https://testing-library.com/)
+- [Playwright Docs](https://playwright.dev/)
+- [Jest Documentation](https://jestjs.io/)
+- [MSW Documentation](https://mswjs.io/)
+
+---
+
+> 💡 **Pro Tip**: Write tests first, then implementation. If it's hard to test, it's probably hard to use!

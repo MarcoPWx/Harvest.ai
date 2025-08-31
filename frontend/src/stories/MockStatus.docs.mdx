@@ -1,0 +1,99 @@
+import { Meta } from "@storybook/addon-docs";
+
+# Mock & Test Status
+
+<Meta title="Docs/Mock Status" />
+
+> Shows exactly what's mocked, testable, and interactive in the current codebase.
+
+## Status Summary
+
+- **30%** of user stories have working mocks
+- **60%** of S2S stories have API mocks
+- **10%** have interactive UI
+- **70 unit tests** passing
+- **0%** real backend functionality
+
+## Interactive Playgrounds Available
+
+### 🟢 Security Playground
+
+- Session-only BYOK demo
+- Auto-wipe timer & panic wipe
+- Sanitized request preview
+- [Try it now](?path=/docs/docs-security-playground--docs)
+
+### 🟢 API Playground
+
+- Generate content with triggers
+- Test error conditions
+- Simulate cache hits
+- [Try it now](?path=/docs/docs-api-playground--docs)
+
+### 🟢 Observability Playground
+
+- Structured logging patterns
+- Metrics collection
+- Correlation IDs
+- [Try it now](?path=/docs/docs-observability-playground--docs)
+
+## Mocked APIs (MSW Handlers)
+
+### Generation APIs ✅
+
+- `POST /api/generate` - Full mock with triggers
+- `GET /api/generate/:id` - Get by ID
+- `GET /api/generations` - List with pagination
+- `POST /api/generate/stream` - SSE streaming
+
+### Auth APIs ✅ (Memory-only)
+
+- `POST /api/auth/signup`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/auth/session`
+
+### User APIs ✅
+
+- `GET/PUT /api/user/profile`
+- `GET /api/user/usage`
+- `POST/GET/DELETE /api/user/api-keys`
+
+### Template & Team APIs ✅
+
+- Full CRUD for templates
+- Basic team operations
+
+### Debug & Metrics ✅
+
+- `GET /api/metrics` - Counters and p95
+- `GET /api/debug/endpoints` - List all
+
+## How to Test
+
+```bash
+# Unit tests (70 passing)
+npm test
+
+# E2E tests (mostly placeholders)
+npm run test:e2e
+
+# Interactive in Storybook
+npm run storybook
+
+# Dev server with mocks
+npm run dev:mock
+```
+
+## Trigger Mock Behaviors
+
+In any API call or playground:
+
+- Add **"TRIGGER_ERROR"** → 500 error
+- Add **"TRIGGER_RATE_LIMIT"** → 429 response
+- Add **"TRIGGER_CACHED"** → cache hit
+- Use same input twice → cache hit
+
+## Full Details
+
+View the complete breakdown: [MOCK_STATUS.md](/docs/MOCK_STATUS.md)

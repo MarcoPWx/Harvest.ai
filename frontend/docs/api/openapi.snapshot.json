@@ -1,0 +1,38 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Harvest.ai API (Snapshot)",
+    "version": "0.2.0",
+    "description": "Static snapshot of the OpenAPI spec for offline viewing in Storybook."
+  },
+  "servers": [{ "url": "http://localhost:3002" }],
+  "paths": {
+    "/api/generate": {
+      "post": { "summary": "Generate content", "responses": { "200": { "description": "OK" } } }
+    },
+    "/api/generations": {
+      "get": { "summary": "List generations", "responses": { "200": { "description": "OK" } } }
+    },
+    "/api/generate/{id}": {
+      "get": {
+        "summary": "Get generation by id",
+        "parameters": [{ "name": "id", "in": "path", "required": true }],
+        "responses": { "200": { "description": "OK" } }
+      },
+      "delete": {
+        "summary": "Delete generation by id",
+        "parameters": [{ "name": "id", "in": "path", "required": true }],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/api/local-memory/index": {
+      "post": {
+        "summary": "Index text into local memory",
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/api/local-memory/search": {
+      "post": { "summary": "Search local memory", "responses": { "200": { "description": "OK" } } }
+    }
+  }
+}

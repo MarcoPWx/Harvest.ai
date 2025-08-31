@@ -1,0 +1,78 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+import InlineToc from "./components/InlineToc";
+
+export const parameters = {
+  repoDocPath: "/docs/architecture/SYSTEM_ARCHITECTURE.md",
+  repoDocLabel: "Architecture",
+};
+
+# Security & Privacy — Extended Model
+
+<a id="top"></a>
+
+<Meta title="Specs/Security/Security & Privacy — Extended Model" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#roles-access", label: "Roles & access" },
+    { href: "#data-handling", label: "Data handling" },
+    { href: "#secrets", label: "Secrets" },
+    { href: "#transport-headers", label: "Transport & headers" },
+    { href: "#audit-trail", label: "Audit trail" },
+    { href: "#threats-mitigations", label: "Threats & mitigations" },
+  ]}
+/>
+
+## Roles & access
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Roles: visitor, creator, admin - Principle of least privilege in UI; no hidden server-only
+functions exposed to client
+
+## Data handling
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Draft content may contain PII → avoid logging full bodies; mask/redact where needed - Logging
+policy: only minimal metadata for troubleshooting
+
+## Secrets
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Keep secrets server-side; never import server files into client bundles - Use NEXT_PUBLIC_* only
+for client-intended flags
+
+## Transport & headers
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- HTTPS-only; plan CSP, Referrer-Policy, Permissions-Policy - Secure cookies for auth (HttpOnly,
+Secure, SameSite)
+
+## Audit trail
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Record high-value actions (generate, export, incident) with minimal payloads and timestamps
+
+<LastUpdated file="src/stories/SpecsSecurityPrivacy.stories.mdx" />
+
+## Threats & mitigations
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- XSS → strict CSP, sanitize/escape rendered content - CSRF → same-site cookies and/or CSRF tokens
+for mutating routes - SSRF/data exfil → disallow arbitrary URL fetches; whitelist domains
+server-side

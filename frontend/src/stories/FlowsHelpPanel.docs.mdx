@@ -1,0 +1,28 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/architecture/HELP_PANEL.md",
+  repoDocLabel: "Help Panel — Behavior & Wiring",
+};
+
+# Help Panel Behavior (Flow)
+
+<Meta title="Flows/Help Panel Behavior" />
+
+This flow demonstrates how the Help Panel is wired via story parameters and links to relevant repo docs.
+
+See also:
+
+- <a href="?path=/docs/review-index--docs">Review Index</a>
+
+## Steps
+
+- Set `parameters.repoDocPath` in a story
+- Storybook decorator renders the help button
+- Reviewers click to open the doc in a new tab
+
+See the wiring doc in the Help panel for details.
+
+<LastUpdated file="src/stories/FlowsHelpPanel.stories.mdx" />

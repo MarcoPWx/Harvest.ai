@@ -1,0 +1,68 @@
+import { Meta, Canvas, Story } from "@storybook/addon-docs/blocks";
+
+export const parameters = {
+  repoDocPath: "/docs/status/LOCAL_DEV_GUIDE.md",
+  repoDocLabel: "Local Development Guide",
+};
+
+<Meta title="Docs/Local Memory API" />
+
+## Try it
+
+<Canvas>
+  <Story name="Index & Search">
+    {() => (
+      <div style={{ display: "grid", gap: 12 }}>
+        <textarea
+          data-testid="lm-text"
+          placeholder="Text to index"
+          defaultValue="Harvest.ai makes content transformation easy."
+          style={{ height: 100 }}
+        />
+        <div style={{ display: "flex", gap: 8 }}>
+          <button
+            onClick={async () => {
+              const text = document.querySelector("[data-testid=lm-text]")?.value || "";
+              const res = await fetch("/api/local-memory/index", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ namespace: "storybook", id: "example", text }),
+              });
+              alert("Indexed: " + res.status);
+            }}
+          >
+            Index
+          </button>
+          <button
+            onClick={async () => {
+              const res = await fetch("/api/local-memory/search", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  namespace: "storybook",
+                  query: "content transformation",
+                  topK: 5,
+                }),
+              });
+              const json = await res.json();
+              const pre = document.querySelector("[data-testid=lm-output]");
+              pre.textContent = JSON.stringify(json, null, 2);
+            }}
+          >
+            Search
+          </button>
+        </div>
+        <pre
+          data-testid="lm-output"
+          style={{
+            maxHeight: 300,
+            overflow: "auto",
+            background: "#111",
+            color: "#0f0",
+            padding: 12,
+          }}
+        />
+      </div>
+    )}
+  </Story>
+</Canvas>

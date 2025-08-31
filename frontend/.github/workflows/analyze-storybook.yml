@@ -1,0 +1,4 @@
+# NOTE: This workflow was moved to the repository root at /.github/workflows/analyze-storybook.yml
+# Keeping this file as a pointer to avoid confusion.
+# See ../../../../.github/workflows/analyze-storybook.yml for the active workflow.
+

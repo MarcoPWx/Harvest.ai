@@ -1,0 +1,114 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "H Harvest.ai Early Alpha" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e9] [cursor=pointer]: H
+            - generic [ref=e10] [cursor=pointer]:
+              - generic [ref=e11] [cursor=pointer]: Harvest.ai
+              - generic [ref=e12] [cursor=pointer]: Early Alpha
+          - generic [ref=e13]:
+            - link "Home" [ref=e14] [cursor=pointer]:
+              - /url: /
+            - link "Demo" [ref=e15] [cursor=pointer]:
+              - /url: /demo
+            - link "System" [ref=e16] [cursor=pointer]:
+              - /url: /system
+            - link "Roadmap" [ref=e17] [cursor=pointer]:
+              - /url: /roadmap
+            - link "Docs" [ref=e18] [cursor=pointer]:
+              - /url: /docs
+        - button "Toggle dark mode" [ref=e20] [cursor=pointer]:
+          - img [ref=e21] [cursor=pointer]
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - heading "🚀 Harvest.ai Content Transformer" [level=1] [ref=e26]
+        - paragraph [ref=e27]: Transform your raw content into professional, ready-to-use formats
+        - generic [ref=e28]:
+          - text: 💡
+          - strong [ref=e29]: "How it works:"
+          - text: Paste any content → Choose format → Get professional output
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e33]: 🎯 What do you want to create?
+            - generic [ref=e34]:
+              - button "📝 Blog Post SEO-optimized blog post with structure Turn notes into a professional blog post with headings, intro, and conclusion" [ref=e35] [cursor=pointer]:
+                - generic [ref=e36] [cursor=pointer]: 📝
+                - generic [ref=e37] [cursor=pointer]: Blog Post
+                - generic [ref=e38] [cursor=pointer]: SEO-optimized blog post with structure
+                - generic [ref=e39] [cursor=pointer]: Turn notes into a professional blog post with headings, intro, and conclusion
+              - button "📋 Content Summary Key points and takeaways Extract main ideas and action items from long content" [ref=e40] [cursor=pointer]:
+                - generic [ref=e41] [cursor=pointer]: 📋
+                - generic [ref=e42] [cursor=pointer]: Content Summary
+                - generic [ref=e43] [cursor=pointer]: Key points and takeaways
+                - generic [ref=e44] [cursor=pointer]: Extract main ideas and action items from long content
+              - button "📧 Email Template Professional email with CTA Convert content into a business email with subject line and structure" [ref=e45] [cursor=pointer]:
+                - generic [ref=e46] [cursor=pointer]: 📧
+                - generic [ref=e47] [cursor=pointer]: Email Template
+                - generic [ref=e48] [cursor=pointer]: Professional email with CTA
+                - generic [ref=e49] [cursor=pointer]: Convert content into a business email with subject line and structure
+          - generic [ref=e50]:
+            - generic [ref=e51]: 🧪 Try with Real Examples
+            - generic [ref=e52]:
+              - 'button "Product Launch Notes We''re launching a new AI-powered content tool called Harvest.ai. It transforms any content into different formats like b... Expected: Professional blog post with SEO optimization, clear sections, and call-to-action" [ref=e53] [cursor=pointer]':
+                - generic [ref=e54] [cursor=pointer]: Product Launch Notes
+                - generic [ref=e55] [cursor=pointer]: We're launching a new AI-powered content tool called Harvest.ai. It transforms any content into different formats like b...
+                - generic [ref=e56] [cursor=pointer]: "Expected: Professional blog post with SEO optimization, clear sections, and call-to-action"
+              - 'button "Meeting Notes - Q4 Strategy Q4 Strategy Meeting Notes: Revenue target $500K, focus on enterprise customers, launch new features by November, hire 3 ... Expected: Structured summary with key points, action items, and success metrics" [ref=e57] [cursor=pointer]':
+                - generic [ref=e58] [cursor=pointer]: Meeting Notes - Q4 Strategy
+                - generic [ref=e59] [cursor=pointer]: "Q4 Strategy Meeting Notes: Revenue target $500K, focus on enterprise customers, launch new features by November, hire 3 ..."
+                - generic [ref=e60] [cursor=pointer]: "Expected: Structured summary with key points, action items, and success metrics"
+              - 'button "Technical Documentation API Endpoints: POST /api/generate - transforms content into different formats. Parameters: input (string), format (blog|... Expected: Professional email template with clear structure and call-to-action" [ref=e61] [cursor=pointer]':
+                - generic [ref=e62] [cursor=pointer]: Technical Documentation
+                - generic [ref=e63] [cursor=pointer]: "API Endpoints: POST /api/generate - transforms content into different formats. Parameters: input (string), format (blog|..."
+                - generic [ref=e64] [cursor=pointer]: "Expected: Professional email template with clear structure and call-to-action"
+          - generic [ref=e65]:
+            - generic [ref=e66]: 🔑 Your OpenAI API Key
+            - textbox "sk-..." [ref=e67]
+            - generic [ref=e68]:
+              - paragraph [ref=e69]: • Your API key is used only for generation and never stored
+              - paragraph [ref=e70]:
+                - text: • Get your key at
+                - link "platform.openai.com" [ref=e71] [cursor=pointer]:
+                  - /url: https://platform.openai.com/api-keys
+              - paragraph [ref=e72]: "• Typical cost: $0.01-$0.10 per generation"
+          - generic [ref=e73]:
+            - generic [ref=e74]: 📝 Your Content (What you have)
+            - textbox "Your content" [ref=e75]: E2E default content
+            - generic [ref=e76]: "💡 Works with: meeting notes, product specs, technical docs, research, ideas, outlines, etc."
+          - button "Generate content" [ref=e77] [cursor=pointer]: ✨ Generate Blog
+        - generic [ref=e79]:
+          - generic [ref=e80]: 🎉 Your Generated Content (What you get)
+          - generic [ref=e81]:
+            - generic [ref=e82]: ✨
+            - generic [ref=e83]: Your professional content will appear here
+            - generic [ref=e84]: Ready-to-use, formatted content
+      - generic [ref=e86]:
+        - 'heading "🚀 New: Interactive BYOK Demo Tour" [level=3] [ref=e87]'
+        - paragraph [ref=e88]: Experience our Bring Your Own Key features with an interactive guided tour and mock data
+        - link "🔑 Launch BYOK Demo Tour →" [ref=e89] [cursor=pointer]:
+          - /url: /demo/byok
+          - generic [ref=e90] [cursor=pointer]: 🔑
+          - generic [ref=e91] [cursor=pointer]: Launch BYOK Demo Tour
+          - generic [ref=e92] [cursor=pointer]: →
+      - generic [ref=e93]:
+        - paragraph [ref=e94]:
+          - text: 💡
+          - strong [ref=e95]: "Perfect for:"
+          - text: Content creators, marketers, educators, product managers, and anyone who needs to transform raw content into professional formats.
+        - paragraph [ref=e96]:
+          - text: 🔒
+          - strong [ref=e97]: "Privacy first:"
+          - text: Your content and API key are never stored on our servers.
+  - button "Explore our ecosystem!":
+    - generic:
+      - generic:
+        - generic:
+          - generic: Explore our ecosystem!
+```

@@ -1,0 +1,40 @@
+{
+  "total_patterns": 3,
+  "platforms_analyzed": [
+    "medium",
+    "dev_to",
+    "hashnode"
+  ],
+  "title_insights": {
+    "avg_title_length": 61.666666666666664,
+    "avg_word_count": 10.666666666666666,
+    "format_distribution": {
+      "how-to": 1,
+      "listicle": 1,
+      "question": 1
+    },
+    "has_numbers_percentage": 100.0,
+    "has_colon_percentage": 66.66666666666666
+  },
+  "section_insights": {
+    "avg_headings": 14.0,
+    "has_intro_percentage": 100.0,
+    "has_conclusion_percentage": 100.0,
+    "avg_section_length": 2.1055555555555556
+  },
+  "content_insights": {
+    "avg_paragraphs": 16.333333333333332,
+    "has_cta_percentage": 66.66666666666666,
+    "avg_lists": 11.0,
+    "avg_code_blocks": 1.3333333333333333
+  },
+  "seo_insights": {
+    "has_meta_desc_percentage": 0.0,
+    "has_canonical_percentage": 0.0
+  },
+  "engagement_insights": {
+    "has_social_percentage": 66.66666666666666,
+    "has_comments_percentage": 33.33333333333333,
+    "has_cta_percentage": 66.66666666666666
+  }
+}

@@ -1,0 +1,59 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+import LastUpdated from "../components/LastUpdated";
+
+# Journeys — Index
+
+<Meta title="Journeys/Index" />
+
+User Journey–driven development (UJDD) with TDD and mock‑first via MSW. Start here to run journeys deterministically and then expand to live S2S.
+
+<InlineToc
+  items={[
+    { href: "#principles", label: "Principles" },
+    { href: "#run", label: "Run journeys" },
+    { href: "#msw", label: "MSW (mock‑first)" },
+    { href: "#tdd", label: "TDD workflow" },
+    { href: "#links", label: "Quick links" },
+  ]}
+/>
+
+## Principles {#principles}
+
+- Journey‑first: define and exercise end‑to‑end behavior the user feels
+- Mock‑first: stability and safety by default (MSW), then flip to live when needed
+- TDD: write a failing test, make it pass, refactor, keep the suite green
+
+## Run journeys {#run}
+
+```bash
+# Start dev with E2E flags (MSW enabled)
+npm run dev:e2e
+# Start Storybook
+npm run storybook
+```
+
+Use Docs/User Journeys (mock‑backed runner) for deterministic flows. Adjust x-mock-delay and x-mock-error-rate for conditions.
+
+## MSW (mock‑first) {#msw}
+
+- Storybook initializes MSW globally (see .storybook/preview.ts)
+- Handlers under src/mocks/handlers/** shape responses and triggers (e.g., TRIGGER_RATE_LIMIT)
+- You can exercise realistic latency (x-mock-delay) and error rates (x-mock-error-rate) safely
+
+## TDD workflow {#tdd}
+
+- Write/extend a user journey spec (Playwright) or add a new button/step to Docs/User Journeys
+- Add/adjust unit tests in parallel for core logic (AI Service, Auth, etc.)
+- Keep @smoke subset fast and deterministic (see Labs/E2E Smoke Lab)
+
+## Quick links {#links}
+
+- Docs/User Journeys
+- Lab/User Journeys — Extended (20)
+- Lab/Curated Journeys
+- Labs/E2E Smoke Lab
+- Mock Status (Docs) — MSW setup and status
+
+<LastUpdated file="src/stories/Journeys/Index.docs.mdx" />
+

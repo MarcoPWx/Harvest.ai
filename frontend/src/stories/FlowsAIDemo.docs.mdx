@@ -1,0 +1,56 @@
+import * as React from "react";
+import { Meta, Canvas, Story } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/architecture/GENERATION_FLOW.md",
+  repoDocLabel: "Generation Flow & AI Gateway",
+};
+
+# AI Streaming Demo (Flow)
+
+<Meta title="Flows/AI Streaming Demo" />
+
+This flow demonstrates the end-to-end generation experience with streaming progress under MSW.
+
+See also:
+
+- <a href="?path=/docs/specs-ai-ai-gateway-full-specification--docs#endpoints-mock-first">
+    AI Gateway → Endpoints (mock-first)
+  </a>
+- <a href="?path=/docs/overview-overview-insanely-detailed--docs#generation-flow-streaming">
+    Overview → Generation flow (streaming)
+  </a>
+- <a
+    href="/doc?path=docs/architecture/GENERATION_FLOW.md#sequence-mermaid"
+    target="_blank"
+    rel="noreferrer"
+  >
+    Docs Viewer → Generation Flow → Sequence
+  </a>
+
+<Canvas>
+  <Story name="Content Generator (Streaming)">
+    {(() => {
+      const Comp = React.lazy(() =>
+        import("../components/content/ContentGenerator").then((m) => ({
+          default: m.ContentGenerator || m.default,
+        })),
+      );
+      return (
+        <React.Suspense fallback={<div style={{ padding: 12 }}>Loading…</div>}>
+          <div style={{ minHeight: 240 }}>
+            <Comp
+              defaultFormat="blog"
+              defaultModel="gpt-4"
+              maxLength={1000}
+              initialContent="Hello from AI Streaming Demo"
+            />
+          </div>
+        </React.Suspense>
+      );
+    })()}
+  </Story>
+</Canvas>
+
+<LastUpdated file="src/stories/FlowsAIDemo.stories.mdx" />

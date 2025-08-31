@@ -1,0 +1,85 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+import InlineToc from "./components/InlineToc";
+
+export const parameters = { repoDocPath: "/docs/api/REST_API.md", repoDocLabel: "REST API" };
+
+# AI Gateway — Full Specification
+
+<a id="top"></a>
+
+<Meta title="Specs/AI/AI Gateway — Full Specification" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#endpoints-mock-first", label: "Endpoints (mock-first)" },
+    { href: "#errors-retries", label: "Errors & retries" },
+    { href: "#observability", label: "Observability" },
+    { href: "#openapi", label: "OpenAPI" },
+    { href: "#see-also", label: "See also" },
+    { href: "#security", label: "Security" },
+  ]}
+/>
+
+## Overview
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+A thin API layer orchestrating content generation and related AI calls. In mock-first mode, routes
+are served by MSW with deterministic behaviors and TRIGGER_* inputs.
+
+## Endpoints (mock-first)
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+- POST /api/generate
+  - Request: { input: string, format: 'blog'|'email'|'summary'|'presentation'|'social', model?: string }
+  - Headers (dev): x-mock-delay, x-mock-error-rate
+  - Special inputs: TRIGGER_RATE_LIMIT, TRIGGER_ERROR, TRIGGER_CACHED
+  - Response: { id, content, meta }
+
+## Errors & retries
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- 429 rate limit → retry-after guidance and exponential backoff - 5xx transient → jittered retry -
+4xx validation → surface actionable messages
+
+## Observability
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Events: generate_click, stream_start/chunk/complete, generate_error - Log minimal PII; prefer
+aggregates for metrics
+
+## OpenAPI
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Live: /api/openapi.json - Snapshot: /docs/api/openapi.snapshot.json
+
+## See also
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+-
+<a href="?path=/docs/overview-architecture-system-map-dependencies-layered-view-data-model-extended-erd--docs#layered-service-dependencies">
+  Architecture → Layered service dependencies
+</a>
+
+<LastUpdated file="src/stories/SpecsAIGateway.stories.mdx" />
+
+## Security
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Server-only keys; no secrets in client bundles - NEXT_PUBLIC_* only for intended client flags

@@ -1,0 +1,27 @@
+import { Meta, ArgsTable, Canvas, Story } from "@storybook/addon-docs";
+import Navigation from "./Navigation";
+
+export const parameters = {
+  repoDocPath: "/docs/architecture/SYSTEM_ARCHITECTURE.md",
+  repoDocLabel: "System Architecture",
+};
+
+<Meta title="Components/Navigation/Docs" component={Navigation} />
+
+<ArgsTable of={Navigation} />
+
+## Examples
+
+<Canvas>
+  <Story name="Default">
+    <div style={{ minHeight: "160px" }}>
+      <Navigation />
+    </div>
+  </Story>
+</Canvas>
+
+## Accessibility
+
+- Interactive elements should have accessible names (aria-labels where necessary).
+- Verify keyboard navigation for menu toggles and links.
+- Confirm sufficient color contrast for all states.

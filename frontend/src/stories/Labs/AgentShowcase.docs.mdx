@@ -1,0 +1,55 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+import LastUpdated from "../components/LastUpdated";
+
+# Agent Showcase (Interview)
+
+<Meta title="Labs/Agent Showcase" />
+
+A presenter-friendly single page to explain how the Agent works in this repo, what’s canonical, and how to demo effectively.
+
+<InlineToc
+  items={[
+    { href: "#how-i-work", label: "How I work" },
+    { href: "#canon", label: "Canonical docs & consistency" },
+    { href: "#demo-agenda", label: "Demo agenda" },
+    { href: "#talk-track", label: "Talk track (short)" },
+  ]}
+/>
+
+## How I work {#how-i-work}
+
+- I run fully inside your repo context; no external clipboard scripts required
+- I update canonical docs (DevLog, Epics, System Status) directly from conversation context
+- I follow the Agent Boot Contract: TDD-first, safe defaults, and secure handling of env secrets
+
+## Canonical docs & consistency {#canon}
+
+- DevLog: /docs/status/DEVLOG.md
+- Epics: /docs/roadmap/EPICS.md
+- System Status: /docs/SYSTEM_STATUS.md
+- Agent Boot: /docs/status/AGENT_BOOT.md
+- Storybook mirrors these and validates them via small status components (e.g., DocsStatus)
+
+## Demo agenda {#demo-agenda}
+
+1) Labs/Index — set context
+2) Docs/Agent Boot — rules and guardrails
+3) Technology Overview Lab — stack & references
+4) S2S Streaming & Threads (live) — JSON and SSE
+5) AI Service Lab — fallback, cache, errors, quality, embeddings
+6) User Journeys — deterministic flows
+7) Provider Adapters Lab — PROVIDERS_ON walk‑through (no secrets in UI)
+8) Security Lab — headers, CSP, COOP/COEP
+9) Observability & Status Dashboard — ops view
+
+## Talk track (short) {#talk-track}
+
+- Mock-first, then flips to real providers when keys exist — same code paths, deterministic testing
+- Single source of truth for docs; I keep them fresh as part of work, not as a separate step
+- S2S routes use structured events; UI surfaces progress robustly and handles rate limits
+- Security posture is explicit in next.config.mjs; CSP stays narrow; connect-src widened only if needed
+- Observability is pragmatic: structured logs and minimal metrics for local feedback
+
+<LastUpdated file="src/stories/Labs/AgentShowcase.docs.mdx" />
+

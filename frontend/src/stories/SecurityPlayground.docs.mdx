@@ -1,0 +1,189 @@
+import * as React from "react";
+const { useEffect, useMemo, useRef, useState } = React;
+import { Meta, Canvas, Story } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/specs-security-privacy--docs",
+  repoDocLabel: "Security & Privacy",
+};
+
+# Security Playground — Session-only BYOK & Transparency
+
+<Meta title="Docs/Security Playground" />
+
+> Interactive demo: session-only key handling, auto-wipe timer, panic wipe, sanitized request preview, and data-flow.
+
+export function useByokSession(timeoutMs = 15 * 60 * 1000) {
+  const [enabled, setEnabled] = useState(false)
+  const keyRef = useRef<string | null>(null)
+  const providerRef = useRef<string>('openai')
+  const [remaining, setRemaining] = useState<number>(timeoutMs)
+  const timer = useRef<any>(null)
+  const start = useRef<number | null>(null)
+
+function resetTimer() {
+clearTimeout(timer.current)
+start.current = Date.now()
+setRemaining(timeoutMs)
+timer.current = setInterval(() => {
+const elapsed = start.current ? Date.now() - start.current : 0
+const left = Math.max(0, timeoutMs - elapsed)
+setRemaining(left)
+if (left <= 0) wipe()
+}, 1000)
+}
+
+function setKey(k: string) { keyRef.current = k; setEnabled(!!k); if (k) resetTimer() }
+function setProvider(p: string) { providerRef.current = p }
+function getSnapshot() { return { enabled, provider: providerRef.current, hasKey: !!keyRef.current } }
+function wipe() { keyRef.current = null; setEnabled(false); clearInterval(timer.current); setRemaining(timeoutMs); start.current = null }
+
+useEffect(() => {
+const handler = () => wipe()
+window.addEventListener('beforeunload', handler)
+return () => { window.removeEventListener('beforeunload', handler); wipe() }
+}, [])
+
+return { enabled, remaining, setKey, setProvider, getSnapshot, wipe }
+}
+
+function redactKey(k: string) {
+if (!k) return ''
+if (k.length <= 6) return '**_'
+return `${k.slice(0, 3)}_**${k.slice(-2)}`
+}
+
+export function SecurityPanel() {
+  const byok = useByokSession(15 * 60 * 1000)
+  const [keyInput, setKeyInput] = useState('')
+  const [out, setOut] = useState('')
+  const [localOnly, setLocalOnly] = useState(false)
+
+async function sendMock() {
+const snap = byok.getSnapshot()
+const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+if (snap.enabled && keyInput) {
+headers['X-Provider'] = snap.provider
+headers['X-Provider-Key'] = keyInput
+}
+const sanitized = {
+target: localOnly ? 'http://localhost:8787' : 'https://proxy.example.com',
+headers: {
+'Content-Type': headers['Content-Type'],
+'X-Provider': headers['X-Provider'] || '(none)',
+'X-Provider-Key': headers['X-Provider-Key'] ? redactKey(headers['X-Provider-Key']) : '(none)'
+},
+cache: 'no-store',
+request_id: Math.random().toString(36).slice(2, 10),
+what_we_store: {
+provider: headers['X-Provider'] || null,
+request_id: '(random)',
+model: '(client-specified)',
+token_count: '(estimated)',
+timing_ms: '(measured)',
+key_fingerprint: '(optional one-way)'
+}
+}
+setOut(JSON.stringify(sanitized, null, 2))
+}
+
+const minutes = Math.floor(byok.remaining / 60000)
+const seconds = Math.floor((byok.remaining % 60000) / 1000)
+
+return (
+
+<div style={{ display: 'grid', gap: 12 }}>
+<div style={{ display: 'grid', gap: 8 }}>
+<label>
+<div>Provider</div>
+<select onChange={e => byok.setProvider(e.target.value)} defaultValue="openai" data-testid="provider">
+<option value="openai">openai</option>
+<option value="anthropic">anthropic</option>
+<option value="gemini">gemini</option>
+</select>
+</label>
+<label>
+<div>API Key (session only)</div>
+<input
+type="password"
+value={keyInput}
+onChange={e => setKeyInput(e.target.value)}
+onCopy={e => e.preventDefault()}
+onCut={e => e.preventDefault()}
+placeholder="sk-..."
+autoComplete="off"
+inputMode="text"
+data-testid="byok-key"
+/>
+<small>This key is never stored and will auto‑wipe after inactivity.</small>
+</label>
+<div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap:'wrap' }}>
+<button onClick={() => byok.setKey(keyInput)} disabled={!keyInput}>Enable BYOK</button>
+<button onClick={byok.wipe} aria-label="Panic wipe">Panic Wipe</button>
+<button onClick={byok.wipe} aria-label="Simulate route change">Simulate Route Change (wipe)</button>
+<label style={{ display:'inline-flex', alignItems:'center', gap:6 }}>
+<input type="checkbox" checked={localOnly} onChange={e => setLocalOnly(e.target.checked)} /> Local-only mode (localhost proxy)
+</label>
+<span style={{ fontSize: 12, color: '#555' }}>
+{byok.enabled ? `Auto‑wipe in ${minutes}:${seconds.toString().padStart(2,'0')}` : 'BYOK disabled'}
+</span>
+</div>
+<div style={{ fontSize: 12, color: '#333' }}>
+<strong>Promise:</strong> Key is session‑only, never stored, and never logged. API responses are served with <code>Cache-Control: no-store</code>.
+</div>
+</div>
+
+      <div>
+        <button onClick={sendMock} data-testid="send-mock">Send Mock Request (sanitized preview)</button>
+      </div>
+
+      <div>
+        <div style={{ fontWeight: 600 }}>Sanitized request preview</div>
+        <pre data-testid="sanitized-preview" style={{ maxHeight: 320, overflow: 'auto', background: '#0b1020', color: '#b8f', padding: 12 }}>{out}</pre>
+      </div>
+
+      <div>
+        <div style={{ fontWeight: 600, marginBottom: 6 }}>Data flow</div>
+        <pre style={{ background: '#f8fafc', padding: 12, borderRadius: 8 }}>
+
+{`Browser (memory-only key) -> Zero‑retention proxy (no store, scrubbed logs) -> Provider (TLS)`}
+
+</pre>
+</div>
+
+      <div>
+        <div style={{ fontWeight: 600, marginBottom: 6 }}>Why this is safe</div>
+        <ul style={{ fontSize: 14, lineHeight: 1.5 }}>
+          <li>Session-only key (memory only); auto-wipe + panic wipe</li>
+          <li>No-store responses (<code>Cache-Control: no-store</code>)</li>
+          <li>Strict CSP and HSTS (recommended in app)</li>
+          <li>No analytics/iframes while BYOK active</li>
+          <li>Redacted logs and sanitized errors</li>
+          <li>Per-IP rate limits and body-size caps</li>
+          <li>Optional local-only proxy so servers never see keys</li>
+        </ul>
+      </div>
+
+      <div>
+        <div style={{ fontWeight: 600, marginBottom: 6 }}>What we store</div>
+        <ul style={{ fontSize: 14, lineHeight: 1.5 }}>
+          <li>Request id, provider, model, token count, timing</li>
+          <li><strong>Never</strong> your key or raw content</li>
+          <li>Optional: one-way key fingerprint for correlation</li>
+        </ul>
+      </div>
+    </div>
+
+)
+}
+
+## Interactive
+
+<Canvas>
+  <Story name="BYOK Session-only">
+    <SecurityPanel />
+  </Story>
+</Canvas>
+
+<LastUpdated file="src/stories/SecurityPlayground.stories.mdx" />

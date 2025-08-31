@@ -1,0 +1,106 @@
+{
+  "total_tests": 7,
+  "passed_tests": 2,
+  "success_rate": 0.2857142857142857,
+  "avg_response_time": 13505.4838180542,
+  "max_response_time": 22457.816123962402,
+  "min_response_time": 9419.74401473999,
+  "results": [
+    {
+      "test": "api_health",
+      "status": "error",
+      "response_time": 10212.378025054932,
+      "error": "HTTPConnectionPool(host='localhost', port=3000): Read timed out. (read timeout=10)",
+      "test_name": "Health Check"
+    },
+    {
+      "test": "generation_blog",
+      "status": "failed",
+      "response_time": 22457.816123962402,
+      "error": "HTTP 500",
+      "test_name": "Blog Generation"
+    },
+    {
+      "test": "generation_summary",
+      "status": "failed",
+      "response_time": 14287.123918533325,
+      "error": "HTTP 500",
+      "test_name": "Summary Generation"
+    },
+    {
+      "test": "generation_email",
+      "status": "failed",
+      "response_time": 11150.357007980347,
+      "error": "HTTP 500",
+      "test_name": "Email Generation"
+    },
+    {
+      "test": "generation_quiz",
+      "status": "failed",
+      "response_time": 9419.74401473999,
+      "error": "HTTP 500",
+      "test_name": "Quiz Generation"
+    },
+    {
+      "test": "rate_limiting",
+      "status": "passed",
+      "total_time": 45641.875982284546,
+      "requests": [
+        {
+          "request": 1,
+          "status_code": 500,
+          "rate_limited": false
+        },
+        {
+          "request": 2,
+          "status_code": 500,
+          "rate_limited": false
+        },
+        {
+          "request": 3,
+          "status_code": 500,
+          "rate_limited": false
+        },
+        {
+          "request": 4,
+          "status_code": 500,
+          "rate_limited": false
+        },
+        {
+          "request": 5,
+          "status_code": 500,
+          "rate_limited": false
+        }
+      ],
+      "rate_limited_count": 0,
+      "test_name": "Rate Limiting"
+    },
+    {
+      "test": "error_handling",
+      "status": "passed",
+      "results": [
+        {
+          "test": "empty_input",
+          "status_code": 400,
+          "expected_error": true,
+          "has_error_message": true
+        },
+        {
+          "test": "invalid_format",
+          "status_code": 400,
+          "expected_error": true,
+          "has_error_message": true
+        },
+        {
+          "test": "missing_api_key",
+          "status_code": 400,
+          "expected_error": true,
+          "has_error_message": true
+        }
+      ],
+      "passed_count": 3,
+      "total_count": 3,
+      "test_name": "Error Handling"
+    }
+  ]
+}

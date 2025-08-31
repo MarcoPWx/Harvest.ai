@@ -1,0 +1,30 @@
+import { Meta } from "@storybook/addon-docs";
+
+<Meta title="Docs/Accessibility" />
+
+## Labels & Roles
+
+- Ensure controls have accessible names (use `<label>` or `aria-label`)
+- Use appropriate roles for navigation, main content, and headings
+- Avoid using non-semantic elements when semantic equivalents exist
+
+## Keyboard
+
+- All interactive elements should be reachable via Tab order
+- Maintain visible focus states with sufficient contrast
+- Ensure Escape closes dialogs and that focus returns to the triggering element
+
+## Color & Contrast
+
+- Target WCAG 2.1 AA contrast for text and interactive states
+- Validate both light and dark themes
+
+## Announcements
+
+- Use `aria-live` for async status updates (loading, errors)
+- Provide meaningful error messages with programmatic association
+
+## Testing
+
+- Add jest-axe checks where feasible for core views
+- Validate keyboard navigation and focus order in E2E smoke tests

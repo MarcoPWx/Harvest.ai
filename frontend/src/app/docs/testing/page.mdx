@@ -1,0 +1,46 @@
+# 🧪 Testing & CI
+
+Single, consolidated source of truth for our testing approach and commands.
+
+See the canonical doc for full details: docs/testing/TESTING.md
+
+## Layers (overview)
+
+- Unit (Jest + RTL)
+  - Polyfills via undici; route tests mock next/server
+- E2E (Playwright)
+  - dev:mock server; HTML report + traces on retry
+- Visual (optional)
+  - Storybook + Chromatic
+- Accessibility
+  - Storybook a11y; jest-axe optional
+
+## Current Status (2025-08-30)
+
+- All Jest unit and integration tests green locally: 229/229
+- Stable animation and Redis mocks in tests
+- Deterministic UI tests for demo tour (immediate visibility in tests)
+- ApiClient tests: abort-aware fetch mocks; short timeouts; globalThis.fetch usage in client
+- Note: E2E (Playwright) to be revisited post-auth/DB integration
+
+## Commands
+
+```bash
+npm test                  # unit
+npm run test:coverage     # unit with coverage
+npm run test:e2e          # e2e (headless)
+npm run test:e2e:headed   # e2e (headed)
+```
+
+## CI (summary)
+
+- Type-check, lint, unit with coverage
+- Playwright E2E (mock)
+- Storybook build
+- Chromatic publish (if secret configured)
+
+## Dev tools & controls
+
+- /dev/tools: API Playground, SSE Viewer, WS Client
+- /dev/network: global mock defaults (cookies), per-request overrides, timeline, presets, batch runner
+- MSW mock controls: x-mock-delay (ms), x-mock-error-rate (0..1)

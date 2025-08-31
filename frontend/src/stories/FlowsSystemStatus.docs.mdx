@@ -1,0 +1,40 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/status/SYSTEM_STATUS_AGGREGATOR.md",
+  repoDocLabel: "System Status — Spec & Aggregator",
+};
+
+# System Status Polling (Flow)
+
+<Meta title="Flows/System Status Polling" />
+
+This flow shows how the CI job writes a JSON snapshot and how the dashboard fetches and renders it.
+
+See also:
+
+- <a href="?path=/docs/specs-system-status-full-spec--docs#data-source">
+    System Status → Data source
+  </a>
+- <a href="?path=/docs/overview-overview-insanely-detailed--docs#system-status-mermaid">
+    Overview → System Status (Mermaid)
+  </a>
+- <a
+    href="/doc?path=docs/status/SYSTEM_STATUS_AGGREGATOR.md#data-flow"
+    target="_blank"
+    rel="noreferrer"
+  >
+    Docs Viewer → System Status Aggregator → Data flow
+  </a>
+
+## Steps
+
+- CI completes tests → writes docs/status/ci-status.json
+- Storybook static site loads → dashboard fetches JSON
+- Badges render with links to coverage and E2E reports
+
+See the deep-dive spec in the Help panel for diagrams and schema.
+
+<LastUpdated file="src/stories/FlowsSystemStatus.stories.mdx" />

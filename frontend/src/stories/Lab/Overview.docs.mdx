@@ -1,0 +1,48 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+
+# Learning Lab
+
+<Meta title="Lab/Overview" />
+
+The Learning Lab is a curated, learning‑centric space inside Storybook. It’s where we collect:
+
+- Headlines: opinionated, product-ready messaging and value framing
+- Definitions: clear vocabulary for the team and docs
+- Curated Journeys: step‑by‑step walkthroughs of core experiences (mock-first and real provider)
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#why", label: "Why this lab?" },
+    { href: "#sections", label: "Sections" },
+    { href: "#start-here", label: "Start here" },
+    { href: "#contribute", label: "Contribute" },
+  ]}
+/>
+
+## Why this lab?
+
+- Keep product language, mental models, and journeys close to the codebase
+- Make it easy for new contributors to ramp up with consistent definitions
+- Provide living, runnable journeys that reference our mocks and E2E flags
+
+## Sections
+
+- Lab/Headlines — product/value headlines and narratives
+- Lab/Definitions — shared vocabulary (BYOK, SSE, MSW, provider adapter, etc.)
+- Lab/Curated Journeys — guided flows with links to interactive pages and docs
+
+## Start here
+
+- Read Lab/Headlines to align on the story we tell
+- Skim Lab/Definitions to internalize the vocabulary
+- Run through Lab/Curated Journeys to experience the system end-to-end
+
+## Contribute
+
+- Keep entries concise; link out to deeper technical docs when needed
+- Prefer examples and runnable links (e.g., Docs/API Playground, Docs/User Journeys)
+- Submit changes alongside feature PRs to keep the lab fresh
+

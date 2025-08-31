@@ -1,0 +1,67 @@
+import * as React from "react";
+import { Meta, Canvas, Story } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/engineering/PERFORMANCE_BUNDLING.md",
+  repoDocLabel: "Perf & Bundling Guide",
+};
+
+# Performance & Bundling
+
+This page summarizes how to profile, analyze, and optimize Storybook bundles (Vite builder) and shows examples of lazy loading and vendor chunk splitting.
+
+<Meta title="Docs/Performance & Bundling" />
+
+## Quick commands
+
+- Profile timings: `npm run storybook:profile`
+- Visualize bundle: `npm run storybook:analyze`
+- Split vendors (optional): `npm run storybook:split`
+- Split + visualize: `npm run storybook:analyze:split`
+
+The full guide lives at /docs/engineering/PERFORMANCE_BUNDLING.md.
+
+## See also
+
+- <a href="?path=/docs/specs-service-catalog--docs#api-routes-mock-first">
+    Service Catalog → API Routes (mock-first)
+  </a>
+- <a href="?path=/docs/overview-architecture-system-map-dependencies-layered-view-data-model-extended-erd--docs#layered-service-dependencies">
+    Architecture → Layered service dependencies
+  </a>
+
+---
+
+## Security & Access
+
+- We do not deploy Storybook publicly; analysis builds are CI artifacts only.
+- Chromatic (hosted Storybook + visual testing) is off by default here; use only if you explicitly enable it and keep the project private.
+- See the full Security & Access notes in /docs/engineering/PERFORMANCE_BUNDLING.md.
+
+---
+
+<LastUpdated file="src/stories/PerformanceBundling.stories.mdx" />
+
+## Lazy loading example
+
+export function LazyLoadedDemo() {
+  const Comp = React.lazy(() =>
+    import("../components/ecosystem/EcosystemWidget").then((m) => ({
+      default: m.default || m.EcosystemWidget,
+    })),
+  );
+  return (
+    <React.Suspense fallback={<div style={{ padding: 12 }}>Loading widget…</div>}>
+      <div style={{ minHeight: 200 }}>
+        <Comp currentProduct="harvest" position="bottom-right" userTier="free" theme="dark" />
+      </div>
+    </React.Suspense>
+  );
+}
+
+<Canvas>
+  <Story name="Lazy-loaded EcosystemWidget">
+    <LazyLoadedDemo />
+  </Story>
+</Canvas>

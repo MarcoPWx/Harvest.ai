@@ -1,0 +1,64 @@
+import { Meta, Canvas, Story, ArgsTable } from "@storybook/addon-docs";
+import { ContentGenerator } from "./ContentGenerator";
+
+export const parameters = {
+  repoDocPath: "/docs/architecture/GENERATION_FLOW.md",
+  repoDocLabel: "Generation Flow & AI Gateway",
+};
+
+<Meta title="Harvest.ai/Content/ContentGenerator/Docs" component={ContentGenerator} />
+
+<ArgsTable of={ContentGenerator} />
+
+## Examples
+
+<Canvas>
+  <Story name="Blog – Pro Model">
+    <ContentGenerator
+      defaultFormat="blog"
+      defaultModel="gpt-4"
+      maxLength={1500}
+      initialContent="The future of renewable energy"
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="Email – Concise">
+    <ContentGenerator
+      defaultFormat="email"
+      defaultModel="gpt-3.5-turbo"
+      maxLength={500}
+      initialContent="Follow-up after product demo"
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="Summary – Technical">
+    <ContentGenerator
+      defaultFormat="summary"
+      defaultModel="claude-3-sonnet"
+      maxLength={300}
+      initialContent="Long article on AI developments..."
+    />
+  </Story>
+</Canvas>
+
+## Guidance
+
+### Error Handling
+
+- Rate limits (429) should display time-to-retry hints.
+- Invalid API key (401) prompts the user to update credentials.
+- Quota exceeded (402) provides guidance to check billing.
+
+### Streaming & Progress
+
+- In mock mode, a simulated stream displays chunked output and progress.
+- In real mode, consider SSE/WebSocket for progressive UX.
+
+### Accessibility
+
+- Ensure form controls are labeled and reachable via keyboard.
+- Announce loading and error states with ARIA live regions when possible.

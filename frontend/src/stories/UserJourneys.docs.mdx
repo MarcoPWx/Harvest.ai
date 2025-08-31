@@ -1,0 +1,90 @@
+import * as React from "react";
+const { useState } = React;
+import { Meta, Canvas } from "@storybook/addon-docs";
+
+export const parameters = {
+  repoDocPath: "/docs/testing/TESTING.md",
+  repoDocLabel: "Testing & CI Guide",
+};
+
+# User Journeys (Mocked)
+
+Try common end-to-end flows against MSW mocks. Headers x-mock-delay and x-mock-error-rate can be added to simulate adverse networks.
+
+<Meta title="Docs/User Journeys" />
+
+export function Journeys() {
+  const [log, setLog] = useState([])
+  const [delay, setDelay] = useState(0)
+  const [errorRate, setErrorRate] = useState(0)
+
+function push(line) {
+setLog(prev => [new Date().toLocaleTimeString() + ' ' + line, ...prev].slice(0, 200))
+}
+
+async function call(url, init) {
+const headers = { 'Content-Type': 'application/json' }
+if (delay > 0) headers['x-mock-delay'] = String(delay)
+if (errorRate > 0) headers['x-mock-error-rate'] = String(errorRate)
+const res = await fetch(url, { ...init, headers: { ...headers, ...(init?.headers || {}) } })
+const text = await res.text().catch(() => '')
+return { status: res.status, body: text }
+}
+
+async function generateSuccess() {
+push('Generate: start')
+const r = await call('/api/generate', { method: 'POST', body: JSON.stringify({ input: 'Hello from User Journeys', format: 'blog' }) })
+push(`Generate: HTTP ${r.status}`)
+}
+
+async function generateRateLimit() {
+push('Generate (429): start')
+const r = await call('/api/generate', { method: 'POST', body: JSON.stringify({ input: 'TRIGGER_RATE_LIMIT', format: 'blog' }) })
+push(`Generate (429): HTTP ${r.status}`)
+}
+
+async function debugEndpoints() {
+push('Debug/endpoints: start')
+const r = await call('/api/debug/endpoints')
+push(`Debug/endpoints: HTTP ${r.status}`)
+}
+
+async function localMemoryFlow() {
+push('LocalMemory index: start')
+await call('/api/local-memory/index', { method: 'POST', body: JSON.stringify({ namespace: 'journeys', id: 'j1', text: 'Harvest.ai makes content transformation easy' }) })
+push('LocalMemory search: start')
+const r = await call('/api/local-memory/search', { method: 'POST', body: JSON.stringify({ namespace: 'journeys', query: 'content', topK: 3 }) })
+push(`LocalMemory search: HTTP ${r.status}`)
+}
+
+return (
+
+<div style={{ maxWidth: 900 }}>
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+<div>
+<label style={{ display: 'block', fontSize: 12 }}>x-mock-delay (ms)</label>
+<input type="number" value={delay} onChange={(e) => setDelay(parseInt(e.target.value || '0', 10))} style={{ width: '100%', padding: 6, border: '1px solid #ddd', borderRadius: 6 }} />
+</div>
+<div>
+<label style={{ display: 'block', fontSize: 12 }}>x-mock-error-rate (0..1)</label>
+<input type="number" step={0.1} min={0} max={1} value={errorRate} onChange={(e) => setErrorRate(parseFloat(e.target.value || '0'))} style={{ width: '100%', padding: 6, border: '1px solid #ddd', borderRadius: 6 }} />
+</div>
+</div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+        <button onClick={generateSuccess} style={{ padding: '6px 10px' }}>Generate (success)</button>
+        <button onClick={generateRateLimit} style={{ padding: '6px 10px' }}>Generate (429)</button>
+        <button onClick={async () => { push('Generate (cached): start'); const r = await call('/api/generate', { method: 'POST', body: JSON.stringify({ input: 'make this TRIGGER_CACHED now', format: 'blog' }) }); push(`Generate (cached): HTTP ${r.status}`) }} style={{ padding: '6px 10px' }}>Generate (cached)</button>
+        <button onClick={debugEndpoints} style={{ padding: '6px 10px' }}>Debug endpoints</button>
+        <button onClick={localMemoryFlow} style={{ padding: '6px 10px' }}>LocalMemory flow</button>
+      </div>
+
+      <pre style={{ border: '1px solid #eee', borderRadius: 6, padding: 12, background: '#fafafa', fontSize: 12, minHeight: 140, maxHeight: 280, overflow: 'auto' }}>{log.join('\n')}</pre>
+    </div>
+
+)
+}
+
+<Canvas>
+  <Journeys />
+</Canvas>

@@ -1,0 +1,80 @@
+import { Meta, Canvas, Story, Source } from "@storybook/addon-docs/blocks";
+
+export const parameters = {
+  repoDocPath: "/docs/api/REST_API.md",
+  repoDocLabel: "REST API Overview",
+};
+
+<Meta title="Docs/API Playground" />
+
+This page lets you try key endpoints directly in Storybook. All requests are intercepted by MSW handlers defined in <code>src/mocks/handlers</code>, so you can explore the API without a live backend.
+
+## Try /api/generate
+
+<Canvas>
+  <Story
+    name="Generate"
+    args={{
+      input: "Write about Harvest.ai mock-first development",
+      format: "blog",
+    }}
+  >
+    {({ input, format }) => (
+      <div style={{ display: "grid", gap: 12 }}>
+        <label>
+          <div>Input</div>
+          <textarea
+            style={{ width: "100%", height: 120 }}
+            defaultValue={input}
+            data-testid="playground-input"
+          />
+        </label>
+        <label>
+          <div>Format</div>
+          <select defaultValue={format} data-testid="playground-format">
+            <option value="blog">blog</option>
+            <option value="summary">summary</option>
+            <option value="email">email</option>
+          </select>
+        </label>
+        <button
+          data-testid="playground-generate"
+          onClick={async () => {
+            const input = document.querySelector("[data-testid=playground-input]")?.value || "";
+            const format =
+              document.querySelector("[data-testid=playground-format]")?.value || "blog";
+            const res = await fetch("/api/generate", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ input, format, options: { tone: "professional" } }),
+            });
+            const json = await res.json();
+            const pre = document.querySelector("[data-testid=playground-output]");
+            pre.textContent = JSON.stringify(json, null, 2);
+          }}
+        >
+          Send Request
+        </button>
+        <div>
+          <div style={{ fontWeight: 600 }}>Response</div>
+          <pre
+            data-testid="playground-output"
+            style={{
+              maxHeight: 300,
+              overflow: "auto",
+              background: "#111",
+              color: "#0f0",
+              padding: 12,
+            }}
+          />
+        </div>
+      </div>
+    )}
+  </Story>
+</Canvas>
+
+## Triggers
+
+- Include "TRIGGER_RATE_LIMIT" in input to simulate 429
+- Include "TRIGGER_ERROR" in input to simulate 500
+- Include "TRIGGER_CACHED" in input to simulate cache hit (metadata.cached = true)

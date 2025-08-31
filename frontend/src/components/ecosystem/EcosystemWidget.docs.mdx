@@ -1,0 +1,63 @@
+import { Meta, Controls, Stories, Canvas, Story, ArgsTable, Source } from "@storybook/addon-docs";
+import EcosystemWidget from "./EcosystemWidget";
+
+export const parameters = {
+  repoDocPath: "/docs/TECH_STACK_CHEATSHEET.md",
+  repoDocLabel: "Tech Stack Cheat Sheet",
+};
+
+<Meta title="Components/EcosystemWidget/Docs" component={EcosystemWidget} />
+
+<ArgsTable of={EcosystemWidget} />
+
+## Common Configurations
+
+<Canvas>
+  <Story name="Free Tier (Dark)">
+    <EcosystemWidget
+      currentProduct="harvest"
+      position="bottom-right"
+      userTier="free"
+      theme="dark"
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="Pro Tier (Dark)">
+    <EcosystemWidget currentProduct="harvest" position="bottom-right" userTier="pro" theme="dark" />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="Light Theme (Free)">
+    <EcosystemWidget
+      currentProduct="harvest"
+      position="bottom-right"
+      userTier="free"
+      theme="light"
+    />
+  </Story>
+</Canvas>
+
+## Guidance
+
+### When to use
+
+- You want a compact, consistent entry point to sibling products in the suite.
+- You want to show upgrade paths inside the product without full-page marketing.
+
+### When not to use
+
+- Pages with strict content focus where extra UI would distract (e.g., onboarding forms).
+- When per-page product context is confusing—provide `currentProduct` to clarify.
+
+### Accessibility
+
+- All clickable items expose accessible names; verify reachability with keyboard Tab order.
+- Provide meaningful `onProductClick` behavior for non-mouse users (e.g., SPA navigation).
+
+### Testing
+
+- Unit tests validate rendering, tier visuals, and `onProductClick` callback semantics.
+- E2E tests should assert keyboard navigation and focus states.

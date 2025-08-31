@@ -1,0 +1,31 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/api/SWAGGER_FALLBACK.md",
+  repoDocLabel: "Swagger — Live vs Snapshot",
+};
+
+# Swagger Live vs Snapshot Fallback (Flow)
+
+<Meta title="Flows/Swagger Live vs Snapshot Fallback" />
+
+This flow summarizes how the Swagger UI story tries the live OpenAPI endpoint and falls back to the snapshot automatically.
+
+See also:
+
+- <a href="?path=/docs/docs-swagger-ui--docs">Docs → Swagger UI</a>
+- <a href="/doc?path=docs/api/SWAGGER_FALLBACK.md#behavior" target="_blank" rel="noreferrer">
+    Docs Viewer → Swagger — Behavior
+  </a>
+
+## Steps
+
+- Start dev server: `npm run dev:mock` (serves /api/openapi.json)
+- Open Docs/Swagger UI
+- If live fails, the story loads /docs/api/openapi.snapshot.json
+
+See the doc in the Help panel for details.
+
+<LastUpdated file="src/stories/FlowsSwaggerFallback.stories.mdx" />

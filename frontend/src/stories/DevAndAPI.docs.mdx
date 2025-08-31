@@ -1,0 +1,49 @@
+import { Meta, Source } from "@storybook/addon-docs";
+
+export const parameters = {
+  repoDocPath: "/docs/api/REST_API.md",
+  repoDocLabel: "REST API Overview",
+};
+
+<Meta title="Docs/Dev & API" />
+
+## Run in Mock Mode
+
+```bash
+npm run dev:mock
+# App: http://localhost:3002
+# Storybook: npm run storybook
+```
+
+- MSW starts automatically via ClientLayoutWrapper
+- Mock WebSocket simulates progress and streaming for the demo page
+
+## Endpoints Discovery
+
+- GET `/api/debug/endpoints` — list implemented endpoints
+- GET `/api/debug/logs` — recent logs (POST to append)
+- GET `/api/openapi.json` — OpenAPI 3.0 JSON
+
+### cURL
+
+```bash
+curl -s http://localhost:3002/api/debug/endpoints | jq
+curl -s http://localhost:3002/api/openapi.json | head -n 40
+```
+
+## Local-Memory Gateway (Degraded Mode)
+
+Use a local gateway if available; otherwise the endpoints fall back to in-memory.
+
+- POST `/api/local-memory/index` — index text locally or via ${LOCAL_GATEWAY_URL}/local-memory/index
+- POST `/api/local-memory/search` — search locally or via ${LOCAL_GATEWAY_URL}/local-memory/search
+
+```bash
+curl -s -X POST http://localhost:3002/api/local-memory/index \
+  -H 'Content-Type: application/json' \
+  -d '{"namespace":"notes","id":"n1","text":"Harvest.ai makes content transformation easy"}' | jq
+
+curl -s -X POST http://localhost:3002/api/local-memory/search \
+  -H 'Content-Type: application/json' \
+  -d '{"namespace":"notes","query":"content transformation","topK":5}' | jq
+```

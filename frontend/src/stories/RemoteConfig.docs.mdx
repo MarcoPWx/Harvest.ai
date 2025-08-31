@@ -1,0 +1,1013 @@
+import React, { useState, useEffect } from "react";
+import { Meta, Canvas, Story } from "@storybook/blocks";
+import LastUpdated from "./components/LastUpdated";
+
+# Remote Config Dashboard
+
+<Meta title="🎛️ Remote Config" />
+
+> Central control plane for feature flags, security monitoring, rate limits, and operational controls. Currently using browser storage (no database needed).
+
+export function RemoteConfigDashboard() {
+  const [config, setConfig] = useState(null);
+  const [overrides, setOverrides] = useState({});
+  const [activeTab, setActiveTab] = useState("features");
+  const [showJson, setShowJson] = useState(false);
+
+// Default configuration
+const defaultConfig = {
+features: {
+byok_enabled: true,
+byok_session_timeout_minutes: 15,
+panic_mode_enabled: true,
+flow_mode_enabled: false,
+power_mode_enabled: false,
+sse_streaming_enabled: true,
+mock_mode_default: true,
+ai_providers: {
+openai: true,
+anthropic: false,
+gemini: false,
+local: false,
+},
+auth_methods: {
+email_password: false,
+google_oauth: false,
+github_oauth: false,
+magic_link: false,
+},
+export_formats: {
+json: true,
+markdown: true,
+pdf: false,
+docx: false,
+},
+template_gallery_enabled: false,
+team_features_enabled: false,
+cost_transparency_enabled: true,
+},
+security: {
+csp_enabled: true,
+csp_report_only: false,
+hsts_max_age: 31536000,
+cors_origins: ["https://app.harvest.ai"],
+allowed_providers: ["openai", "anthropic"],
+key_redaction_enabled: true,
+content_redaction_patterns: [
+"ssn:\\s*\\d{3}-\\d{2}-\\d{4}",
+"credit_card:\\s*\\d{4}-\\d{4}-\\d{4}-\\d{4}",
+],
+auto_wipe_timeout_ms: 900000,
+panic_wipe_enabled: true,
+local_only_mode_available: false,
+no_store_headers_enabled: true,
+request_signing_required: false,
+ip_allowlist: [],
+ip_blocklist: [],
+geo_restrictions: [],
+max_key_age_days: 90,
+},
+rate_limits: {
+global: {
+requests_per_minute: 60,
+requests_per_hour: 1000,
+requests_per_day: 10000,
+},
+per_endpoint: {
+"/api/generate": {
+requests_per_minute: 10,
+burst_size: 5,
+cooldown_ms: 5000,
+},
+"/api/generate/stream": {
+concurrent_streams: 3,
+stream_timeout_ms: 300000,
+},
+"/api/auth/\*": {
+requests_per_minute: 5,
+lockout_after_failures: 5,
+lockout_duration_ms: 900000,
+},
+},
+per_tier: {
+free: {
+daily_generations: 10,
+max_input_length: 1000,
+max_output_tokens: 500,
+},
+pro: {
+daily_generations: 100,
+max_input_length: 5000,
+max_output_tokens: 2000,
+},
+enterprise: {
+daily_generations: -1,
+max_input_length: -1,
+max_output_tokens: -1,
+},
+},
+payload_limits: {
+max_body_size_kb: 256,
+max_url_length: 2048,
+max_header_size_kb: 8,
+},
+},
+monitoring: {
+log_level: "info",
+log_sampling_rate: 1.0,
+metrics_enabled: true,
+metrics_interval_ms: 60000,
+trace_enabled: false,
+trace_sampling_rate: 0.1,
+error_reporting_enabled: true,
+error_reporting_sample_rate: 1.0,
+performance_monitoring_enabled: true,
+performance_thresholds: {
+api_latency_p95_ms: 1000,
+api_latency_p99_ms: 3000,
+frontend_lcp_ms: 2500,
+frontend_fid_ms: 100,
+frontend_cls: 0.1,
+},
+alert_channels: {
+slack: false,
+email: false,
+pagerduty: false,
+webhook: null,
+},
+health_check_interval_ms: 30000,
+health_check_timeout_ms: 5000,
+collect_user_metrics: false,
+collect_usage_analytics: false,
+},
+content: {
+default_model: "gpt-3.5-turbo",
+model_overrides: {
+blog: "gpt-4",
+summary: "gpt-3.5-turbo",
+email: "gpt-3.5-turbo",
+},
+temperature_defaults: {
+creative: 0.8,
+balanced: 0.5,
+precise: 0.2,
+},
+max_retries: 3,
+retry_delay_ms: 1000,
+timeout_ms: 30000,
+cache_ttl_seconds: 3600,
+cache_enabled: true,
+moderation_enabled: false,
+moderation_threshold: 0.8,
+quality_checks_enabled: true,
+min_quality_score: 0.7,
+profanity_filter_enabled: false,
+fact_checking_enabled: false,
+},
+ui: {
+dark_mode_default: false,
+animations_enabled: true,
+reduced_motion_respect: true,
+loading_states: {
+show_skeletons: true,
+show_progress_bar: true,
+show_estimated_time: true,
+},
+error_display: {
+show_technical_details: false,
+show_request_id: true,
+show_retry_button: true,
+auto_retry_enabled: false,
+},
+banners: {
+maintenance: null,
+announcement: null,
+warning: null,
+},
+onboarding: {
+show_tour: true,
+show_tips: true,
+force_byok_explanation: true,
+},
+feedback: {
+show_satisfaction_survey: false,
+show_bug_report: true,
+show_feature_request: false,
+},
+},
+operations: {
+maintenance_mode: false,
+read_only_mode: false,
+degraded_mode: false,
+circuit_breakers: {
+openai: {
+enabled: true,
+threshold: 0.5,
+timeout_ms: 60000,
+half_open_requests: 3,
+},
+anthropic: {
+enabled: true,
+threshold: 0.5,
+timeout_ms: 60000,
+half_open_requests: 3,
+},
+},
+fallback_chain: ["openai", "anthropic", "mock"],
+retry_policies: {
+exponential_backoff: true,
+max_retries: 3,
+base_delay_ms: 1000,
+max_delay_ms: 30000,
+},
+graceful_degradation: {
+enabled: true,
+disable_features_on_load: ["templates", "teams"],
+cache_only_mode_threshold: 0.8,
+},
+},
+experiments: {
+active_experiments: [
+{
+id: "new_onboarding_flow",
+allocation: 0.5,
+variants: ["control", "variant_a"],
+metrics: ["conversion", "time_to_first_generation"],
+},
+{
+id: "ai_provider_routing",
+allocation: 1.0,
+variants: ["openai_only", "multi_provider"],
+metrics: ["latency", "cost", "quality"],
+},
+],
+feature_rollouts: {
+new_editor: {
+percentage: 10,
+criteria: "random",
+override_users: [],
+},
+},
+cohort_configs: {
+power_users: {
+definition: "generations > 100",
+features: ["power_mode", "advanced_settings"],
+},
+},
+},
+};
+
+useEffect(() => {
+// Load config from localStorage
+const storedConfig = localStorage.getItem("harvest_config");
+const storedOverrides = localStorage.getItem("harvest_config_overrides");
+
+    if (storedConfig) {
+      setConfig(JSON.parse(storedConfig));
+    } else {
+      setConfig(defaultConfig);
+    }
+
+    if (storedOverrides) {
+      setOverrides(JSON.parse(storedOverrides));
+    }
+
+}, []);
+
+const updateConfig = (path, value) => {
+const newOverrides = { ...overrides, [path]: value };
+setOverrides(newOverrides);
+localStorage.setItem("harvest_config_overrides", JSON.stringify(newOverrides));
+
+    // Notify other tabs
+    window.dispatchEvent(new CustomEvent("config-update", { detail: { path, value } }));
+
+};
+
+const getValue = (path) => {
+if (overrides[path] !== undefined) return overrides[path];
+const keys = path.split(".");
+let value = config || defaultConfig;
+for (const key of keys) {
+value = value?.[key];
+}
+return value;
+};
+
+const exportConfig = () => {
+const merged = { ...config, overrides };
+const blob = new Blob([JSON.stringify(merged, null, 2)], { type: "application/json" });
+const url = URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = url;
+a.download = "harvest-config.json";
+a.click();
+};
+
+const importConfig = (e) => {
+const file = e.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = (e) => {
+try {
+const imported = JSON.parse(e.target.result);
+setConfig(imported);
+localStorage.setItem("harvest_config", JSON.stringify(imported));
+alert("Config imported successfully");
+} catch (err) {
+alert("Invalid config file");
+}
+};
+reader.readAsText(file);
+}
+};
+
+const resetConfig = () => {
+if (confirm("Reset all configuration to defaults?")) {
+localStorage.removeItem("harvest_config");
+localStorage.removeItem("harvest_config_overrides");
+setConfig(defaultConfig);
+setOverrides({});
+}
+};
+
+const TabButton = ({ id, label }) => (
+
+<button
+  onClick={() => setActiveTab(id)}
+  style={{
+    padding: "8px 16px",
+    background: activeTab === id ? "#3b82f6" : "#e5e7eb",
+    color: activeTab === id ? "white" : "#374151",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontSize: "14px",
+    fontWeight: activeTab === id ? "600" : "400",
+  }}
+>
+  {label}
+</button>
+);
+
+const Toggle = ({ label, path }) => (
+
+<label style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 0" }}>
+  <input
+    type="checkbox"
+    checked={getValue(path)}
+    onChange={(e) => updateConfig(path, e.target.checked)}
+  />
+  <span style={{ fontSize: "14px" }}>{label}</span>
+  <code style={{ fontSize: "11px", color: "#6b7280", marginLeft: "auto" }}>{path}</code>
+</label>
+);
+
+const NumberInput = ({ label, path, min = 0, max, step = 1 }) => (
+
+<label style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 0" }}>
+  <span style={{ fontSize: "14px", minWidth: "200px" }}>{label}</span>
+  <input
+    type="number"
+    value={getValue(path) || 0}
+    onChange={(e) => updateConfig(path, parseInt(e.target.value))}
+    min={min}
+    max={max}
+    step={step}
+    style={{
+      padding: "4px 8px",
+      border: "1px solid #d1d5db",
+      borderRadius: "4px",
+      width: "100px",
+    }}
+  />
+  <code style={{ fontSize: "11px", color: "#6b7280" }}>{path}</code>
+</label>
+);
+
+const SelectInput = ({ label, path, options }) => (
+
+<label style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 0" }}>
+  <span style={{ fontSize: "14px", minWidth: "200px" }}>{label}</span>
+  <select
+    value={getValue(path) || options[0]}
+    onChange={(e) => updateConfig(path, e.target.value)}
+    style={{ padding: "4px 8px", border: "1px solid #d1d5db", borderRadius: "4px" }}
+  >
+    {options.map((opt) => (
+      <option key={opt} value={opt}>
+        {opt}
+      </option>
+    ))}
+  </select>
+  <code style={{ fontSize: "11px", color: "#6b7280" }}>{path}</code>
+</label>
+);
+
+if (!config) return <div>Loading configuration...</div>;
+
+return (
+
+<div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+{/* Header */}
+<div
+style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "24px",
+          padding: "16px",
+          background: "#f9fafb",
+          borderRadius: "8px",
+        }} >
+<div>
+<h2 style={{ margin: 0 }}>Remote Config Dashboard</h2>
+<p style={{ margin: "4px 0 0 0", color: "#6b7280", fontSize: "14px" }}>
+Browser-based configuration (no database needed)
+</p>
+</div>
+<div style={{ display: "flex", gap: "8px" }}>
+<button
+onClick={exportConfig}
+style={{
+              padding: "6px 12px",
+              background: "#10b981",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}>
+Export
+</button>
+<label
+style={{
+              padding: "6px 12px",
+              background: "#3b82f6",
+              color: "white",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}>
+Import
+<input type="file" accept=".json" onChange={importConfig} style={{ display: "none" }} />
+</label>
+<button
+onClick={resetConfig}
+style={{
+              padding: "6px 12px",
+              background: "#ef4444",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }} >
+Reset
+</button>
+<button
+onClick={() => setShowJson(!showJson)}
+style={{
+              padding: "6px 12px",
+              background: "#6b7280",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}>
+{showJson ? "Hide" : "Show"} JSON
+</button>
+</div>
+</div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "24px", flexWrap: "wrap" }}>
+        <TabButton id="features" label="Features" />
+        <TabButton id="security" label="Security" />
+        <TabButton id="rate_limits" label="Rate Limits" />
+        <TabButton id="monitoring" label="Monitoring" />
+        <TabButton id="content" label="Content" />
+        <TabButton id="ui" label="UI/UX" />
+        <TabButton id="operations" label="Operations" />
+        <TabButton id="experiments" label="Experiments" />
+      </div>
+
+      {/* Content */}
+      <div
+        style={{
+          padding: "20px",
+          background: "white",
+          border: "1px solid #e5e7eb",
+          borderRadius: "8px",
+          minHeight: "400px",
+        }}
+      >
+        {activeTab === "features" && (
+          <div>
+            <h3>Feature Flags</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div>
+                <h4>Core Features</h4>
+                <Toggle label="BYOK Enabled" path="features.byok_enabled" />
+                <NumberInput
+                  label="BYOK Timeout (min)"
+                  path="features.byok_session_timeout_minutes"
+                  min={5}
+                  max={60}
+                />
+                <Toggle label="Panic Mode" path="features.panic_mode_enabled" />
+                <Toggle label="Flow Mode" path="features.flow_mode_enabled" />
+                <Toggle label="Power Mode" path="features.power_mode_enabled" />
+                <Toggle label="SSE Streaming" path="features.sse_streaming_enabled" />
+                <Toggle label="Mock Mode Default" path="features.mock_mode_default" />
+                <Toggle label="Template Gallery" path="features.template_gallery_enabled" />
+                <Toggle label="Team Features" path="features.team_features_enabled" />
+                <Toggle label="Cost Transparency" path="features.cost_transparency_enabled" />
+              </div>
+              <div>
+                <h4>AI Providers</h4>
+                <Toggle label="OpenAI" path="features.ai_providers.openai" />
+                <Toggle label="Anthropic" path="features.ai_providers.anthropic" />
+                <Toggle label="Gemini" path="features.ai_providers.gemini" />
+                <Toggle label="Local Model" path="features.ai_providers.local" />
+
+                <h4 style={{ marginTop: "20px" }}>Export Formats</h4>
+                <Toggle label="JSON" path="features.export_formats.json" />
+                <Toggle label="Markdown" path="features.export_formats.markdown" />
+                <Toggle label="PDF" path="features.export_formats.pdf" />
+                <Toggle label="DOCX" path="features.export_formats.docx" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "security" && (
+          <div>
+            <h3>Security & Trust Controls</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div>
+                <h4>Headers & Policies</h4>
+                <Toggle label="CSP Enabled" path="security.csp_enabled" />
+                <Toggle label="CSP Report Only" path="security.csp_report_only" />
+                <NumberInput
+                  label="HSTS Max Age"
+                  path="security.hsts_max_age"
+                  min={0}
+                  step={86400}
+                />
+                <Toggle label="No-Store Headers" path="security.no_store_headers_enabled" />
+                <Toggle label="Request Signing" path="security.request_signing_required" />
+              </div>
+              <div>
+                <h4>Key & Content Security</h4>
+                <Toggle label="Key Redaction" path="security.key_redaction_enabled" />
+                <NumberInput
+                  label="Auto-wipe Timeout (ms)"
+                  path="security.auto_wipe_timeout_ms"
+                  min={60000}
+                  step={60000}
+                />
+                <Toggle label="Panic Wipe" path="security.panic_wipe_enabled" />
+                <Toggle label="Local-only Mode" path="security.local_only_mode_available" />
+                <NumberInput
+                  label="Max Key Age (days)"
+                  path="security.max_key_age_days"
+                  min={1}
+                  max={365}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "rate_limits" && (
+          <div>
+            <h3>Rate Limiting & Quotas</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div>
+                <h4>Global Limits</h4>
+                <NumberInput
+                  label="Requests/minute"
+                  path="rate_limits.global.requests_per_minute"
+                  min={1}
+                  max={1000}
+                />
+                <NumberInput
+                  label="Requests/hour"
+                  path="rate_limits.global.requests_per_hour"
+                  min={1}
+                  max={10000}
+                />
+                <NumberInput
+                  label="Requests/day"
+                  path="rate_limits.global.requests_per_day"
+                  min={1}
+                  max={100000}
+                />
+
+                <h4 style={{ marginTop: "20px" }}>Payload Limits</h4>
+                <NumberInput
+                  label="Max Body Size (KB)"
+                  path="rate_limits.payload_limits.max_body_size_kb"
+                  min={1}
+                  max={10240}
+                />
+                <NumberInput
+                  label="Max URL Length"
+                  path="rate_limits.payload_limits.max_url_length"
+                  min={100}
+                  max={8192}
+                />
+              </div>
+              <div>
+                <h4>Free Tier Limits</h4>
+                <NumberInput
+                  label="Daily Generations"
+                  path="rate_limits.per_tier.free.daily_generations"
+                  min={1}
+                  max={100}
+                />
+                <NumberInput
+                  label="Max Input Length"
+                  path="rate_limits.per_tier.free.max_input_length"
+                  min={100}
+                  max={10000}
+                />
+                <NumberInput
+                  label="Max Output Tokens"
+                  path="rate_limits.per_tier.free.max_output_tokens"
+                  min={100}
+                  max={4000}
+                />
+
+                <h4 style={{ marginTop: "20px" }}>Pro Tier Limits</h4>
+                <NumberInput
+                  label="Daily Generations"
+                  path="rate_limits.per_tier.pro.daily_generations"
+                  min={1}
+                  max={1000}
+                />
+                <NumberInput
+                  label="Max Input Length"
+                  path="rate_limits.per_tier.pro.max_input_length"
+                  min={100}
+                  max={50000}
+                />
+                <NumberInput
+                  label="Max Output Tokens"
+                  path="rate_limits.per_tier.pro.max_output_tokens"
+                  min={100}
+                  max={8000}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "monitoring" && (
+          <div>
+            <h3>Monitoring & Observability</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div>
+                <h4>Logging</h4>
+                <SelectInput
+                  label="Log Level"
+                  path="monitoring.log_level"
+                  options={["debug", "info", "warn", "error"]}
+                />
+                <NumberInput
+                  label="Log Sampling Rate"
+                  path="monitoring.log_sampling_rate"
+                  min={0}
+                  max={1}
+                  step={0.1}
+                />
+                <Toggle label="Metrics Enabled" path="monitoring.metrics_enabled" />
+                <NumberInput
+                  label="Metrics Interval (ms)"
+                  path="monitoring.metrics_interval_ms"
+                  min={1000}
+                  step={1000}
+                />
+
+                <h4 style={{ marginTop: "20px" }}>Collection</h4>
+                <Toggle label="Collect User Metrics" path="monitoring.collect_user_metrics" />
+                <Toggle label="Collect Usage Analytics" path="monitoring.collect_usage_analytics" />
+              </div>
+              <div>
+                <h4>Performance</h4>
+                <Toggle
+                  label="Performance Monitoring"
+                  path="monitoring.performance_monitoring_enabled"
+                />
+                <NumberInput
+                  label="API Latency P95 (ms)"
+                  path="monitoring.performance_thresholds.api_latency_p95_ms"
+                  min={100}
+                  max={10000}
+                />
+                <NumberInput
+                  label="Frontend LCP (ms)"
+                  path="monitoring.performance_thresholds.frontend_lcp_ms"
+                  min={100}
+                  max={10000}
+                />
+
+                <h4 style={{ marginTop: "20px" }}>Alerts</h4>
+                <Toggle label="Slack Alerts" path="monitoring.alert_channels.slack" />
+                <Toggle label="Email Alerts" path="monitoring.alert_channels.email" />
+                <Toggle label="PagerDuty" path="monitoring.alert_channels.pagerduty" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "content" && (
+          <div>
+            <h3>Content & Quality Controls</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div>
+                <h4>Model Settings</h4>
+                <SelectInput
+                  label="Default Model"
+                  path="content.default_model"
+                  options={["gpt-3.5-turbo", "gpt-4", "claude-2", "claude-instant"]}
+                />
+                <NumberInput
+                  label="Creative Temperature"
+                  path="content.temperature_defaults.creative"
+                  min={0}
+                  max={2}
+                  step={0.1}
+                />
+                <NumberInput
+                  label="Balanced Temperature"
+                  path="content.temperature_defaults.balanced"
+                  min={0}
+                  max={2}
+                  step={0.1}
+                />
+                <NumberInput
+                  label="Precise Temperature"
+                  path="content.temperature_defaults.precise"
+                  min={0}
+                  max={2}
+                  step={0.1}
+                />
+              </div>
+              <div>
+                <h4>Quality & Safety</h4>
+                <Toggle label="Cache Enabled" path="content.cache_enabled" />
+                <NumberInput
+                  label="Cache TTL (seconds)"
+                  path="content.cache_ttl_seconds"
+                  min={60}
+                  max={86400}
+                  step={60}
+                />
+                <Toggle label="Moderation Enabled" path="content.moderation_enabled" />
+                <Toggle label="Quality Checks" path="content.quality_checks_enabled" />
+                <Toggle label="Profanity Filter" path="content.profanity_filter_enabled" />
+                <Toggle label="Fact Checking" path="content.fact_checking_enabled" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "ui" && (
+          <div>
+            <h3>UI/UX Controls</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div>
+                <h4>Appearance</h4>
+                <Toggle label="Dark Mode Default" path="ui.dark_mode_default" />
+                <Toggle label="Animations Enabled" path="ui.animations_enabled" />
+                <Toggle label="Respect Reduced Motion" path="ui.reduced_motion_respect" />
+
+                <h4 style={{ marginTop: "20px" }}>Loading States</h4>
+                <Toggle label="Show Skeletons" path="ui.loading_states.show_skeletons" />
+                <Toggle label="Show Progress Bar" path="ui.loading_states.show_progress_bar" />
+                <Toggle label="Show Estimated Time" path="ui.loading_states.show_estimated_time" />
+              </div>
+              <div>
+                <h4>Error Display</h4>
+                <Toggle
+                  label="Show Technical Details"
+                  path="ui.error_display.show_technical_details"
+                />
+                <Toggle label="Show Request ID" path="ui.error_display.show_request_id" />
+                <Toggle label="Show Retry Button" path="ui.error_display.show_retry_button" />
+                <Toggle label="Auto Retry" path="ui.error_display.auto_retry_enabled" />
+
+                <h4 style={{ marginTop: "20px" }}>Onboarding</h4>
+                <Toggle label="Show Tour" path="ui.onboarding.show_tour" />
+                <Toggle label="Show Tips" path="ui.onboarding.show_tips" />
+                <Toggle
+                  label="Force BYOK Explanation"
+                  path="ui.onboarding.force_byok_explanation"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "operations" && (
+          <div>
+            <h3>Operational Controls</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+              <div>
+                <h4>System Modes</h4>
+                <Toggle label="Maintenance Mode" path="operations.maintenance_mode" />
+                <Toggle label="Read-only Mode" path="operations.read_only_mode" />
+                <Toggle label="Degraded Mode" path="operations.degraded_mode" />
+
+                <h4 style={{ marginTop: "20px" }}>Retry Policies</h4>
+                <Toggle
+                  label="Exponential Backoff"
+                  path="operations.retry_policies.exponential_backoff"
+                />
+                <NumberInput
+                  label="Max Retries"
+                  path="operations.retry_policies.max_retries"
+                  min={0}
+                  max={10}
+                />
+                <NumberInput
+                  label="Base Delay (ms)"
+                  path="operations.retry_policies.base_delay_ms"
+                  min={100}
+                  max={10000}
+                />
+              </div>
+              <div>
+                <h4>Circuit Breakers</h4>
+                <Toggle label="OpenAI Breaker" path="operations.circuit_breakers.openai.enabled" />
+                <NumberInput
+                  label="OpenAI Threshold"
+                  path="operations.circuit_breakers.openai.threshold"
+                  min={0}
+                  max={1}
+                  step={0.1}
+                />
+                <Toggle
+                  label="Anthropic Breaker"
+                  path="operations.circuit_breakers.anthropic.enabled"
+                />
+                <NumberInput
+                  label="Anthropic Threshold"
+                  path="operations.circuit_breakers.anthropic.threshold"
+                  min={0}
+                  max={1}
+                  step={0.1}
+                />
+
+                <h4 style={{ marginTop: "20px" }}>Graceful Degradation</h4>
+                <Toggle
+                  label="Degradation Enabled"
+                  path="operations.graceful_degradation.enabled"
+                />
+                <NumberInput
+                  label="Cache-only Threshold"
+                  path="operations.graceful_degradation.cache_only_mode_threshold"
+                  min={0}
+                  max={1}
+                  step={0.1}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "experiments" && (
+          <div>
+            <h3>Experiments & A/B Testing</h3>
+            <div>
+              <h4>Active Experiments</h4>
+              <div
+                style={{
+                  padding: "12px",
+                  background: "#f9fafb",
+                  borderRadius: "6px",
+                  marginBottom: "16px",
+                }}
+              >
+                <p style={{ margin: "0 0 8px 0", fontWeight: "600" }}>New Onboarding Flow</p>
+                <p style={{ margin: "0 0 4px 0", fontSize: "14px", color: "#6b7280" }}>
+                  Allocation: 50% | Variants: control, variant_a
+                </p>
+                <p style={{ margin: 0, fontSize: "14px", color: "#6b7280" }}>
+                  Metrics: conversion, time_to_first_generation
+                </p>
+              </div>
+
+              <div
+                style={{
+                  padding: "12px",
+                  background: "#f9fafb",
+                  borderRadius: "6px",
+                  marginBottom: "16px",
+                }}
+              >
+                <p style={{ margin: "0 0 8px 0", fontWeight: "600" }}>AI Provider Routing</p>
+                <p style={{ margin: "0 0 4px 0", fontSize: "14px", color: "#6b7280" }}>
+                  Allocation: 100% | Variants: openai_only, multi_provider
+                </p>
+                <p style={{ margin: 0, fontSize: "14px", color: "#6b7280" }}>
+                  Metrics: latency, cost, quality
+                </p>
+              </div>
+
+              <h4>Feature Rollouts</h4>
+              <div style={{ padding: "12px", background: "#f9fafb", borderRadius: "6px" }}>
+                <p style={{ margin: "0 0 8px 0", fontWeight: "600" }}>New Editor</p>
+                <p style={{ margin: 0, fontSize: "14px", color: "#6b7280" }}>
+                  Rollout: 10% random selection
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* JSON View */}
+      {showJson && (
+        <div style={{ marginTop: "24px" }}>
+          <h3>Current Configuration (JSON)</h3>
+          <pre
+            style={{
+              padding: "16px",
+              background: "#1f2937",
+              color: "#10b981",
+              borderRadius: "8px",
+              overflow: "auto",
+              maxHeight: "500px",
+              fontSize: "12px",
+            }}
+          >
+            {JSON.stringify({ ...config, ...overrides }, null, 2)}
+          </pre>
+        </div>
+      )}
+
+      {/* Status Bar */}
+      <div
+        style={{
+          marginTop: "24px",
+          padding: "12px",
+          background: "#f3f4f6",
+          borderRadius: "8px",
+          fontSize: "14px",
+          color: "#6b7280",
+        }}
+      >
+        <strong>Storage:</strong> Browser localStorage |<strong> Overrides:</strong>{" "}
+        {Object.keys(overrides).length} active |<strong> Sync:</strong> Cross-tab enabled |
+        <strong> Persistence:</strong> Session-based
+      </div>
+    </div>
+
+);
+}
+
+## Interactive Dashboard
+
+<Canvas>
+  <Story name="Config Dashboard">
+    <RemoteConfigDashboard />
+  </Story>
+</Canvas>
+
+## API Endpoints (Mocked)
+
+All configuration APIs are currently mocked via MSW handlers. When a database is added, these will become real endpoints.
+
+### Available Endpoints
+
+- `GET /api/config` - Get full configuration
+- `GET /api/config/:category` - Get specific category (features, security, etc.)
+- `GET /api/config/flag/:key` - Get specific flag value
+- `PUT /api/config/:category` - Update configuration (admin only)
+- `GET /api/config/history` - View change history
+- `POST /api/config/validate` - Validate configuration
+- `GET /api/config/stream` - SSE stream for real-time updates
+
+### React Integration
+
+```typescript
+// Use in your components
+import { useRemoteConfig } from '@/hooks/useRemoteConfig';
+
+function MyComponent() {
+  const { value: byokEnabled } = useRemoteConfig('features.byok_enabled');
+
+  if (!byokEnabled) return null;
+  return <BYOKPanel />;
+}
+```
+
+## Current Implementation
+
+- ✅ **Browser Storage**: Configuration stored in localStorage
+- ✅ **Cross-tab Sync**: Changes propagate across browser tabs
+- ✅ **Import/Export**: Download and upload configuration files
+- ✅ **No Database Required**: Works immediately without infrastructure
+- 🔄 **Future**: Will integrate with Supabase when database is added
+
+<LastUpdated file="src/stories/RemoteConfig.stories.mdx" />

@@ -1,0 +1,75 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Docs/Beta Production Readiness" />
+
+# Beta Production Readiness
+
+This document defines the readiness criteria for two states:
+
+- Mock-Beta (no real backends; MSW-driven)
+- True Beta (real auth, persistence, AI providers, and monitoring)
+
+## Current Snapshot (2025-08-30)
+
+- Local unit/integration tests: green (per docs, 229/229)
+- Storybook: builds and interaction tests included
+- E2E: configured to run against dev:mock (MSW)
+- CI: GitHub Actions workflow in place (install, type-check, lint, unit, E2E, Storybook, artifacts)
+
+## Definition of Done — Mock-Beta
+
+- All Jest unit/integration tests green
+- Playwright E2E green in mock mode (NEXT_PUBLIC_ENABLE_MSW=1)
+- Core demo journeys render without console errors
+- Deployed (or deployable) with MSW-only behavior clearly labeled (“Mock Beta”)
+- Basic status/docs page reflecting mock operation
+
+Nice to have
+
+- Visual snapshot baselines for primary views
+- A11y smoke checks (axe) clean for core pages
+
+## Definition of Done — True Beta
+
+Must have
+
+- Authentication: Supabase Auth flows (login/signup, sessions)
+- Persistence: Supabase Postgres for user content and BYOK tables
+- AI provider(s): real provider integration with fallback and basic error handling
+- Usage control: limits and/or payments or gates to prevent abuse
+- Production monitoring: Sentry (errors), uptime check, basic analytics
+
+Should have
+
+- Cost tracking, token usage per request
+- Health endpoint and smoke checks
+- Clear user-facing error states and retries
+
+## CI Gates (recommended)
+
+- TypeScript: noEmit check must pass
+- ESLint: no errors (Prettier formatting enforced via plugin and pre-commit)
+- Unit/Integration: all passing with coverage threshold (e.g., 80%)
+- E2E (mock mode): pass Chromium suite (optionally Firefox/WebKit)
+- Storybook: build succeeds and interaction runner passes
+- Commit messages: Conventional Commits enforced via commitlint (PR job) and husky commit-msg
+
+## Code Quality & Conventions
+
+- Linting: ESLint (extends next/core-web-vitals) + plugin:prettier/recommended
+- Formatting: Prettier with pre-commit enforcement (lint-staged)
+- Git hooks: Husky (pre-commit runs lint-staged, commit-msg runs commitlint)
+- Commits: Commitizen for interactive Conventional Commits
+
+## Environment & Config
+
+- Local: NEXT_PUBLIC_ENABLE_MSW=1 for Mock-Beta UX
+- Production (when ready): configure OPENAI_API_KEY and Supabase env
+- Vercel deployment (when used): set project root to `frontend` in Vercel settings; vercel.json is optional if no custom routing/build is needed
+
+## Links
+
+- Beta Roadmap: frontend/docs/roadmap/BETA_ROADMAP.md
+- Beta Launch Checklist: frontend/docs/BETA_LAUNCH_CHECKLIST.md
+- Production Readiness Runbook: docs/runbooks/PRODUCTION_READINESS_RUNBOOK.md
+- Deployment Runbook: docs/runbooks/DEPLOYMENT_RUNBOOK.md

@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Ensure we execute commands from the frontend directory
+cd "$(dirname "$0")/.."
+
+# Lint-staged: run Prettier and ESLint on staged files
+npm run -s lint-staged
+

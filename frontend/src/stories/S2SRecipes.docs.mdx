@@ -1,0 +1,95 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import InlineToc from "./components/InlineToc";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/architecture/GENERATION_FLOW.md",
+  repoDocLabel: "Generation Flow",
+};
+
+# S2S — Recipes & Flows
+
+<a id="top"></a>
+
+<Meta title="Specs/S2S — Recipes & Flows" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#generate-json", label: "Generate (JSON)" },
+    { href: "#generate-sse", label: "Generate (SSE)" },
+    { href: "#rate-limit", label: "Rate limit" },
+    { href: "#error-path", label: "Error path" },
+    { href: "#cache-hit", label: "Cache hit / bypass" },
+    { href: "#threads-basic", label: "Threads (create & message)" },
+  ]}
+/>
+
+## Generate (JSON)
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+```bash path=null start=null
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"input":"Write a short blog","format":"blog"}' \
+  http://localhost:3002/api/generate | jq
+```
+
+## Generate (SSE)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+Use the Storybook live panel (Command Center → S2S — Streaming & Threads) or a custom fetch reader
+to process token/meta/final/done events.
+
+## Rate limit
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+```bash path=null start=null
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"input":"please TRIGGER_RATE_LIMIT now","format":"blog"}' \
+  http://localhost:3002/api/generate | jq
+```
+→ 429 with Retry-After header.
+
+## Error path
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+```bash path=null start=null
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"input":"TRIGGER_ERROR","format":"blog"}' \
+  http://localhost:3002/api/generate | jq
+```
+→ 500 with error details.
+
+## Cache hit / bypass
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+1) First call (miss): returns processing_time > 0, cached=false
+2) Second call (hit): returns processing_time: 0, cached=true
+3) Force bypass with header:
+```bash path=null start=null
+curl -sS -X POST -H 'Content-Type: application/json' -H 'x-cache-bypass: 1' \
+  -d '{"input":"same content","format":"blog"}' \
+  http://localhost:3002/api/generate | jq
+```
+
+## Threads (create & message)
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+Create a thread:
+```bash path=null start=null
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"title":"Q&A Session"}' http://localhost:3002/api/threads | jq
+```
+Send a message (JSON):
+```bash path=null start=null
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"role":"user","content":"Summarize this into bullets"}' \
+  http://localhost:3002/api/threads/<THREAD_ID>/messages | jq
+```
+Stream a message (SSE): Use Storybook panel or a fetch reader with Accept: text/event-stream.
+
+<LastUpdated file="src/stories/S2SRecipes.stories.mdx" />

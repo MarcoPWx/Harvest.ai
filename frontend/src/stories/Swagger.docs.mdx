@@ -1,0 +1,71 @@
+import * as React from "react";
+import SwaggerUIPage from "../components/SwaggerUIPage";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/api/REST_API.md",
+  repoDocLabel: "REST API Overview",
+};
+
+# Swagger UI (Storybook)
+
+This story embeds Swagger UI inside Storybook. Make sure your dev server is running so the OpenAPI JSON is available at http://localhost:3002/api/openapi.json.
+
+- Start app: `npm run dev:mock` (http://localhost:3002)
+- Then open this story.
+
+<Meta title="Docs/Swagger UI" />
+
+export function FallbackSwagger({
+  liveUrl = "http://localhost:3002/api/openapi.json",
+  snapshotUrl = "/docs/api/openapi.snapshot.json",
+  ...rest
+}) {
+  const [url, setUrl] = React.useState(liveUrl);
+  React.useEffect(() => {
+    let ok = true;
+    const ctrl = new AbortController();
+    fetch(liveUrl, { method: "GET", signal: ctrl.signal })
+      .then((r) => {
+        if (!ok) return;
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        setUrl(liveUrl);
+      })
+      .catch(() => ok && setUrl(snapshotUrl));
+    return () => {
+      ok = false;
+      ctrl.abort();
+    };
+  }, [liveUrl, snapshotUrl]);
+  return <SwaggerUIPage url={url} {...rest} />;
+}
+
+<Canvas>
+  <Story
+    name="Swagger UI"
+    args={{
+      docExpansion: "list",
+      defaultModelsExpandDepth: 1,
+      defaultModelExpandDepth: 1,
+      deepLinking: true,
+      displayRequestDuration: true,
+      tryItOutEnabled: true,
+      layout: "BaseLayout",
+    }}
+  >
+    {(args) => <FallbackSwagger {...args} />}
+  </Story>
+</Canvas>
+
+## See also
+
+- <a href="?path=/docs/specs-service-catalog--docs#api-routes-mock-first">
+    Service Catalog → API Routes (mock-first)
+  </a>
+- <a href="?path=/docs/overview-architecture-system-map-dependencies-layered-view-data-model-extended-erd--docs#system-map-context">
+    Architecture → System map (context)
+  </a>
+
+<LastUpdated file="src/stories/Swagger.stories.mdx" />
+
+<ArgsTable of={SwaggerUIPage} />

@@ -1,0 +1,15 @@
+# Ignore build outputs and generated content
+.next/
+storybook-static/
+coverage/
+playwright-report/
+node_modules/
+
+test-results/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+

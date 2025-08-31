@@ -1,0 +1,52 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+import LastUpdated from "../components/LastUpdated";
+
+# S2S — Index
+
+<Meta title="S2S/Index" />
+
+Server‑to‑server flows: JSON + SSE generate, multi‑turn threads, and deterministic triggers. Use this as the guide for live demos.
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#generate", label: "Generate (JSON & SSE)" },
+    { href: "#threads", label: "Threads" },
+    { href: "#triggers", label: "Triggers" },
+    { href: "#links", label: "Quick links" },
+  ]}
+/>
+
+## Overview {#overview}
+
+- Routes: /api/generate (JSON or SSE), /api/threads (+ messages)
+- Events: meta, token, final, done (and error)
+- Mock‑first by default; live S2S in Storybook via Command Center panels
+
+## Generate (JSON & SSE) {#generate}
+
+- JSON: POST /api/generate with { input, format }
+- SSE: POST /api/generate with Accept: text/event-stream
+- Use the Command Center panel to visualize events and bypass cache via x-cache-bypass: 1
+
+## Threads {#threads}
+
+- Create a thread → add messages → stream assistant responses over SSE
+- Dev storage is in‑memory for local exploration
+
+## Triggers {#triggers}
+
+- Include TRIGGER_RATE_LIMIT in input to simulate 429
+- Include TRIGGER_ERROR in input to simulate 500
+- Include TRIGGER_CACHED to simulate cached results
+
+## Quick links {#links}
+
+- Command Center/S2S — Streaming & Threads (live)
+- Specs/S2S — Recipes & Flows
+- Specs/S2S — Gateway Reference
+- Specs/S2S — State & DB Semantics
+
+<LastUpdated file="src/stories/S2S/Index.docs.mdx" />
+

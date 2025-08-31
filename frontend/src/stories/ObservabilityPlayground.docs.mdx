@@ -1,0 +1,118 @@
+import { Meta } from "@storybook/addon-docs";
+
+export const parameters = {
+  repoDocPath: "/docs/runbooks/OPERATIONS_BOOK.md",
+  repoDocLabel: "Operations Book",
+};
+
+<Meta title="Docs/Observability Playground" />
+
+## Structured logging (server)
+
+For each request, log a single structured line on start/end and key stream events.
+
+```ts
+// Minimal helper (drop-in; replace with your logger of choice)
+function logInfo(event: string, fields: Record<string, unknown> = {}) {
+  console.log(JSON.stringify({ level: "info", event, t: new Date().toISOString(), ...fields }));
+}
+```
+
+Hook it into your /api/generate handler:
+
+```ts
+// On request start
+const request_id = crypto.randomUUID?.() || Math.random().toString(36).slice(2, 10);
+logInfo("generate_start", { request_id, user_id, format, provider, input_len: input.length });
+
+// On each token batch (sampled)
+logInfo("generate_stream", { request_id, batch: i, len: part.length });
+
+// On completion
+logInfo("generate_done", {
+  request_id,
+  duration_ms: Date.now() - start,
+  tokens: tokens_used,
+  cached,
+});
+```
+
+## Correlation ID (client → server)
+
+Send an X-Request-ID header from the client to correlate browser logs with server events.
+
+```ts
+const REQ_ID = crypto.randomUUID?.() || Math.random().toString(36).slice(2, 10);
+await fetch("/api/generate", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-Request-ID": REQ_ID,
+    "Accept": "text/event-stream",
+  },
+  body: JSON.stringify({ input, format, provider }),
+});
+```
+
+In the server handler, read it:
+
+```ts
+const clientReqId = req.headers.get("x-request-id") || request_id;
+```
+
+## Minimal metrics
+
+Track key counters and timings. If you do not have a metrics backend yet, start with simple in-memory counters and expose a /metrics JSON for local dashboards.
+
+```ts
+const metrics = { req_total: 0, stream_open: 0, stream_err: 0, gen_ms: [] as number[] };
+
+function observeDuration(ms: number) {
+  metrics.gen_ms.push(ms);
+  if (metrics.gen_ms.length > 1000) metrics.gen_ms.shift();
+}
+```
+
+Then update metrics in the route:
+
+```ts
+metrics.req_total += 1;
+metrics.stream_open += 1;
+try {
+  // ... stream work
+} catch (e) {
+  metrics.stream_err += 1;
+} finally {
+  observeDuration(Date.now() - start);
+}
+```
+
+## Local metrics endpoint
+
+During local development you can GET the current counters here:
+
+```
+GET /api/metrics
+```
+
+This returns a JSON object with counters and a p95 estimate of generation duration (ms).
+
+## Basic tracing
+
+If/when you add OpenTelemetry later, wrap the request in a span and propagate trace headers to any provider SDK. Until then, capture request_id, thread_id, and provider in logs to approximate traces.
+
+```ts
+// Pseudocode: startSpan('generate') → set attributes: provider, format, user_id, thread_id
+```
+
+## What to alert on (beta)
+
+- spike in stream_err or HTTP 5xx
+- sustained increase in p95 generate duration
+- unusually high open SSE connections
+- rate-limit saturation
+
+## Related docs
+
+- System status: /docs/status/LOCAL_DEV_GUIDE.md
+- Operations book: /docs/runbooks/OPERATIONS_BOOK.md

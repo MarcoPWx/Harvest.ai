@@ -1,0 +1,172 @@
+{
+  "epics": [
+    {
+      "id": "E-001",
+      "title": "Docs & Test Reliability",
+      "description": "Stabilize E2E, add learning pages, status pipeline.",
+      "status": "in-progress",
+      "links": [
+        "?path=/docs/overview-overview-insanely-detailed--docs",
+        "?path=/docs/specs-system-status-full-spec--docs"
+      ]
+    },
+    {
+      "id": "E-002",
+      "title": "Observability & CI Signals",
+      "description": "Expand status, incident flows, artifacts.",
+      "status": "proposed",
+      "links": ["?path=/docs/specs-system-status-full-spec--docs"]
+    },
+    {
+      "id": "E-003",
+      "title": "Performance & Bundle Hygiene",
+      "description": "Analyzer, lazy loading, vendor splits.",
+      "status": "proposed",
+      "links": ["?path=/docs/docs-performance-bundling--docs"]
+    },
+    {
+      "id": "E-004",
+      "title": "Beta Readiness",
+      "description": "Complete stories, finalize mocks, trim dependencies.",
+      "status": "proposed",
+      "links": [
+        "?path=/docs/overview-architecture-system-map-dependencies-layered-view-data-model-extended-erd--docs"
+      ]
+    },
+    {
+      "id": "E-101",
+      "title": "S2S Gateway Hardening",
+      "description": "SSE contract, validation, timeouts, retries, circuit breakers, idempotency.",
+      "status": "in-progress",
+      "links": [
+        "?path=/story/command-center-s2s-streaming-threads--generate-sse-json",
+        "?path=/docs/docs-sse-client-guide--docs"
+      ]
+    },
+    {
+      "id": "E-102",
+      "title": "SSE Client & UX",
+      "description": "Reusable hook, token/sec, cancel/undo, pause, cached banner.",
+      "status": "in-progress",
+      "links": [
+        "?path=/story/command-center-playgrounds--playgrounds",
+        "?path=/docs/docs-sse-client-guide--docs"
+      ]
+    },
+    {
+      "id": "E-103",
+      "title": "Conversations & Threads",
+      "description": "Persist threads, paginate messages, export transcripts, RBAC.",
+      "status": "proposed",
+      "links": ["/playground/threads", "?path=/story/command-center-epics-board--epics"]
+    },
+    {
+      "id": "E-104",
+      "title": "Caching & Idempotency",
+      "description": "Redis caching, TTLs, hit/miss metrics, idempotency keys.",
+      "status": "proposed",
+      "links": ["/playground/generate"]
+    },
+    {
+      "id": "E-105",
+      "title": "Provider Integrations",
+      "description": "Adapters for OpenAI, Anthropic, Gemini with fallback chain and costs.",
+      "status": "proposed",
+      "links": ["?path=/docs/api/rest-api--docs"]
+    },
+    {
+      "id": "E-106",
+      "title": "Moderation & Compliance",
+      "description": "Input/output moderation, PII tagging, redaction.",
+      "status": "proposed",
+      "links": ["?path=/docs/specs-security-privacy--docs"]
+    },
+    {
+      "id": "E-107",
+      "title": "Rate Limiting & Quotas",
+      "description": "Redis limits per IP/user/key; plan quotas; headers and hints.",
+      "status": "in-progress",
+      "links": ["/api/metrics", "/playground/metrics"]
+    },
+    {
+      "id": "E-108",
+      "title": "Auth & RBAC",
+      "description": "AuthN for threads, roles on teams, API key scopes.",
+      "status": "proposed",
+      "links": ["?path=/docs/specs-security-privacy--docs"]
+    },
+    {
+      "id": "E-109",
+      "title": "Billing & Usage",
+      "description": "Stripe plans, usage dashboards, upgrade flows.",
+      "status": "proposed",
+      "links": ["?path=/docs/specs-service-catalog--docs"]
+    },
+    {
+      "id": "E-110",
+      "title": "Observability & Ops",
+      "description": "Logs, metrics, tracing, dashboards, alerts.",
+      "status": "in-progress",
+      "links": ["?path=/docs/docs-observability-playground--docs", "/api/metrics"]
+    },
+    {
+      "id": "E-111",
+      "title": "Security Hardening",
+      "description": "CORS allowlist, CSP, secret hygiene, audits.",
+      "status": "proposed",
+      "links": ["?path=/docs/specs-security-privacy--docs"]
+    },
+    {
+      "id": "E-112",
+      "title": "Performance & Scale",
+      "description": "Load tests, keep-alive tuning, batching/backpressure.",
+      "status": "proposed",
+      "links": ["?path=/docs/docs-performance-bundling--docs"]
+    },
+    {
+      "id": "E-113",
+      "title": "Testing (E2E & Unit)",
+      "description": "Playwright smokes (streaming, errors, metrics), unit utils.",
+      "status": "in-progress",
+      "links": ["?path=/story/command-center-test-coverage--coverage-ci"]
+    },
+    {
+      "id": "E-114",
+      "title": "Docs & Storybook",
+      "description": "SSE guide, Observability, API references, E2E status story.",
+      "status": "in-progress",
+      "links": [
+        "?path=/docs/docs-sse-client-guide--docs",
+        "?path=/docs/docs-observability-playground--docs"
+      ]
+    },
+    {
+      "id": "E-115",
+      "title": "DevEx & Tooling",
+      "description": "Smoke scripts, linting, git hooks, DX polish.",
+      "status": "proposed",
+      "links": ["?path=/docs/dev-and-api--dev-and-api"]
+    },
+    {
+      "id": "E-116",
+      "title": "Deployment & Environments",
+      "description": "Staging env, seed data, feature flags UI, env docs.",
+      "status": "proposed",
+      "links": ["?path=/docs/docs-status-dashboard--docs"]
+    },
+    {
+      "id": "E-117",
+      "title": "Product Analytics & Feedback",
+      "description": "NPS/CSAT, action instrumentation, bad response reporting.",
+      "status": "proposed",
+      "links": ["?path=/docs/user-journeys--user-journeys"]
+    },
+    {
+      "id": "E-118",
+      "title": "Compliance & Data Lifecycle",
+      "description": "Data retention, export, deletion (DSR) workflows.",
+      "status": "proposed",
+      "links": ["?path=/docs/specs-security-privacy--docs"]
+    }
+  ]
+}

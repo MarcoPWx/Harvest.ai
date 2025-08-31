@@ -1,0 +1,25 @@
+# Lychee link checker configuration
+# See https://github.com/lycheeverse/lychee for all options
+
+# Exclude localhost/dev endpoints that may not be running on CI
+exclude = [
+  "http://localhost:3002/api/.*",
+  "http://127.0.0.1:3002/.*",
+]
+
+# Accept localhost links generally
+accept = [
+  "http://localhost",
+  "http://127.0.0.1"
+]
+
+# Request options
+max_redirects = 5
+scheme = ["http", "https"]
+user_agent = "lychee/ci"
+
+# Timeouts (milliseconds)
+max_duration = 10000
+retry_wait_time = 1000
+retries = 2
+

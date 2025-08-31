@@ -1,0 +1,345 @@
+import * as React from "react";
+const { useEffect, useState } = React;
+
+export const parameters = { layout: "fullscreen" };
+
+# Project Docs Reader
+
+This page serves the repository's `/docs` folder directly via Storybook static assets, so you can read project documentation inside Storybook.
+
+Note: These are plain-text Markdown renders (no MD parser). Use the links below to open in a new tab for better formatting if needed.
+
+export function DocReader() {
+  const [path, setPath] = useState('/docs/testing/TESTING.md');
+  const [text, setText] = useState('');
+  const [html, setHtml] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+function escapeHtml(s) {
+return s
+.replaceAll('&', '&amp;')
+.replaceAll('<', '&lt;')
+.replaceAll('>', '&gt;')
+.replaceAll('"', '&quot;')
+.replaceAll("'", '&#39;')
+}
+
+function mdToHtml(md) {
+// Very lightweight, safe markdown rendering (no raw HTML allowed)
+// 1) Split into code blocks and text segments
+const parts = []
+const re = /`([a-zA-Z0-9_-]+)?\n([\s\S]*?)`/g
+let last = 0
+let m
+while ((m = re.exec(md)) !== null) {
+if (m.index > last) parts.push({ kind: 'text', content: md.slice(last, m.index) })
+parts.push({ kind: 'code', lang: m[1] || '', content: m[2] || '' })
+last = re.lastIndex
+}
+if (last < md.length) parts.push({ kind: 'text', content: md.slice(last) })
+
+    const chunks = parts.map(p => {
+      if (p.kind === 'code') {
+        return `<pre style="background:#0b0f19;color:#e6edf3;padding:12px;border-radius:6px;overflow:auto"><code class="language-${escapeHtml(p.lang)}">${escapeHtml(p.content)}</code></pre>`
+      }
+      // Process text: headings, inline code, links, lists, paragraphs
+      let s = p.content
+      // Headings
+      s = s.replace(/^######\s+(.*)$/gm, '<h6>$1</h6>')
+           .replace(/^#####\s+(.*)$/gm, '<h5>$1</h5>')
+           .replace(/^####\s+(.*)$/gm, '<h4>$1</h4>')
+           .replace(/^###\s+(.*)$/gm, '<h3>$1</h3>')
+           .replace(/^##\s+(.*)$/gm, '<h2>$1</h2>')
+           .replace(/^#\s+(.*)$/gm, '<h1>$1</h1>')
+      // Inline code
+      s = s.replace(/`([^`]+)`/g, (_, code) => `<code style="background:#f6f8fa;padding:2px 4px;border-radius:4px">${escapeHtml(code)}</code>`)
+      // Links [text](url)
+      s = s.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+      // Unordered lists (very basic)
+      s = s.replace(/^(\s*)([-*])\s+(.+)$/gm, '$1<li>$3</li>')
+      // Wrap consecutive <li> blocks into <ul>
+      s = s.replace(/(?:<li>[^<]*<\/li>\n?)+/g, (block) => `<ul>${block.trim()}</ul>\n`)
+      // Paragraphs: split on blank lines that are not already HTML blocks
+      const lines = s.split(/\n{2 }/)
+      const rendered = lines.map(line => /^(<h\d|<ul|<pre|<blockquote|<p|<table|<hr|\s*$)/.test(line.trim())
+        ? line
+        : `<p>${line.replace(/\n/g, '<br/>')}</p>`
+      ).join('\n')
+      return rendered
+    })
+
+    return chunks.join('\n')
+
+}
+
+useEffect(() => {
+let ok = true;
+setLoading(true);
+setError('');
+setText('');
+setHtml('');
+fetch(path)
+.then(async (r) => {
+if (!ok) return;
+if (!r.ok) throw new Error('HTTP ' + r.status);
+const t = await r.text();
+setText(t);
+try {
+setHtml(mdToHtml(t))
+} catch (e) {
+// Fallback to plain text display
+setHtml('')
+}
+})
+.catch((e) => ok && setError(String(e)))
+.finally(() => ok && setLoading(false));
+return () => {
+ok = false;
+};
+}, [path]);
+
+const [manifest, setManifest] = useState(null)
+const [navError, setNavError] = useState('')
+const [navQuery, setNavQuery] = useState('')
+
+useEffect(() => {
+let alive = true
+fetch('/docs/manifest.json')
+.then(async r => { if (!alive) return; if (!r.ok) throw new Error('HTTP '+r.status); return r.json() })
+.then(j => alive && setManifest(j))
+.catch(e => alive && setNavError(String(e)))
+return () => { alive = false }
+}, [])
+
+function filteredManifest(m, q) {
+if (!q) return m
+const qq = q.toLowerCase()
+function filterNode(n) {
+if (n.type === 'file') {
+const text = `${n.title || n.name} ${n.path}`.toLowerCase()
+return text.includes(qq) ? n : null
+}
+if (n.type === 'dir') {
+const children = (n.children || []).map(filterNode).filter(Boolean)
+return children.length ? { ...n, children } : null
+}
+return null
+}
+return { ...m, tree: m.tree.map(filterNode).filter(Boolean) }
+}
+
+function renderNavFromManifest(m) {
+if (!m?.tree) return null
+const sections = m.tree
+const renderNode = (node) => {
+if (node.type === 'file') {
+return (
+
+<li key={node.path} style={{ margin: '6px 0' }}>
+<a href="#" onClick={(e) => { e.preventDefault(); setPath(node.path) }} style={{ color: path === node.path ? '#0366d6' : '#333', textDecoration: 'none' }}>{node.title || node.name}</a>
+</li>
+)
+}
+if (node.type === 'dir') {
+return (
+<div key={node.name} style={{ marginBottom: 10 }}>
+<div style={{ fontWeight: 600, marginBottom: 6 }}>{node.name}</div>
+<ul style={{ listStyle: 'none', paddingLeft: 8, margin: 0 }}>
+{node.children?.map(ch => renderNode(ch))}
+</ul>
+</div>
+)
+}
+return null
+}
+return (
+<div>
+{sections.map(s => renderNode(s))}
+</div>
+)
+}
+
+// Fallback curated tree if manifest missing
+function filterFallbackTree(tree, q) {
+if (!q) return tree
+const qq = q.toLowerCase()
+return tree.map(section => {
+const items = section.items.filter(it => `${it.label} ${it.path}`.toLowerCase().includes(qq))
+return { ...section, items }
+}).filter(s => s.items.length)
+}
+
+const fallbackTree = [
+{ label: 'Overview', items: [
+{ label: 'Docs README', path: '/docs/README.md' },
+{ label: 'System Status', path: '/docs/SYSTEM_STATUS.md' },
+{ label: 'Architecture', path: '/docs/architecture/SYSTEM_ARCHITECTURE.md' },
+]},
+{ label: 'Guides', items: [
+{ label: 'Local Dev Guide', path: '/docs/status/LOCAL_DEV_GUIDE.md' },
+{ label: 'Testing & CI', path: '/docs/testing/TESTING.md' },
+{ label: 'Tech Stack Cheat Sheet', path: '/docs/TECH_STACK_CHEATSHEET.md' },
+]},
+{ label: 'API', items: [
+{ label: 'REST API Overview', path: '/docs/api/REST_API.md' },
+{ label: 'Complete API Spec', path: '/docs/api/COMPLETE_API_SPEC.md' },
+]},
+{ label: 'Runbooks', items: [
+{ label: 'Operations Book', path: '/docs/runbooks/OPERATIONS_BOOK.md' },
+{ label: 'Production Checklist', path: '/docs/runbooks/PRODUCTION_CHECKLIST.md' },
+]},
+{ label: 'Roadmap & Status', items: [
+{ label: 'Epics', path: '/docs/roadmap/EPICS.md' },
+{ label: 'Implementation Progress', path: '/docs/status/implementation-progress.md' },
+{ label: 'System Status (Reality)', path: '/docs/SYSTEM_STATUS.md' },
+]},
+]
+
+return (
+
+<div style={{ maxWidth: 1200 }}>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "1fr auto auto auto",
+      gap: 8,
+      alignItems: "center",
+      marginBottom: 10,
+    }}
+  >
+    <select value={path} onChange={(e) => setPath(e.target.value)}>
+      <option value="/docs/testing/TESTING.md">Testing & CI (Consolidated)</option>
+      <option value="/docs/status/LOCAL_DEV_GUIDE.md">Local Development Guide</option>
+      <option value="/docs/TECH_STACK_CHEATSHEET.md">Tech Stack Cheat Sheet</option>
+      <option value="/docs/status/implementation-progress.md">Implementation Progress</option>
+      <option value="/docs/architecture/SYSTEM_ARCHITECTURE.md">System Architecture</option>
+      <option value="/docs/api/REST_API.md">REST API (overview)</option>
+      <option value="/docs/runbooks/OPERATIONS_BOOK.md">Operations Book</option>
+      <option value="/docs/runbooks/PRODUCTION_CHECKLIST.md">Production Checklist</option>
+    </select>
+    <a href={path} target="_blank" rel="noreferrer">
+      Open raw
+    </a>
+    <a href="/docs/api" target="_blank" rel="noreferrer">
+      Swagger UI
+    </a>
+    <a href="/docs" target="_blank" rel="noreferrer">
+      In-app Docs
+    </a>
+  </div>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "1fr auto",
+      gap: 8,
+      alignItems: "center",
+      marginBottom: 10,
+    }}
+  >
+    <input
+      style={{
+        fontFamily: "monospace",
+        fontSize: 12,
+        padding: 6,
+        border: "1px solid #eee",
+        borderRadius: 6,
+      }}
+      placeholder="Custom path under /docs (e.g., /docs/roadmap/EPICS.md)"
+      value={path}
+      onChange={(e) => setPath(e.target.value)}
+    />
+    <button onClick={() => setPath(path)} style={{ padding: "6px 12px" }}>
+      Load
+    </button>
+  </div>
+  <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 16 }}>
+    <div style={{ border: "1px solid #eee", borderRadius: 6, padding: 8, background: "#fafafa" }}>
+      <div style={{ marginBottom: 8 }}>
+        <input
+          placeholder="Filter docs…"
+          onChange={(e) => setNavQuery(e.target.value)}
+          style={{
+            width: "100%",
+            padding: 6,
+            border: "1px solid #ddd",
+            borderRadius: 6,
+            fontSize: 12,
+          }}
+        />
+      </div>
+      {manifest ? (
+        renderNavFromManifest(filteredManifest(manifest, navQuery))
+      ) : (
+        <div>
+          {filterFallbackTree(fallbackTree, navQuery).map((section, i) => (
+            <div key={i} style={{ marginBottom: 10 }}>
+              <div style={{ fontWeight: 600, marginBottom: 6 }}>{section.label}</div>
+              <ul style={{ listStyle: "none", paddingLeft: 8, margin: 0 }}>
+                {section.items.map((it, j) => (
+                  <li key={j} style={{ margin: "6px 0" }}>
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPath(it.path);
+                      }}
+                      style={{
+                        color: path === it.path ? "#0366d6" : "#333",
+                        textDecoration: "none",
+                      }}
+                    >
+                      {it.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {navError && (
+            <div style={{ fontFamily: "monospace", color: "crimson" }}>Nav error: {navError}</div>
+          )}
+        </div>
+      )}
+    </div>
+    <div>
+      {loading && <div style={{ fontFamily: "monospace" }}>Loading…</div>}
+      {error && <div style={{ fontFamily: "monospace", color: "crimson" }}>{error}</div>}
+      {!loading && !error && html && (
+        <div
+          style={{
+            border: "1px solid #eee",
+            borderRadius: 6,
+            padding: 14,
+            background: "white",
+            fontSize: 14,
+            lineHeight: 1.55,
+          }}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      )}
+      {!loading && !error && !html && (
+        <pre
+          style={{
+            whiteSpace: "pre-wrap",
+            border: "1px solid #eee",
+            borderRadius: 6,
+            padding: 8,
+            background: "#fafafa",
+            fontSize: 12,
+            overflow: "auto",
+          }}
+        >
+          {text}
+        </pre>
+      )}
+    </div>
+  </div>
+</div>
+); }
+
+<Meta title="Docs/Project Docs Reader" />
+
+<Canvas>
+  <DocReader />
+</Canvas>

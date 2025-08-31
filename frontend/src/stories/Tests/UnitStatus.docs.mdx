@@ -1,0 +1,75 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import LastUpdated from "../components/LastUpdated";
+
+# Unit Tests — Status
+
+<Meta title="Tests/Unit Status" />
+
+A minimal dashboard for local unit test coverage. Generate artifacts with:
+
+```bash
+npm run test:coverage
+```
+
+export function UnitCoverage() {
+  const [data, setData] = React.useState<any>(null)
+  const [err, setErr] = React.useState('')
+  React.useEffect(() => {
+    let alive = true
+    fetch('/coverage/coverage-summary.json')
+      .then(async r => { if (!alive) return; if (!r.ok) throw new Error('HTTP '+r.status); return r.json() })
+      .then(j => alive && setData(j))
+      .catch(e => alive && setErr(String(e)))
+    return () => { alive = false }
+  }, [])
+
+  const threshold = 80
+  function row(label: string, pct?: number) {
+    const ok = typeof pct === 'number' ? pct >= threshold : false
+    return (
+      <tr>
+        <td style={{ padding: '6px 8px' }}>{label}</td>
+        <td style={{ padding: '6px 8px', fontFamily: 'monospace' }}>{pct ?? '?' }%</td>
+        <td style={{ padding: '6px 8px' }}>
+          <span style={{
+            display: 'inline-block', padding: '2px 6px', borderRadius: 6,
+            background: ok ? '#e6ffed' : '#ffebe6', color: ok ? '#027a48' : '#b42318', border: `1px solid ${ok ? '#abefc6' : '#ffb4a6'}`,
+            fontSize: 12,
+          }}>{ok ? 'ok' : 'below'}</span>
+        </td>
+      </tr>
+    )
+  }
+
+  if (err) return <div style={{ fontFamily: 'monospace', color: 'crimson' }}>No coverage artifacts found: {err}</div>
+  if (!data) return <div style={{ fontFamily: 'monospace' }}>Loading…</div>
+
+  const total = data?.total || {}
+  return (
+    <div>
+      <table style={{ borderCollapse: 'collapse', border: '1px solid #eee' }}>
+        <thead>
+          <tr style={{ background: '#f8fafc' }}>
+            <th style={{ textAlign: 'left', padding: '6px 8px' }}>Metric</th>
+            <th style={{ textAlign: 'left', padding: '6px 8px' }}>Percent</th>
+            <th style={{ textAlign: 'left', padding: '6px 8px' }}>Gate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {row('statements', total?.statements?.pct)}
+          {row('branches', total?.branches?.pct)}
+          {row('functions', total?.functions?.pct)}
+          {row('lines', total?.lines?.pct)}
+        </tbody>
+      </table>
+      <div style={{ marginTop: 8 }}>
+        <a href="/coverage/lcov-report/index.html" target="_blank" rel="noreferrer">Open LCOV report</a>
+      </div>
+    </div>
+  )
+}
+
+<UnitCoverage />
+
+<LastUpdated file="coverage/coverage-summary.json" />
+

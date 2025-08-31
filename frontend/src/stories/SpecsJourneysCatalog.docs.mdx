@@ -1,0 +1,63 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+import InlineToc from "./components/InlineToc";
+
+export const parameters = {
+  repoDocPath: "/docs/user-journeys/USER_FLOWS.md",
+  repoDocLabel: "User Journeys",
+};
+
+# User Journeys — Detailed Catalog
+
+<a id="top"></a>
+
+<Meta title="Specs/Journeys/User Journeys — Detailed Catalog" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#journeys-summary", label: "Journeys (summary)" },
+    { href: "#observability-events-sample-taxonomy", label: "Observability events" },
+  ]}
+/>
+
+## Overview
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+This catalog enumerates key journeys, acceptance criteria, and error/alt flows. See the interactive
+"Docs/User Journeys" page for a live MSW-backed runner.
+
+## Journeys (summary)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Generate (blog/email/summary/quiz/presentation/social) - AC: valid input, streaming progress,
+copy/download - Errors: 429 retry, 401 key help, 5xx retry - View API Docs (Swagger UI) - AC: loads
+spec; Try It Out in dev; snapshot fallback - Adjust mock latency/error - AC: x-mock-delay,
+x-mock-error-rate; clamped ranges - Status Dashboard - AC: badges show pass/fail; links to artifacts
+- Explore Architecture - AC: context map, layered dependencies, ERD load
+
+<LastUpdated file="src/stories/SpecsJourneysCatalog.stories.mdx" />
+
+## Observability events (sample taxonomy)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+
+```json path=null start=null
+[
+  { "evt": "hvt_generate_click", "cat": "journey", "lvl": "info" },
+  { "evt": "hvt_stream_start", "cat": "journey", "lvl": "info" },
+  { "evt": "hvt_stream_complete", "cat": "journey", "lvl": "info" },
+  { "evt": "hvt_generate_error", "cat": "journey", "lvl": "warn" },
+  { "evt": "hvt_help_open", "cat": "docs", "lvl": "info" },
+  { "evt": "hvt_status_view", "cat": "status", "lvl": "info" }
+]
+```

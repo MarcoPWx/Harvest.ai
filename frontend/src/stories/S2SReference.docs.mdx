@@ -1,0 +1,122 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "./components/InlineToc";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = { repoDocPath: "/docs/api/REST_API.md", repoDocLabel: "REST API" };
+
+# S2S — Gateway Reference
+
+<a id="top"></a>
+
+<Meta title="Specs/S2S — Gateway Reference" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#endpoints", label: "Endpoints" },
+    { href: "#headers", label: "Headers" },
+    { href: "#events", label: "SSE events" },
+    { href: "#triggers", label: "Triggers (test paths)" },
+    { href: "#caching", label: "Caching" },
+    { href: "#cors", label: "CORS" },
+    { href: "#examples", label: "Examples" },
+    { href: "#see-also", label: "See also" },
+  ]}
+/>
+
+## Overview
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+Server-to-server routes power streaming content generation and multi‑turn conversations. They
+support both JSON and SSE streaming.
+
+## Endpoints
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- POST /api/generate — JSON or SSE based on Accept header - POST /api/threads — create thread →
+{thread_id}- GET /api/threads — list threads (dev) - GET /api/threads/{id} — get full thread (dev) -
+POST /api/threads/{id}/messages — append user message; JSON or SSE assistant reply
+
+## Headers
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Accept: 'text/event-stream' → enable streaming - Content-Type: 'application/json' -
+x-cache-bypass: '1' → bypass cache for generate
+
+## SSE events
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+- token: { text } — partial token/chunk
+- meta: { model, format?, thread_id? } — context
+- cached: { cached:true } — indicates cache hit
+- final: { result/... } or { content,... } — final payload
+- done: { ok:true }
+- error: { message } — non-fatal stream error
+
+## Triggers (test paths)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Include "TRIGGER_RATE_LIMIT" in input → 429 with Retry-After - Include "TRIGGER_ERROR" in input →
+500 error
+
+## Caching
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- In dev: in-memory cache keyed by request hash - Cache hit returns processing_time: 0 and
+metadata.cached=true - Use x-cache-bypass: 1 to force regeneration
+
+## CORS
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Routes set Access-Control-Allow-* headers to allow Storybook (6006) to call Next (3002) - OPTIONS
+endpoints included for preflight
+
+## Examples
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+- JSON:
+```bash path=null start=null
+curl -sS -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{"input":"hello world","format":"blog"}' \
+  http://localhost:3002/api/generate | jq
+```
+- SSE (using curl event-stream isnt ideal; use fetch/Storybook panel):
+```js path=null start=null
+const res = await fetch('http://localhost:3002/api/generate', {
+  method: 'POST',
+  headers: { 'Content-Type':'application/json', 'Accept': 'text/event-stream' },
+  body: JSON.stringify({ input:'hello', format:'blog' }) })
+// read res.body stream...
+```
+- Threads (JSON):
+```bash path=null start=null
+TID=$(curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"title":"S2S Demo"}' http://localhost:3002/api/threads | jq -r .thread_id)
+curl -sS -X POST -H 'Content-Type: application/json' \
+  -d '{"role":"user","content":"Refine this."}' \
+  http://localhost:3002/api/threads/$TID/messages | jq
+```
+
+## See also
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Command Center → S2S — Streaming & Threads (live) - Specs → AI Gateway — Full Specification
+
+<LastUpdated file="src/stories/S2SReference.stories.mdx" />

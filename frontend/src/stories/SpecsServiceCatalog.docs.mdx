@@ -1,0 +1,99 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+import InlineToc from "./components/InlineToc";
+
+export const parameters = {
+  repoDocPath: "/docs/TECH_STACK_CHEATSHEET.md",
+  repoDocLabel: "Tech Stack & Docs",
+};
+
+# Service Catalog
+
+<a id="top"></a>
+
+<Meta title="Specs/Service Catalog" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#frontend-nextjs-app", label: "Frontend — Next.js App" },
+    { href: "#storybook", label: "Storybook" },
+    { href: "#api-routes-mock-first", label: "API Routes (mock-first)" },
+    { href: "#mocks-contracts", label: "Mocks & Contracts" },
+    {
+      href: "#external-integrations-optional-or-planned",
+      label: "External integrations (optional or planned)",
+    },
+    { href: "#see-also", label: "See also" },
+    { href: "#notes", label: "Notes" },
+  ]}
+/>
+
+## Overview
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+This catalog describes the user-facing application and its supporting services/interfaces.
+
+## Frontend — Next.js App
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- App Router (Next.js 15) - UI components (React 19, Tailwind, Radix UI, lucide-react) - Pages:
+Demo, Docs (MDX), Swagger UI, Dev tools (local only) - Contracts: fetch-based client; OpenAPI JSON
+for API docs
+
+## Storybook
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Vite builder; a11y/docs/vitest addons - MSW integration for interactive mocks - Docs pages:
+Overview, Architecture, Performance & Bundling, Status Dashboard, Swagger UI
+
+## API Routes (mock-first)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Core route: POST /api/generate (supports TRIGGER_* inputs for test paths) - Debug routes and Local
+Memory demo - OpenAPI JSON served at /api/openapi.json (live) and /docs/api/openapi.snapshot.json
+(fallback)
+
+## Mocks & Contracts
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- MSW handlers mirror API routes - Swagger UI page embeds live spec or snapshot
+
+## External integrations (optional or planned)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Supabase (Auth/DB), Stripe (billing), Resend (email) - AI SDKs available server-side as needed
+
+## See also
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+-
+<a href="?path=/docs/overview-architecture-system-map-dependencies-layered-view-data-model-extended-erd--docs">
+  Overview → Architecture
+</a>
+
+<LastUpdated file="src/stories/SpecsServiceCatalog.stories.mdx" />
+
+## Notes
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- This is a mock-first catalog; concrete backend services may be stubbed or disabled in development.

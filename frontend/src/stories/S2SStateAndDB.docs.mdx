@@ -1,0 +1,73 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import InlineToc from "./components/InlineToc";
+import LastUpdated from "./components/LastUpdated";
+
+export const parameters = {
+  repoDocPath: "/docs/architecture/GENERATION_FLOW.md",
+  repoDocLabel: "Generation Flow",
+};
+
+# S2S — State & DB Semantics
+
+<a id="top"></a>
+
+<Meta title="Specs/S2S — State & DB Semantics" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#state-machine", label: "State machine" },
+    { href: "#db-model", label: "DB model (planned)" },
+    { href: "#dev-store", label: "Dev store (in-memory)" },
+    { href: "#event-log", label: "Event log" },
+    { href: "#traceability", label: "Traceability" },
+  ]}
+/>
+
+## State machine
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Generate (JSON): request → compute/cache → respond - Generate (SSE): request → meta → token* →
+final → done - Threads: create thread → user message → assistant stream (token*) → final saved →
+done
+
+## DB model (planned)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- threads(id, user_id, title, created_at) - messages(id, thread_id, role[user|assistant], content,
+tokens_in/out, model, cost, created_at) - generations(id, user_id, request_hash, cached, provider,
+model, tokens_in/out, cost, pricing_version, created_at)
+
+## Dev store (in-memory)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Threads/messages are stored in-memory in dev for Storybook demos and local E2E - GET /api/threads
+returns summaries; GET /api/threads/{id} returns the full transcript - Generate uses in-memory cache
+keyed by request hash
+
+## Event log
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- token: streamed chunk for UI progress - final: persisted message (assistant) or generation result
+- done: end-of-stream; UI may enable actions (copy/download) - error: surfaced to UI; retry logic
+per code (e.g. 429 with Retry-After)
+
+## Traceability
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Each final event associates with a thread/message or generation_id - Planned: trace_id/span_id for
+hop-to-hop correlation (UI, gateway, provider)
+
+<LastUpdated file="src/stories/S2SStateAndDB.stories.mdx" />

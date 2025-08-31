@@ -1,0 +1,178 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+
+# S2S Journeys — Extended (50)
+
+<Meta title="Lab/S2S Journeys — Extended" />
+
+50 focused journeys for server-to-server JSON and SSE.
+
+<InlineToc
+  items={Array.from({ length: 50 }, (_, i) => ({ href: `#s2s-${String(i+1).padStart(2,'0')}`, label: `S2S-${String(i+1).padStart(2,'0')}` }))}
+/>
+
+## JSON Essentials
+
+## S2S-01 — JSON generate (blog) {#s2s-01}
+- POST /api/generate { input, format: 'blog' }
+- Expect result, cost, quality, metadata
+
+## S2S-02 — JSON generate (email) {#s2s-02}
+- POST /api/generate { input, format: 'email' }
+- Expect Subject and body shape in result
+
+## S2S-03 — JSON generate (summary) {#s2s-03}
+- Ensure key sections appear (bullets or headings)
+
+## S2S-04 — JSON generate (presentation) {#s2s-04}
+- Expect slides layout markers
+
+## S2S-05 — Large input (OK) {#s2s-05}
+- Send a few thousand chars; expect OK
+
+## S2S-06 — Too long input (400) {#s2s-06}
+- Input >10k chars; expect 400 error
+
+## S2S-07 — Cost telemetry present {#s2s-07}
+- Validate tokens_used, estimated_cost, model_used
+
+## S2S-08 — Quality telemetry present {#s2s-08}
+- Validate quality_score numeric
+
+## S2S-09 — Metadata present {#s2s-09}
+- Validate format, input/output length, generated_at
+
+## S2S-10 — Idempotent cache warm {#s2s-10}
+- Call twice with same input; second shows cached=true
+
+## SSE Streaming
+
+## S2S-11 — SSE handshake {#s2s-11}
+- Accept: text/event-stream → open event stream
+
+## S2S-12 — SSE meta event {#s2s-12}
+- Expect model + format
+
+## S2S-13 — SSE token chunks {#s2s-13}
+- Expect periodic token events
+
+## S2S-14 — SSE final and done {#s2s-14}
+- Final payload then done event
+
+## S2S-15 — SSE cancel/abort (client) {#s2s-15}
+- Abort controller cancels stream
+
+## S2S-16 — SSE retry (client) {#s2s-16}
+- On error, client retries once with backoff
+
+## S2S-17 — SSE backpressure note {#s2s-17}
+- Document that tokens are paced to simulate streaming
+
+## S2S-18 — SSE + cache hit {#s2s-18}
+- Cached path emits cached event then final
+
+## S2S-19 — SSE error event {#s2s-19}
+- Simulate and assert error payload shape
+
+## S2S-20 — SSE to JSON fallback {#s2s-20}
+- If SSE unsupported, fallback to JSON
+
+## Error & Retry
+
+## S2S-21 — Rate limit 429 {#s2s-21}
+- TRIGGER_RATE_LIMIT → 429 + Retry-After
+
+## S2S-22 — Server error 500 {#s2s-22}
+- TRIGGER_ERROR → 500
+
+## S2S-23 — Transient 500 with retry {#s2s-23}
+- Client retries w/ exponential backoff
+
+## S2S-24 — Retry budget exceeded {#s2s-24}
+- Stop after N attempts; surface error
+
+## S2S-25 — Timeouts (client) {#s2s-25}
+- Abort after timeout; ensure cleanup
+
+## S2S-26 — Input validation 400 {#s2s-26}
+- Missing input → 400
+
+## S2S-27 — Auth missing (placeholder) {#s2s-27}
+- Document expected 401 in BYOK-only mode
+
+## S2S-28 — Quota 402 (placeholder) {#s2s-28}
+- Quota exceeded pattern
+
+## S2S-29 — Provider fallback {#s2s-29}
+- Provider error → simulated output
+
+## S2S-30 — Cached bypass {#s2s-30}
+- x-cache-bypass: 1 forces regeneration
+
+## Caching & Idempotency
+
+## S2S-31 — Cache key definition {#s2s-31}
+- Request hash over input+format
+
+## S2S-32 — Cache metadata persistence {#s2s-32}
+- model_used and provider saved for hit
+
+## S2S-33 — TTL (placeholder) {#s2s-33}
+- Note TTL if/when enabled
+
+## S2S-34 — Partial match (non-key) {#s2s-34}
+- Minor change breaks cache (by design)
+
+## S2S-35 — Bulk warm (batch) {#s2s-35}
+- POST /api/generate/batch warms cache
+
+## Threads & Multi‑turn
+
+## S2S-36 — Create thread {#s2s-36}
+- POST /api/threads → thread_id
+
+## S2S-37 — Append user message {#s2s-37}
+- POST /api/threads/{id}/messages
+
+## S2S-38 — Assistant reply (JSON) {#s2s-38}
+- Verify last message role/content
+
+## S2S-39 — Assistant reply (SSE) {#s2s-39}
+- Streaming reply with tokens
+
+## S2S-40 — Get full thread {#s2s-40}
+- GET /api/threads/{id}
+
+## Pagination & Listing
+
+## S2S-41 — List generations {#s2s-41}
+- GET /api/generations?limit=10&offset=0
+
+## S2S-42 — Next page {#s2s-42}
+- offset=10
+
+## S2S-43 — Empty list {#s2s-43}
+- No history returns []
+
+## S2S-44 — Not found {#s2s-44}
+- /api/generate/:id unknown → 404
+
+## S2S-45 — Delete generation {#s2s-45}
+- DELETE /api/generate/:id → success
+
+## Rate limiting & Headers
+
+## S2S-46 — Identifier extraction {#s2s-46}
+- getIdentifierFromHeaders strategy
+
+## S2S-47 — Rate headers response {#s2s-47}
+- buildRateHeaders presence in responses
+
+## S2S-48 — Retry-After semantics {#s2s-48}
+- RFC compliance
+
+## S2S-49 — Real provider passthrough {#s2s-49}
+- x-real-api: 1 bypasses MSW
+
+## S2S-50 — CORS preflight {#s2s-50}
+- OPTIONS handler includes Access-Control-Allow-*

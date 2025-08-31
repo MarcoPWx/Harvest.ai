@@ -1,0 +1,82 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+import InlineToc from "./components/InlineToc";
+
+export const parameters = { repoDocPath: "/docs/roadmap/EPICS.md", repoDocLabel: "Epics" };
+
+# Epic Management — Full Specification
+
+<a id="top"></a>
+
+<Meta title="Specs/Epic Management — Full Spec" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#data-model-simplified", label: "Data model (simplified)" },
+    { href: "#api-mock-first", label: "API (mock-first)" },
+    { href: "#acceptance-criteria", label: "Acceptance criteria" },
+    { href: "#error-alt-flows", label: "Error & alt flows" },
+    { href: "#see-also", label: "See also" },
+    { href: "#observability", label: "Observability" },
+  ]}
+/>
+
+## Overview
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+Manage product epics: list, create, update, link to docs, and reflect status in dashboards.
+
+## Data model (simplified)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Epic: id, title, description, status (proposed, in-progress, done), links[]
+
+## API (mock-first)
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- GET /api/epics → [Epic] - POST /api/epics → Epic - PUT /api/epics/:id → Epic
+
+## Acceptance criteria
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- List loads epics with stable ordering and filters - Create/update validates required fields;
+optimistic UI; errors surfaced inline - Links open in new tab; broken links flagged by CI link-check
+
+## Error & alt flows
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Offline / fetch error → empty state with retry - Conflict on update → user prompted to refresh
+
+## See also
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- <a href="?path=/docs/overview-overview-insanely-detailed--docs">Overview</a>-
+<a href="?path=/docs/overview-architecture-system-map-dependencies-layered-view-data-model-extended-erd--docs">
+  Architecture
+</a>
+
+<LastUpdated file="src/stories/SpecsEpicManagement.stories.mdx" />
+
+## Observability
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Events: epic_list_view, epic_create, epic_update, epic_link_open - Status Dashboard reflects
+epic-related CI signals indirectly via links

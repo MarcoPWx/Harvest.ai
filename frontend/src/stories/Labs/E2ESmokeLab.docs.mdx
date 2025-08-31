@@ -1,0 +1,58 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+import LastUpdated from "../components/LastUpdated";
+
+# E2E Smoke Lab
+
+<Meta title="Labs/E2E Smoke Lab" />
+
+Deterministic, fast E2E smokes in Chromium using MSW and stable selectors.
+
+<InlineToc
+  items={[
+    { href: "#run", label: "Run smokes" },
+    { href: "#selectors", label: "Stable selectors" },
+    { href: "#mocks", label: "MSW in E2E" },
+    { href: "#tags", label: "@smoke tags" },
+    { href: "#next", label: "Next steps" },
+  ]}
+/>
+
+## Run smokes {#run}
+
+```bash
+# Dev server with E2E flags (Chromium)
+npm run dev:e2e &
+# Run the smoke subset
+npm run test:smoke:e2e
+# Or grep by tag in the full suite
+npm run test:e2e:smoke:tags
+```
+
+Files: see tests/e2e/smoke.spec.ts and related helpers in tests/helpers/selectors.ts
+
+## Stable selectors {#selectors}
+
+- Prefer data-testid on interactive controls
+- Avoid brittle text selectors for localized/animated content
+- Use explicit waits for visible/attached state and generous timeouts for streaming flows
+
+## MSW in E2E {#mocks}
+
+- The dev:e2e script enables NEXT_PUBLIC_ENABLE_MSW=1 so handlers shape responses deterministically
+- Headers you can use for injection:
+  - x-mock-delay: emulate latency
+  - x-mock-error-rate: inject transient failures
+
+## @smoke tags {#tags}
+
+- Tag the minimal happy-path journeys with @smoke
+- Keep smokes idempotent, offline-capable, and under ~30s total
+
+## Next steps {#next}
+
+- Add visual snapshots for home/docs once layouts stabilize
+- Include an a11y smoke using @axe-core/playwright
+
+<LastUpdated file="src/stories/Labs/E2ESmokeLab.docs.mdx" />
+

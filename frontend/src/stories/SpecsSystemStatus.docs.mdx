@@ -1,0 +1,90 @@
+import * as React from "react";
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+import InlineToc from "./components/InlineToc";
+
+export const parameters = {
+  repoDocPath: "/docs/testing/TEST_STATUS.md",
+  repoDocLabel: "Test & Status",
+};
+
+# System Status — Full Specification
+
+<a id="top"></a>
+
+<Meta title="Specs/System Status — Full Spec" />
+
+## On this page
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#data-source", label: "Data source" },
+    { href: "#acceptance-criteria", label: "Acceptance criteria" },
+    { href: "#error-alt-flows", label: "Error & alt flows" },
+    { href: "#see-also", label: "See also" },
+    { href: "#observability", label: "Observability" },
+  ]}
+/>
+
+## Overview
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+Storybook Status Dashboard reads a CI-generated JSON to display green/amber/red signals with links
+to coverage and E2E reports.
+
+## Data source
+
+<div style={{ textAlign:'right' }}><a href="#top">Back to top</a></div>
+- Path: /docs/status/ci-status.json (written by CI job)
+- Example schema:
+```json path=null start=null
+{
+  "summary": {
+    "unit": "passed | failed | partial",
+    "e2e": "passed | failed | partial",
+    "storybookInteractions": "passed | failed | partial"
+  },
+  "links": {
+    "coverage": "./coverage/index.html",
+    "playwrightReport": "./playwright-report/index.html"
+  },
+  "generatedAt": "<run-id or timestamp>"
+}
+```
+
+## Acceptance criteria
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Dashboard fetches JSON and renders badges - Links open to downloadable artifacts - Robust to
+missing JSON (shows empty/help state)
+
+## Error & alt flows
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- 404 JSON → user hint: run CI or generate locally - Missing links → hide link buttons
+
+## See also
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+-
+<a href="?path=/docs/overview-architecture-system-map-dependencies-layered-view-data-model-extended-erd--docs#system-map-context">
+  Architecture → System map (context)
+</a>
+
+<LastUpdated file="src/stories/SpecsSystemStatus.stories.mdx" />
+
+## Observability
+
+<div style={{ textAlign: "right" }}>
+  <a href="#top">Back to top</a>
+</div>
+- Events: status_view, status_links_click

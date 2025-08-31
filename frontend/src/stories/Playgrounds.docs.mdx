@@ -1,0 +1,40 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+export const parameters = { repoDocPath: "/docs/INDEX.md", repoDocLabel: "Docs Index" };
+
+<Meta title="Command Center/Playgrounds" />
+
+These playgrounds run in your Next.js dev server and are embedded here via iframes. Make sure your dev server is running on <code>http://localhost:3002</code>.
+
+## How to run
+
+```bash
+npm run dev:mock  # Next.js dev at http://localhost:3002
+npm run storybook # Storybook at http://localhost:6006
+```
+
+> Tip: You can also open the playgrounds directly in the browser: <code>http://localhost:3002/playground</code>.
+
+## Generate Playground
+
+<iframe
+  src="http://localhost:3002/playground/generate"
+  style={{ width: "100%", height: 600, border: "1px solid #eee", borderRadius: 8 }}
+  title="Generate Playground"
+/>
+
+## Threads Playground
+
+<iframe
+  src="http://localhost:3002/playground/threads"
+  style={{ width: "100%", height: 600, border: "1px solid #eee", borderRadius: 8 }}
+  title="Threads Playground"
+/>
+
+## SSE Demo Playground
+
+<iframe
+  src="http://localhost:3002/playground/sse"
+  style={{ width: "100%", height: 520, border: "1px solid #eee", borderRadius: 8 }}
+  title="SSE Playground"
+/>

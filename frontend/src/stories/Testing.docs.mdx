@@ -1,0 +1,40 @@
+import { Meta, Source } from "@storybook/addon-docs";
+
+export const parameters = {
+  repoDocPath: "/docs/testing/TESTING.md",
+  repoDocLabel: "Testing & CI Guide",
+};
+
+<Meta title="Docs/Testing" />
+
+## Commands
+
+```bash
+# Unit tests (expected: all passing)
+npm test
+
+# Coverage (report in console)
+npm test -- --coverage
+
+# E2E (Chromium smoke)
+npm run test:e2e:chrome
+```
+
+## Status
+
+- Unit tests: 58/58 passing
+- API route tests: present for generation history and id routes
+- E2E: align page titles/selectors; run with MSW + mock WebSocket
+
+## Tips
+
+- Prefer stable selectors: `data-testid` on interactive elements
+- Await visible state with generous timeouts for async flows
+- Integrate MSW handlers into Playwright setup for offline, deterministic runs
+- Add visual snapshots for key pages (demo, home) when stabilize
+
+### Example: Waiting for content
+
+```ts
+await expect(page.locator('[data-testid="generated-content"]')).toBeVisible({ timeout: 30000 });
+```

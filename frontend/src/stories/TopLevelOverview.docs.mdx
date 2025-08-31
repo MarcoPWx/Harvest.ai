@@ -1,0 +1,74 @@
+import { Meta } from "@storybook/addon-docs";
+import LastUpdated from "./components/LastUpdated";
+
+# Top-Level Overview
+
+<Meta title="Docs/Top-Level Overview" />
+
+> Central navigation to all key documentation, playgrounds, and dashboards in Harvest.ai.
+
+## 🏠 System Overview
+
+- [**Harvest Overview (Insanely Detailed)**](?path=/docs/overview-overview-insanely-detailed--docs) - Complete product & system overview with 30+ user stories
+- [**Architecture**](?path=/docs/overview-architecture-system-map-dependencies-layered-view-data-model-extended-erd--docs) - System map, dependencies, data model
+- [**System Status**](?path=/docs/docs-system-status--docs) - Reality check: what actually works vs what doesn't
+
+## 🎓 Learning & Onboarding
+
+- [**Expert Hub**](?path=/docs/docs-🎓-expert-hub---master-harvest.ai--docs) - Complete learning path from beginner to expert
+- [**TDD Master Plan**](?path=/docs/docs-tdd-master-plan--docs) - Test-driven development philosophy and implementation
+- [**Testing Patterns & Examples**](?path=/docs/docs-testing-patterns-examples--docs) - Real-world testing patterns with code
+
+## 🔒 Security & Trust
+
+- [**Security & Trust Plan**](?path=/docs/docs-security-trust--docs) - Session-only BYOK, zero-retention proxy, transport controls
+- [**Security Playground**](?path=/docs/docs-security-playground--docs) - Interactive BYOK demo with auto-wipe, panic wipe, sanitized preview
+
+## 📊 Command Center
+
+- [**Epics Manager**](?path=/docs/command-center-epics-manager--docs) - Track and update epics in one place
+- [**Test Coverage**](?path=/docs/command-center-test-coverage--docs) - Local coverage and E2E status
+- [**Epic Tracking**](/docs/roadmap/EPIC_TRACKING.md) - Raw markdown tracking doc
+
+## 🧪 Playgrounds
+
+- [**API Playground**](?path=/docs/docs-api-playground--docs) - Interactive API testing with MSW mocks
+- [**Observability Playground**](?path=/docs/docs-observability-playground--docs) - Structured logging, metrics, correlation
+- [**Generate/Threads/SSE Playgrounds**](?path=/docs/command-center-playgrounds--docs) - Live demos (requires dev server)
+
+## 📋 User Stories & Requirements
+
+- [**User Stories**](/docs/USER_STORIES.md) - 55+ user stories with acceptance criteria
+- [**S2S Stories**](/docs/S2S_STORIES.md) - 52+ server-to-server stories for API/gateway
+
+## 🚀 Implementation Tracking
+
+- [**Tech Stack**](?path=/docs/docs-tech-stack--docs) - Technologies and tools used
+- [**Local Dev Guide**](?path=/docs/docs-local-dev-guide--docs) - Setup instructions
+- [**Performance & Bundling**](?path=/docs/docs-performance-bundling--docs) - Optimization strategies
+
+## 📝 Product & Specs
+
+- [**Product Brief**](?path=/docs/specs-product-brief--docs) - Product vision and goals
+- [**Service Catalog**](?path=/docs/specs-service-catalog--docs) - Service boundaries and responsibilities
+- [**API Specification**](?path=/docs/specs-api-specification--docs) - REST API contracts
+
+## Current Reality
+
+- ✅ Frontend prototype with UI components
+- ✅ Mock-first development with MSW
+- ✅ Test infrastructure with 70/70 tests passing
+- ✅ Security headers and no-store policy
+- ✅ Session-only BYOK capability (no persistence)
+- ❌ No backend/database/auth
+- ❌ No real AI integration (mocks only)
+- ❌ No data persistence
+
+## Quick Links
+
+- **Run tests**: `npm test`
+- **Start Storybook**: `npm run storybook`
+- **Dev with mocks**: `npm run dev:mock`
+- **E2E tests**: `npm run test:e2e`
+
+<LastUpdated file="src/stories/TopLevelOverview.stories.mdx" />

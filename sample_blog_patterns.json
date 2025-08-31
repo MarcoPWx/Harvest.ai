@@ -1,0 +1,235 @@
+[
+  {
+    "platform": "medium",
+    "url": "https://medium.com/sample-blog",
+    "title_pattern": {
+      "title_length": 65,
+      "title_format": "how-to",
+      "has_numbers": true,
+      "has_colon": true,
+      "has_dash": false,
+      "word_count": 12,
+      "common_words": [
+        [
+          "build",
+          1
+        ],
+        [
+          "successful",
+          1
+        ],
+        [
+          "saas",
+          1
+        ],
+        [
+          "product:",
+          1
+        ],
+        [
+          "complete",
+          1
+        ]
+      ]
+    },
+    "section_structure": {
+      "total_headings": 12,
+      "h1_count": 1,
+      "h2_count": 5,
+      "h3_count": 6,
+      "section_types": [
+        "introduction",
+        "content",
+        "content",
+        "content",
+        "conclusion"
+      ],
+      "has_introduction": true,
+      "has_conclusion": true,
+      "avg_section_length": 2.4
+    },
+    "content_patterns": {
+      "paragraph_count": 13,
+      "list_count": 15,
+      "code_block_count": 0,
+      "image_count": 0,
+      "has_call_to_action": false,
+      "content_density": 16.692307692307693
+    },
+    "seo_patterns": {
+      "has_meta_description": false,
+      "has_meta_keywords": false,
+      "has_canonical": false,
+      "heading_structure": {
+        "h1": 1,
+        "h2": 5,
+        "h3": 6
+      }
+    },
+    "engagement_metrics": {
+      "has_social_sharing": true,
+      "has_comments": false,
+      "has_call_to_action": false,
+      "social_button_count": 1
+    },
+    "scraped_at": "2025-08-27T23:41:34.211126"
+  },
+  {
+    "platform": "dev_to",
+    "url": "https://dev.to/sample-post",
+    "title_pattern": {
+      "title_length": 56,
+      "title_format": "listicle",
+      "has_numbers": true,
+      "has_colon": false,
+      "has_dash": false,
+      "word_count": 8,
+      "common_words": [
+        [
+          "essential",
+          1
+        ],
+        [
+          "javascript",
+          1
+        ],
+        [
+          "tips",
+          1
+        ],
+        [
+          "every",
+          1
+        ],
+        [
+          "developer",
+          1
+        ]
+      ]
+    },
+    "section_structure": {
+      "total_headings": 13,
+      "h1_count": 1,
+      "h2_count": 12,
+      "h3_count": 0,
+      "section_types": [
+        "introduction",
+        "content",
+        "content",
+        "content",
+        "content",
+        "content",
+        "content",
+        "content",
+        "content",
+        "content",
+        "content",
+        "conclusion"
+      ],
+      "has_introduction": true,
+      "has_conclusion": true,
+      "avg_section_length": 1.0833333333333333
+    },
+    "content_patterns": {
+      "paragraph_count": 17,
+      "list_count": 0,
+      "code_block_count": 4,
+      "image_count": 0,
+      "has_call_to_action": true,
+      "content_density": 16.941176470588236
+    },
+    "seo_patterns": {
+      "has_meta_description": false,
+      "has_meta_keywords": false,
+      "has_canonical": false,
+      "heading_structure": {
+        "h1": 1,
+        "h2": 12,
+        "h3": 0
+      }
+    },
+    "engagement_metrics": {
+      "has_social_sharing": true,
+      "has_comments": true,
+      "has_call_to_action": true,
+      "social_button_count": 1
+    },
+    "scraped_at": "2025-08-27T23:41:34.211599"
+  },
+  {
+    "platform": "hashnode",
+    "url": "https://hashnode.dev/sample-post",
+    "title_pattern": {
+      "title_length": 64,
+      "title_format": "question",
+      "has_numbers": true,
+      "has_colon": true,
+      "has_dash": false,
+      "word_count": 12,
+      "common_words": [
+        [
+          "future",
+          1
+        ],
+        [
+          "software",
+          1
+        ],
+        [
+          "development:",
+          1
+        ],
+        [
+          "what",
+          1
+        ],
+        [
+          "expect",
+          1
+        ]
+      ]
+    },
+    "section_structure": {
+      "total_headings": 17,
+      "h1_count": 1,
+      "h2_count": 6,
+      "h3_count": 10,
+      "section_types": [
+        "introduction",
+        "content",
+        "content",
+        "content",
+        "problem",
+        "conclusion"
+      ],
+      "has_introduction": true,
+      "has_conclusion": true,
+      "avg_section_length": 2.8333333333333335
+    },
+    "content_patterns": {
+      "paragraph_count": 19,
+      "list_count": 18,
+      "code_block_count": 0,
+      "image_count": 0,
+      "has_call_to_action": true,
+      "content_density": 14.105263157894736
+    },
+    "seo_patterns": {
+      "has_meta_description": false,
+      "has_meta_keywords": false,
+      "has_canonical": false,
+      "heading_structure": {
+        "h1": 1,
+        "h2": 6,
+        "h3": 10
+      }
+    },
+    "engagement_metrics": {
+      "has_social_sharing": false,
+      "has_comments": false,
+      "has_call_to_action": true,
+      "social_button_count": 0
+    },
+    "scraped_at": "2025-08-27T23:41:34.211958"
+  }
+]

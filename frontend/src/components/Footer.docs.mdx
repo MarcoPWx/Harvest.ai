@@ -1,0 +1,42 @@
+import { Meta, Story, Canvas, ArgsTable } from "@storybook/addon-docs";
+import Footer from "./Footer";
+
+<Meta title="Components/Footer/Docs" component={Footer} />
+
+# Footer
+
+## Branding, quick links, and system status with light/dark theming.
+
+The Footer provides site-wide branding and utility links. It supports both light and dark appearances via the `darkMode` prop, and is designed to maintain readability against a variety of backgrounds.
+
+Usage tips:
+
+- Choose `darkMode={true}` for dark backgrounds; `false` for light backgrounds.
+- Keep link density reasonable to avoid clutter at the bottom of pages.
+- Surface status/uptime and essential policies (privacy, terms) when applicable.
+
+<ArgsTable story="^" />
+
+## Examples
+
+<Canvas>
+  <Story name="Light Mode">
+    <div style={{ background: "#f8fafc", padding: "1rem" }}>
+      <Footer darkMode={false} />
+    </div>
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="Dark Mode">
+    <div style={{ background: "#0b1020", padding: "1rem" }}>
+      <Footer darkMode={true} />
+    </div>
+  </Story>
+</Canvas>
+
+## Accessibility
+
+- Ensure all links have descriptive text.
+- Check color contrast for text and icons in both themes.
+- Keep focus indicators visible against the chosen background.

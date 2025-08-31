@@ -1,0 +1,277 @@
+/**
+ * Demo Tour Styles
+ * Highlight and animation styles for the interactive tour
+ */
+
+/* Tour highlight effect */
+.tour-highlight {
+  position: relative;
+  z-index: 60 !important;
+  animation: tour-pulse 2s ease-in-out infinite;
+}
+
+.tour-highlight::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 3px solid rgba(59, 130, 246, 0.8);
+  border-radius: 12px;
+  animation: tour-glow 2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Pulse animation */
+@keyframes tour-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+/* Glow animation */
+@keyframes tour-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(59, 130, 246, 0.4),
+      0 0 40px rgba(59, 130, 246, 0.2),
+      inset 0 0 20px rgba(59, 130, 246, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(59, 130, 246, 0.6),
+      0 0 60px rgba(59, 130, 246, 0.3),
+      inset 0 0 30px rgba(59, 130, 246, 0.2);
+  }
+}
+
+/* Floating emoji animation */
+@keyframes float-diagonal {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(100px, -50px) rotate(90deg);
+  }
+  50% {
+    transform: translate(50px, 100px) rotate(180deg);
+  }
+  75% {
+    transform: translate(-50px, 50px) rotate(270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+/* Sparkle animation */
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+/* Tour step card entrance */
+.tour-step-enter {
+  opacity: 0;
+  transform: scale(0.8) translateY(20px);
+}
+
+.tour-step-enter-active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tour-step-exit {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.tour-step-exit-active {
+  opacity: 0;
+  transform: scale(0.8) translateY(-20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gradient text animation */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-text-animated {
+  background: linear-gradient(270deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Demo mode indicator */
+.demo-mode-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-mode-badge::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Notification animations */
+.notification-enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.notification-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 0.3s ease-out;
+}
+
+.notification-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.notification-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.3s ease-in;
+}
+
+/* Session card hover effects */
+.session-card-hover {
+  transition: all 0.3s ease;
+}
+
+.session-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Provider icon bounce */
+@keyframes icon-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.provider-icon-bounce {
+  animation: icon-bounce 2s ease-in-out infinite;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Progress bar animation */
+@keyframes progress-fill {
+  from {
+    width: 0%;
+  }
+}
+
+.progress-animated {
+  animation: progress-fill 1s ease-out;
+}
+
+/* Ripple effect for buttons */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.6s,
+    height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .tour-highlight::before {
+    border-color: rgba(147, 197, 253, 0.8);
+  }
+
+  @keyframes tour-glow {
+    0%,
+    100% {
+      box-shadow:
+        0 0 20px rgba(147, 197, 253, 0.4),
+        0 0 40px rgba(147, 197, 253, 0.2),
+        inset 0 0 20px rgba(147, 197, 253, 0.1);
+    }
+    50% {
+      box-shadow:
+        0 0 30px rgba(147, 197, 253, 0.6),
+        0 0 60px rgba(147, 197, 253, 0.3),
+        inset 0 0 30px rgba(147, 197, 253, 0.2);
+    }
+  }
+}

@@ -1,0 +1,17 @@
+name: Chromatic (disabled)
+
+# Disabled by default; can be manually triggered if needed.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromatic:
+    if: ${{ false }}
+    name: Publish Storybook to Chromatic
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Chromatic workflow is disabled. Enable by editing .github/workflows/chromatic.yml"
+

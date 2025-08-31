@@ -1,0 +1,73 @@
+# Production Checklist
+
+Use this checklist before releases and to keep production healthy.
+
+## Environment & secrets
+
+- Ensure all required env vars are set in the target environment.
+  - Public flags: NEXT_PUBLIC_ENABLE_MSW should be disabled in production.
+  - API keys, provider tokens, and service URLs are configured in the platform (not committed to the repo).
+- Configure CORS, WAF, and allowed origins appropriately.
+- Confirm JWT/Session settings (expiration, rotation, secure cookies).
+
+## Build & quality gates
+
+- Type-check passes: `npm run type-check`
+- Lint passes: `npm run lint`
+- Unit tests pass with coverage:
+  - Statements/Functions/Lines ≥ 60%
+  - Branches ≥ 50%
+  - HTML coverage report is uploaded as a CI artifact.
+- E2E tests pass in mock mode: `npm run test:e2e`
+- Storybook builds: `npm run build-storybook`
+- Chromatic visual tests run in CI (optional but recommended):
+  - Set CHROMATIC_PROJECT_TOKEN in repository secrets.
+  - The CI includes a Chromatic publish step that runs when the token is present.
+
+## Post-deploy smoke
+
+- Use the included smoke script to validate deployments automatically:
+
+```bash path=null start=null
+# Minimal checks
+SMOKE_BASE_URL=https://your-app.example.com npm run smoke
+
+# Also exercise POST /api/generate
+SMOKE_BASE_URL=https://your-app.example.com SMOKE_TRY_GENERATE=1 npm run smoke
+```
+
+Checks:
+
+- / (200)
+- /docs/api (200)
+- /api/openapi.json (valid JSON)
+- Optional: POST /api/generate
+
+## Rate limiting & caching
+
+- Configure upstream rate limiting (e.g., CDN, gateway) and confirm 429 handling UX.
+- Validate cache policies and invalidation for API and docs assets.
+
+## Error handling & resilience
+
+- Client: graceful error states, retries with backoff where appropriate, and user messaging.
+- Server: structured logging, request IDs, safe error surfaces.
+- Realtime: fallbacks (WS→SSE→polling), timeouts, reconnections.
+
+## Observability
+
+- Dashboard tiles for: error rate, p95 latency, 4xx/5xx by route, WS connection rate, dropped connections.
+- Tracing for key flows (generate, auth, file uploads) if available.
+- Log sampling in production (PII-safe) and retention policy verified.
+
+## Security & privacy
+
+- No secrets in client bundles.
+- PII handled according to policy; redact in logs.
+- Dependency audit with GitHub Dependabot or npm audit in CI.
+
+## Rollback & recovery
+
+- Versioned deployments with fast rollback procedure documented.
+- Smoke checks and alarms trigger on regression.
+- DB migrations are backward compatible or have a rollback plan.

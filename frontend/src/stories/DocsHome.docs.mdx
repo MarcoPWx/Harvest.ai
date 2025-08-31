@@ -1,0 +1,58 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+export const parameters = { repoDocPath: "/docs/README.md", repoDocLabel: "Docs README" };
+
+<Meta title="Docs/Overview" />
+
+This Storybook docs space supplements the in-repo `/docs` with hands-on, embedded examples and developer guidance.
+
+Quick links:
+
+- Components: Layout, Navigation, Footer, EcosystemWidget, ContentGenerator
+- Dev & API: run in mock mode, inspect endpoints, OpenAPI, local-memory gateway
+- Testing & QA: unit, API route tests, E2E smoke, visual tips
+- Accessibility: guidelines for labels, keyboard, and contrast
+
+Docs inside Storybook:
+
+- Project Docs Reader (with left nav): <a href="?path=/story/docs-project-docs-reader--page">open</a>
+- Swagger UI (embedded): <a href="?path=/story/docs-swagger-ui--page">open</a>
+- DevLog (Live): <a href="?path=/docs/command-center-devlog--docs">open</a>
+
+Repo docs quick links (static):
+
+- DEVLOG (Implementation Progress): <a href="/docs/status/implementation-progress.md" target="_blank" rel="noreferrer">/docs/status/implementation-progress.md</a>
+- EPIC MANAGEMENT (Epics): <a href="/docs/roadmap/EPICS.md" target="_blank" rel="noreferrer">/docs/roadmap/EPICS.md</a>
+- SYSTEM STATUS (Reality): <a href="/docs/SYSTEM_STATUS.md" target="_blank" rel="noreferrer">/docs/SYSTEM_STATUS.md</a>
+
+## Quick Start
+
+```bash
+# Start development with mocks (MSW + mock WebSocket)
+npm run dev:mock
+# Storybook (component docs)
+npm run storybook
+```
+
+- App (mock): http://localhost:3002
+- Storybook: http://localhost:6006
+
+## Key Concepts
+
+- Mock-first: MSW handlers + mock-socket provide an offline experience and stable demos.
+- Hybrid API: `/api/generate`, `/api/generations`, `/api/generate/:id` work with mocks in dev and Supabase when configured.
+- Realtime Demo UX: mock WebSocket simulates progress/stream; useful for UI iteration.
+
+## Recommended Reading
+
+- Components/Layout/Docs: application shell guidance
+- Components/Navigation/Docs: responsive nav + accessibility tips
+- Components/Footer/Docs: theming + quick links
+- Components/EcosystemWidget/Docs: product launcher + upgrade surface
+- Harvest.ai/Content/ContentGenerator/Docs: authoring surface and UX patterns
+
+## Further References
+
+- In-repo docs: `/docs` and `DOCUMENTATION_INDEX.md`
+- Debug endpoints: `/api/debug/endpoints`, `/api/debug/logs`
+- OpenAPI spec: `/api/openapi.json`

@@ -1,0 +1,17 @@
+{
+  "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "react/no-unescaped-entities": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.mdx"],
+      "extends": ["plugin:mdx/recommended"],
+      "settings": { "mdx/code-blocks": true },
+      "rules": {
+        "mdx/no-jsx-html-comments": "error"
+      }
+    }
+  ]
+}

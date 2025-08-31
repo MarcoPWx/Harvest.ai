@@ -1,0 +1,36 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+
+# Curated Journeys
+
+<Meta title="Lab/Curated Journeys" />
+
+Guided walkthroughs that tie together mocks, API routes, and UI.
+
+<InlineToc
+  items={[
+    { href: "#quick-generate", label: "Quick generate (mock)" },
+    { href: "#rate-limit", label: "Handle rate limits" },
+    { href: "#streaming-playground", label: "Streaming playground" },
+    { href: "#formatting", label: "Formatting page" },
+    { href: "#api-playground", label: "API Playground" },
+  ]}
+/>
+
+## Quick generate (mock) {#quick-generate}
+- Open Demo page and enter a short paragraph
+- Click "Generate content" and watch progress + streaming text
+
+## Handle rate limits {#rate-limit}
+- Use input including `TRIGGER_RATE_LIMIT` and verify the UI surfaces the 429 retry guidance
+
+## Streaming playground {#streaming-playground}
+- Use the app or the Storybook playground to trigger SSE and observe tokens/events flowing
+
+## Formatting page {#formatting}
+- Enter content and format as blog/email/summary — verify metrics and result export
+
+## API Playground {#api-playground}
+- Storybook: Docs/API Playground → send mock requests to `/api/generate` and inspect the JSON
+- For live E2E exploration, see Docs/User Journeys as well
+

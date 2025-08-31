@@ -1,0 +1,39 @@
+# 📖 Harvest.ai Documentation Overview
+
+Welcome to the in-app MDX documentation. This overview highlights the most important docs and tools for working on Harvest.ai.
+
+## Quick links
+
+- Local Dev Guide (full): /docs -> Local Dev Guide in repo (docs/status/LOCAL_DEV_GUIDE.md)
+- Operations Book: docs/runbooks/OPERATIONS_BOOK.md
+- Production Checklist: docs/runbooks/PRODUCTION_CHECKLIST.md
+- REST API Reference (repo): docs/api/REST_API.md
+- Swagger UI (live): /docs/api
+- Status & progress: docs/status/implementation-progress.md
+
+## Run the app with mocks
+
+```bash
+npm run dev:mock  # http://localhost:3002 (MSW + WebSocket mocks)
+```
+
+## Storybook (interactive docs)
+
+```bash
+npm run storybook  # http://localhost:6006
+```
+
+- API Playground: try /api/generate with TRIGGER\_\* inputs
+- Debug API: list endpoints, append and view logs
+- Local Memory API: index and search locally
+
+## Testing
+
+- Unit: `npm test`
+- E2E: `npm run test:e2e:headed`
+- CI: type-check + lint + unit + E2E + Storybook build (Chromatic optional)
+
+## Next steps
+
+- Read the Operations Book for production concerns and real-time hardening
+- Use the Production Checklist before releases

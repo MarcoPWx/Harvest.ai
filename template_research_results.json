@@ -1,0 +1,315 @@
+{
+  "research_date": "2025-08-27T12:00:51.983206",
+  "opportunities": [
+    {
+      "name": "Quiz Generator",
+      "category": "Education Templates",
+      "search_volume": 40500,
+      "competition": "medium",
+      "opportunity_score": 56.7,
+      "problems": [
+        "Creating from existing content",
+        "Multiple choice formatting",
+        "Answer explanations",
+        "Difficulty levels"
+      ]
+    },
+    {
+      "name": "Cold Outreach",
+      "category": "Email Templates",
+      "search_volume": 49500,
+      "competition": "high",
+      "opportunity_score": 48.51,
+      "problems": [
+        "Personalization at scale",
+        "Getting past spam filters",
+        "Subject lines that work",
+        "Follow-up sequences"
+      ]
+    },
+    {
+      "name": "Follow Up",
+      "category": "Email Templates",
+      "search_volume": 33100,
+      "competition": "medium",
+      "opportunity_score": 46.34,
+      "problems": [
+        "When to follow up",
+        "How many times",
+        "Different angles",
+        "Not being annoying"
+      ]
+    },
+    {
+      "name": "Twitter Thread",
+      "category": "Social Media Templates",
+      "search_volume": 18100,
+      "competition": "low",
+      "opportunity_score": 38.01,
+      "problems": [
+        "Thread structure",
+        "Character limits",
+        "Engagement hooks",
+        "Call-to-action"
+      ]
+    },
+    {
+      "name": "Executive Summary",
+      "category": "Business Templates",
+      "search_volume": 12100,
+      "competition": "low",
+      "opportunity_score": 33.03,
+      "problems": [
+        "Condensing 50 pages to 1",
+        "Highlighting key metrics",
+        "Action items clarity",
+        "Visual appeal"
+      ]
+    },
+    {
+      "name": "Linkedin Post",
+      "category": "Social Media Templates",
+      "search_volume": 22200,
+      "competition": "medium",
+      "opportunity_score": 31.08,
+      "problems": [
+        "Professional but engaging",
+        "Hashtag selection",
+        "Optimal length",
+        "Hook creation"
+      ]
+    },
+    {
+      "name": "Study Guide",
+      "category": "Education Templates",
+      "search_volume": 14800,
+      "competition": "low",
+      "opportunity_score": 31.08,
+      "problems": [
+        "Condensing information",
+        "Highlighting key points",
+        "Creating mnemonics",
+        "Visual organization"
+      ]
+    },
+    {
+      "name": "Newsletter",
+      "category": "Email Templates",
+      "search_volume": 27100,
+      "competition": "high",
+      "opportunity_score": 24.66,
+      "problems": [
+        "Engaging subject lines",
+        "Content curation",
+        "Call-to-action placement"
+      ]
+    },
+    {
+      "name": "Meeting Minutes",
+      "category": "Business Templates",
+      "search_volume": 9900,
+      "competition": "low",
+      "opportunity_score": 20.79,
+      "problems": [
+        "Capturing everything",
+        "Action item tracking",
+        "Decision documentation",
+        "Follow-up automation"
+      ]
+    },
+    {
+      "name": "Blog To Social",
+      "category": "Content Repurposing",
+      "search_volume": 8800,
+      "competition": "low",
+      "opportunity_score": 18.48,
+      "problems": [
+        "Maintaining message",
+        "Platform optimization",
+        "Visual creation",
+        "Scheduling"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "quiz_generator",
+      "name": "Quiz Generator",
+      "category": "Education Templates",
+      "monthly_searches": 40500,
+      "implementation_priority": 1,
+      "prompt_structure": {
+        "system": "You are an expert educator who creates engaging assessments.",
+        "user_template": "Create {count} quiz questions from: {content}",
+        "output_format": "Multiple choice questions with 4 options and explanations"
+      },
+      "example_use_case": "Transform education templates into quiz generator"
+    },
+    {
+      "id": "cold_outreach",
+      "name": "Cold Outreach",
+      "category": "Email Templates",
+      "monthly_searches": 49500,
+      "implementation_priority": 2,
+      "prompt_structure": {
+        "system": "You are an expert content transformer.",
+        "user_template": "Transform this content into {format}: {input}",
+        "output_format": "Well-structured output in requested format"
+      },
+      "example_use_case": "Transform email templates into cold outreach"
+    },
+    {
+      "id": "follow_up",
+      "name": "Follow Up",
+      "category": "Email Templates",
+      "monthly_searches": 33100,
+      "implementation_priority": 3,
+      "prompt_structure": {
+        "system": "You are an expert content transformer.",
+        "user_template": "Transform this content into {format}: {input}",
+        "output_format": "Well-structured output in requested format"
+      },
+      "example_use_case": "Transform email templates into follow up"
+    },
+    {
+      "id": "twitter_thread",
+      "name": "Twitter Thread",
+      "category": "Social Media Templates",
+      "monthly_searches": 18100,
+      "implementation_priority": 4,
+      "prompt_structure": {
+        "system": "You are a social media expert who creates viral content.",
+        "user_template": "Transform this into a {platform} post: {content}",
+        "output_format": "Engaging post with hashtags and call-to-action"
+      },
+      "example_use_case": "Transform social media templates into twitter thread"
+    },
+    {
+      "id": "executive_summary",
+      "name": "Executive Summary",
+      "category": "Business Templates",
+      "monthly_searches": 12100,
+      "implementation_priority": 5,
+      "prompt_structure": {
+        "system": "You are an expert content transformer.",
+        "user_template": "Transform this content into {format}: {input}",
+        "output_format": "Well-structured output in requested format"
+      },
+      "example_use_case": "Transform business templates into executive summary"
+    },
+    {
+      "id": "linkedin_post",
+      "name": "Linkedin Post",
+      "category": "Social Media Templates",
+      "monthly_searches": 22200,
+      "implementation_priority": 6,
+      "prompt_structure": {
+        "system": "You are a social media expert who creates viral content.",
+        "user_template": "Transform this into a {platform} post: {content}",
+        "output_format": "Engaging post with hashtags and call-to-action"
+      },
+      "example_use_case": "Transform social media templates into linkedin post"
+    },
+    {
+      "id": "study_guide",
+      "name": "Study Guide",
+      "category": "Education Templates",
+      "monthly_searches": 14800,
+      "implementation_priority": 7,
+      "prompt_structure": {
+        "system": "You are an expert content transformer.",
+        "user_template": "Transform this content into {format}: {input}",
+        "output_format": "Well-structured output in requested format"
+      },
+      "example_use_case": "Transform education templates into study guide"
+    },
+    {
+      "id": "newsletter",
+      "name": "Newsletter",
+      "category": "Email Templates",
+      "monthly_searches": 27100,
+      "implementation_priority": 8,
+      "prompt_structure": {
+        "system": "You are an expert content transformer.",
+        "user_template": "Transform this content into {format}: {input}",
+        "output_format": "Well-structured output in requested format"
+      },
+      "example_use_case": "Transform email templates into newsletter"
+    },
+    {
+      "id": "meeting_minutes",
+      "name": "Meeting Minutes",
+      "category": "Business Templates",
+      "monthly_searches": 9900,
+      "implementation_priority": 9,
+      "prompt_structure": {
+        "system": "You are an expert content transformer.",
+        "user_template": "Transform this content into {format}: {input}",
+        "output_format": "Well-structured output in requested format"
+      },
+      "example_use_case": "Transform business templates into meeting minutes"
+    },
+    {
+      "id": "blog_to_social",
+      "name": "Blog To Social",
+      "category": "Content Repurposing",
+      "monthly_searches": 8800,
+      "implementation_priority": 10,
+      "prompt_structure": {
+        "system": "You are a social media expert who creates viral content.",
+        "user_template": "Transform this into a {platform} post: {content}",
+        "output_format": "Engaging post with hashtags and call-to-action"
+      },
+      "example_use_case": "Transform content repurposing into blog to social"
+    }
+  ],
+  "implementation_plan": {
+    "phase_1_mvp": [
+      "Cold Outreach Email",
+      "Quiz Generator",
+      "LinkedIn Post",
+      "Executive Summary",
+      "Follow Up Email"
+    ],
+    "phase_2_expansion": [
+      "Twitter Thread",
+      "Study Guide",
+      "Newsletter Email",
+      "Meeting Minutes",
+      "Blog To Social"
+    ],
+    "phase_3_advanced": [
+      "Email sequences",
+      "Content calendars",
+      "Course creation",
+      "Pitch decks",
+      "Documentation"
+    ]
+  },
+  "reddit_insights": {
+    "r/Teachers": [
+      "Need quiz generators that work with PDFs",
+      "Want to create tests from YouTube videos",
+      "Study guide generators save hours",
+      "Rubric creators highly requested"
+    ],
+    "r/sales": [
+      "Cold email templates with 40%+ open rates",
+      "Follow-up sequences that convert",
+      "LinkedIn outreach templates",
+      "Objection handling scripts"
+    ],
+    "r/marketing": [
+      "Social media content calendars",
+      "Email newsletter templates",
+      "Case study templates",
+      "Landing page copy templates"
+    ],
+    "r/Entrepreneur": [
+      "Pitch deck templates",
+      "Executive summaries",
+      "Business plan sections",
+      "Investor updates"
+    ]
+  }
+}

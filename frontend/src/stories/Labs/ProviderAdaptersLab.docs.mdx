@@ -1,0 +1,72 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import InlineToc from "../components/InlineToc";
+import LastUpdated from "../components/LastUpdated";
+
+# Provider Adapters Lab
+
+<Meta title="Labs/Provider Adapters Lab" />
+
+Explore the provider adapter layer powering generateWithProvider. Learn how to toggle real SDKs vs mock simulation, and how to present fallback behavior.
+
+<InlineToc
+  items={[
+    { href: "#overview", label: "Overview" },
+    { href: "#toggle", label: "Toggle real providers" },
+    { href: "#scenarios", label: "Scenarios" },
+    { href: "#safety", label: "Secrets & safety" },
+    { href: "#talk", label: "Interview talk track" },
+  ]}
+/>
+
+## Overview {#overview}
+
+- Entry: src/lib/ai/providers/index.ts
+- Function: generateWithProvider(provider, { input, format })
+- Providers: mock | openai | anthropic | gemini | our
+- Behavior:
+  - If PROVIDERS_ON !== '1' or provider === 'mock' → simulateOutput()
+  - If PROVIDERS_ON === '1' and env keys exist → use SDKs; otherwise fallback to simulate
+  - Errors → fallback to simulate with `${provider}-fallback`
+
+## Toggle real providers {#toggle}
+
+Never commit secrets; export them only in your local shell.
+
+```bash
+# Turn on adapters (still mock-first unless keys exist)
+export PROVIDERS_ON=1
+# Optionally set provider-specific keys (only locally)
+export OPENAI_API_KEY={{OPENAI_API_KEY}}
+export ANTHROPIC_API_KEY={{ANTHROPIC_API_KEY}}
+export GOOGLE_AI_API_KEY={{GOOGLE_AI_API_KEY}}
+# Our provider (optional)
+export OUR_PROVIDER_API_URL=https://api.example.com
+export OUR_PROVIDER_API_KEY={{OUR_PROVIDER_API_KEY}}
+```
+
+Then, exercise flows via:
+- Docs/User Journeys → Generate (success / cached / triggers)
+- Command Center/S2S — Streaming & Threads (live)
+
+## Scenarios {#scenarios}
+
+- OpenAI on, others off → expect OpenAI model to respond; cost/usage metadata where applicable
+- Invalid key → expect fallback simulate output (provider-fallback)
+- Our provider present → verify fetch to OUR_PROVIDER_API_URL and JSON shape
+- PROVIDERS_ON off → everything simulated; deterministic for demos
+
+## Secrets & safety {#safety}
+
+- Do not paste keys into UI controls or commit them to .env.* files
+- Load keys from environment only during local demos
+- When switching providers, ensure CSP connect-src includes the domains you need (see Security Lab)
+
+## Interview talk track {#talk}
+
+- Start with mock-first philosophy for deterministic E2E and offline demos
+- Flip PROVIDERS_ON to show how the same codepaths work with real SDKs
+- Demonstrate graceful fallback on key errors and the cost/usage metadata (where available)
+- Tie into AI Service Lab to explain end-to-end fallback chain at a higher level
+
+<LastUpdated file="src/stories/Labs/ProviderAdaptersLab.docs.mdx" />
+

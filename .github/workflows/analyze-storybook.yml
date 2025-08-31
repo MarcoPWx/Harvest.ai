@@ -1,0 +1,54 @@
+name: Analyze Storybook Bundle (on-demand)
+
+on:
+  workflow_dispatch:
+    inputs:
+      split:
+        description: 'Enable manual vendor chunk splitting (SPLIT_CHUNKS=1)'
+        required: false
+        default: 'false'
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  analyze-storybook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Ensure analyzer plugin (optional)
+        run: npm i -D vite-plugin-visualizer@^0.10.4 || echo "Analyzer install failed; continuing without analyzer"
+
+      - name: Build Storybook (analyze)
+        env:
+          ANALYZE: '1'
+          SPLIT_CHUNKS: ${{ github.event.inputs.split == 'true' && '1' || '' }}
+        run: npm run build-storybook
+
+      - name: Upload analyzer report (if present)
+        if: ${{ hashFiles('storybook-visualizer.html') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-visualizer
+          path: frontend/storybook-visualizer.html
+
+      - name: Upload Storybook static site
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: frontend/storybook-static
+
