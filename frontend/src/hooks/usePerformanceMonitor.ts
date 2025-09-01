@@ -42,7 +42,7 @@ export function usePerformanceMonitor(
   const [warnings, setWarnings] = useState<string[]>([]);
   const frameTimestamps = useRef<number[]>([]);
   const lastFrameTime = useRef<number>(performance.now());
-  const animationId = useRef<number>();
+  const animationId = useRef<number>(0);
   const startTime = useRef<number>(performance.now());
 
   // Calculate FPS

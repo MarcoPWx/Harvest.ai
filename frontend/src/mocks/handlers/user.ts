@@ -54,6 +54,10 @@ export const userHandlers = [
       data: updates,
     });
 
+    if (!updatedUser) {
+      return HttpResponse.json({ error: "Failed to update user" }, { status: 500 });
+    }
+
     return HttpResponse.json({
       id: updatedUser.id,
       email: updatedUser.email,
@@ -76,6 +80,10 @@ export const userHandlers = [
       where: { id: { equals: userId as string } },
       data: { preferences },
     });
+
+    if (!updatedUser) {
+      return HttpResponse.json({ error: "Failed to update preferences" }, { status: 500 });
+    }
 
     return HttpResponse.json({
       preferences: updatedUser.preferences,
@@ -190,6 +198,10 @@ export const userHandlers = [
       },
     });
 
+    if (!updatedUser) {
+      return HttpResponse.json({ error: "Failed to update subscription" }, { status: 500 });
+    }
+
     return HttpResponse.json({
       subscription: {
         tier: updatedUser.subscription_tier,
@@ -213,9 +225,13 @@ export const userHandlers = [
       where: { id: { equals: userId as string } },
       data: {
         subscription_tier: "free",
-        subscription_status: "cancelled",
+        subscription_status: "canceled",
       },
     });
+
+    if (!updatedUser) {
+      return HttpResponse.json({ error: "Failed to cancel subscription" }, { status: 500 });
+    }
 
     return HttpResponse.json({
       success: true,
@@ -242,10 +258,10 @@ export const userHandlers = [
       api_keys: apiKeys.map((key) => ({
         id: key.id,
         name: key.name,
-        key: key.key.substring(0, 8) + "..." + key.key.substring(key.key.length - 4),
+        key: key.key_preview,
         created_at: key.created_at,
-        last_used: key.last_used,
-        active: key.active,
+        last_used: key.last_used_at,
+        status: key.status,
       })),
     });
   }),
@@ -260,18 +276,19 @@ export const userHandlers = [
     const body = (await request.json()) as any;
     const { name } = body;
 
+    const fullKey = `hv_${faker.string.alphanumeric(32)}`;
     const newKey = db.apiKey.create({
       user_id: userId as string,
       name: name || "API Key",
-      key: `hv_${faker.string.alphanumeric(32)}`,
-      active: true,
+      key_preview: `hv_...${fullKey.substring(fullKey.length - 8)}`,
+      status: "active",
     });
 
     return HttpResponse.json({
       api_key: {
         id: newKey.id,
         name: newKey.name,
-        key: newKey.key, // Full key only shown once
+        key: fullKey, // Full key only shown once
         created_at: newKey.created_at,
       },
     });

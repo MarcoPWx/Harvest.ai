@@ -224,11 +224,19 @@ const TourDemo = ({
 
 // Default story
 export const Default: Story = {
+  args: {
+    visible: false,
+    onComplete: () => {},
+  },
   render: () => <TourDemo showOnMount={false} />,
 };
 
 // Auto-start story
 export const AutoStart: Story = {
+  args: {
+    visible: true,
+    onComplete: () => {},
+  },
   render: () => <TourDemo showOnMount={true} />,
   parameters: {
     docs: {
@@ -241,6 +249,10 @@ export const AutoStart: Story = {
 
 // With mock elements story
 export const WithMockElements: Story = {
+  args: {
+    visible: false,
+    onComplete: () => {},
+  },
   render: () => <TourDemo showOnMount={false} mockElements={true} />,
   parameters: {
     docs: {
@@ -254,6 +266,10 @@ export const WithMockElements: Story = {
 
 // Hook usage example
 export const HookUsage: Story = {
+  args: {
+    visible: false,
+    onComplete: () => {},
+  },
   render: () => {
     const Component = () => {
       const { shouldShowTour, isLoading, startTour, resetTour, completeTour } = useDemoTour();
@@ -319,6 +335,10 @@ export const HookUsage: Story = {
 
 // Tour steps preview
 export const TourStepsPreview: Story = {
+  args: {
+    visible: false,
+    onComplete: () => {},
+  },
   render: () => {
     const steps = [
       { title: "Welcome", emoji: "🎯", color: "from-purple-500 to-pink-500" },

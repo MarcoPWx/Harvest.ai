@@ -17,7 +17,7 @@ export const templateHandlers = [
     let templates = db.template.getAll();
 
     if (userId) {
-      templates = templates.filter((t) => t.user_id === userId || t.is_public);
+      templates = templates.filter((t) => t.created_by === userId || t.is_public);
     }
 
     if (category) {
@@ -33,7 +33,7 @@ export const templateHandlers = [
         prompt: t.prompt,
         variables: t.variables,
         is_public: t.is_public,
-        created_by: t.user_id,
+        created_by: t.created_by,
         created_at: t.created_at,
         usage_count: t.usage_count,
       })),
@@ -73,7 +73,7 @@ export const templateHandlers = [
       prompt: body.prompt,
       variables: body.variables || [],
       is_public: body.is_public || false,
-      user_id: body.user_id || "demo-user",
+      created_by: body.user_id || "demo-user",
       usage_count: 0,
     });
 
@@ -153,7 +153,7 @@ export const templateHandlers = [
       prompt: originalTemplate.prompt,
       variables: originalTemplate.variables,
       is_public: false,
-      user_id: body.user_id || "demo-user",
+      created_by: body.user_id || "demo-user",
       usage_count: 0,
     });
 
@@ -196,7 +196,7 @@ export const teamHandlers = [
 
     if (userId) {
       teams = teams.filter(
-        (t) => t.owner_id === userId || (t.members && t.members.includes(userId)),
+        (t) => t.owner_id === userId || (t.member_ids && t.member_ids.includes(userId)),
       );
     }
 
@@ -206,7 +206,7 @@ export const teamHandlers = [
         name: t.name,
         description: t.description,
         owner_id: t.owner_id,
-        members: t.members,
+        members: t.member_ids,
         created_at: t.created_at,
         settings: t.settings,
       })),
@@ -243,7 +243,7 @@ export const teamHandlers = [
       name: body.name,
       description: body.description,
       owner_id: body.owner_id || "demo-user",
-      members: [body.owner_id || "demo-user"],
+      member_ids: [body.owner_id || "demo-user"],
       settings: body.settings || {},
     });
 
@@ -322,7 +322,7 @@ export const teamHandlers = [
     const updatedTeam = db.team.update({
       where: { id: { equals: teamId as string } },
       data: {
-        members: [...(team.members || []), newMemberId],
+        member_ids: [...(team.member_ids || []), newMemberId],
       },
     });
 
@@ -351,7 +351,7 @@ export const teamHandlers = [
     const updatedTeam = db.team.update({
       where: { id: { equals: teamId as string } },
       data: {
-        members: team.members?.filter((m) => m !== memberId) || [],
+        member_ids: team.member_ids?.filter((m) => m !== memberId) || [],
       },
     });
 

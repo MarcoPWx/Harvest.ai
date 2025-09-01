@@ -1,4 +1,4 @@
-import { http, HttpResponse, delay } from "msw";
+import { http, HttpResponse, delay, passthrough } from "msw";
 import { db } from "../db/schema";
 import { faker } from "@faker-js/faker";
 import { maybeInjectNetworkControls } from "./util";
@@ -149,7 +149,7 @@ export const generationHandlers = [
       const u = new URL(request.url);
       realParam = u.searchParams.get("real") === "1";
     } catch {}
-    if (realHeader || realParam) return HttpResponse.passthrough();
+    if (realHeader || realParam) return passthrough();
 
     // Apply header-driven network controls (extra delay/error injection)
     const injected = await maybeInjectNetworkControls(request as unknown as Request);

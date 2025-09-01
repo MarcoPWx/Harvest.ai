@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export const config = {
   // Run middleware on all routes so we can optionally protect the main site,
@@ -15,7 +15,7 @@ function unauthorized(realm: string) {
   });
 }
 
-export default function middleware(req) {
+export default function middleware(req: any) {
   const url = new URL(req.url);
   const pathname = url.pathname || "";
 

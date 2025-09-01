@@ -14,19 +14,21 @@ export const db = factory({
     api_keys: () => [] as string[],
     created_at: () => faker.date.past().toISOString(),
     updated_at: () => new Date().toISOString(),
-    preferences: () => ({
-      theme: "dark",
-      default_format: "blog",
-      email_notifications: true,
-      language: "en",
-    }),
-    usage: () => ({
-      generations_today: faker.number.int({ min: 0, max: 50 }),
-      generations_total: faker.number.int({ min: 0, max: 1000 }),
-      tokens_used: faker.number.int({ min: 0, max: 100000 }),
-      limit: 1000,
-      reset_date: faker.date.future().toISOString(),
-    }),
+    preferences: () =>
+      JSON.stringify({
+        theme: "dark",
+        default_format: "blog",
+        email_notifications: true,
+        language: "en",
+      }),
+    usage: () =>
+      JSON.stringify({
+        generations_today: faker.number.int({ min: 0, max: 50 }),
+        generations_total: faker.number.int({ min: 0, max: 1000 }),
+        tokens_used: faker.number.int({ min: 0, max: 100000 }),
+        limit: 1000,
+        reset_date: faker.date.future().toISOString(),
+      }),
   },
 
   generation: {
@@ -42,12 +44,13 @@ export const db = factory({
     quality_score: () => faker.number.int({ min: 70, max: 100 }),
     processing_time: () => faker.number.int({ min: 500, max: 5000 }),
     created_at: () => faker.date.recent().toISOString(),
-    metadata: () => ({
-      temperature: 0.7,
-      max_tokens: 1000,
-      language: "en",
-      cached: faker.datatype.boolean(),
-    }),
+    metadata: () =>
+      JSON.stringify({
+        temperature: 0.7,
+        max_tokens: 1000,
+        language: "en",
+        cached: faker.datatype.boolean(),
+      }),
   },
 
   team: {
@@ -61,11 +64,12 @@ export const db = factory({
     subscription_tier: () => "team" as "team" | "enterprise",
     max_members: () => faker.number.int({ min: 5, max: 50 }),
     created_at: () => faker.date.past().toISOString(),
-    settings: () => ({
-      allow_api_access: true,
-      shared_generations: true,
-      billing_email: faker.internet.email(),
-    }),
+    settings: () =>
+      JSON.stringify({
+        allow_api_access: true,
+        shared_generations: true,
+        billing_email: faker.internet.email(),
+      }),
   },
 
   template: {
@@ -170,7 +174,7 @@ export function seedDatabase() {
 
   // Seed epics (used by Command Center stories)
   db.epic.create({
-    id: "E-001",
+    id: "epic_001",
     title: "Docs & Test Reliability",
     description: "Stabilize E2E, add learning pages, status pipeline.",
     status: "in-progress",
@@ -181,7 +185,7 @@ export function seedDatabase() {
     created_at: new Date("2025-08-01").toISOString(),
   });
   db.epic.create({
-    id: "E-002",
+    id: "epic_002",
     title: "Observability & CI Signals",
     description: "Expand status, incident flows, artifacts.",
     status: "proposed",
@@ -189,7 +193,7 @@ export function seedDatabase() {
     created_at: new Date("2025-08-10").toISOString(),
   });
   db.epic.create({
-    id: "E-003",
+    id: "epic_003",
     title: "Performance & Bundle Hygiene",
     description: "Analyzer, lazy loading, vendor splits.",
     status: "proposed",
@@ -197,7 +201,7 @@ export function seedDatabase() {
     created_at: new Date("2025-08-15").toISOString(),
   });
   db.epic.create({
-    id: "E-004",
+    id: "epic_004",
     title: "Beta Readiness",
     description: "Complete stories, finalize mocks, trim dependencies.",
     status: "proposed",
