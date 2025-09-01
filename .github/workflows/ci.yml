@@ -105,13 +105,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish to Chromatic (optional)
-        if: ${{ secrets.CHROMATIC_PROJECT_TOKEN != '' }}
-        uses: chromaui/action@v1
-        with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          workingDir: frontend
+      # Chromatic step removed - uncomment if you have CHROMATIC_PROJECT_TOKEN secret
+      # - name: Publish to Chromatic (optional)
+      #   uses: chromaui/action@v1
+      #   with:
+      #     projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     workingDir: frontend
 
   deploy:
     needs: build-and-test
