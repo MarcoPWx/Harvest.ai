@@ -38,6 +38,7 @@ Source: next.config.mjs → headers()
 - Cross-Origin-Embedder-Policy: require-corp
 
 Notes:
+
 - 'unsafe-inline' for styles is a pragmatic dev choice; consider removing with CSS-only approach if feasible
 - Add connect-src entries only when enabling providers in dev/preview; keep production tight
 
@@ -79,4 +80,3 @@ curl -sI http://localhost:3002 | grep -E 'Strict-Transport|Content-Security-Poli
 - Outline a plan to tighten CSP further and where it might impact DX, along with mitigations (nonces, CSS extraction)
 
 <LastUpdated file="src/stories/Labs/SecurityLab.docs.mdx" />
-

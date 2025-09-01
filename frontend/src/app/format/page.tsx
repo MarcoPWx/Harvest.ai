@@ -102,7 +102,12 @@ export default function FormatPage() {
 
             {/* Content Input */}
             <div className="mb-4">
-              <label htmlFor="format-content-input" className="block text-sm font-medium text-gray-700 mb-2">Your Content</label>
+              <label
+                htmlFor="format-content-input"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Your Content
+              </label>
               <textarea
                 id="format-content-input"
                 ref={contentRef}
@@ -155,7 +160,9 @@ export default function FormatPage() {
             <div className="prose prose-sm max-w-none">
               {formatted ? (
                 <div className="bg-gray-50 p-4 rounded-md">
-                  <pre data-testid="formatted-output" className="whitespace-pre-wrap text-sm">{formatted}</pre>
+                  <pre data-testid="formatted-output" className="whitespace-pre-wrap text-sm">
+                    {formatted}
+                  </pre>
                 </div>
               ) : (
                 <div className="text-center py-12 text-gray-500">
@@ -178,7 +185,7 @@ export default function FormatPage() {
             </div>
 
             {/* Copy Button */}
-              {formatted && (
+            {formatted && (
               <button
                 data-testid="copy-formatted"
                 onClick={() => {

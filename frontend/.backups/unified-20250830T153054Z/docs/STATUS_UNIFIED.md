@@ -3,6 +3,7 @@
 GeneratedAt: 2025-08-30T15:26:45Z
 
 Sources
+
 - /docs/SYSTEM_STATUS.md
 - /docs/roadmap/EPICS.md
 - /docs/status/DEVLOG.md
@@ -499,6 +500,7 @@ Links:
 A running log of notable changes while driving the project to “all green” and a richer Learning Lab.
 
 ## 2025-08-30
+
 - E2E: Added smoke specs (home, /api/generate JSON, /api/format JSON) — green
 - E2E: Hardened Format page specs (stable test IDs, longer waits); switched page input to controlled in E2E for reliable CTA enablement
 - E2E: Mock flows (TRIGGER_RATE_LIMIT / TRIGGER_CACHED) now wait for hydration and MSW SW control
@@ -508,7 +510,7 @@ A running log of notable changes while driving the project to “all green” an
 - Docs: Added docs/status/EPICS_STATUS.md and updated statuses
 
 ## Next
-- Finalize E2E all green in Chromium (format + mock flows reruns)
-- Storybook build: clean up TechStack.docs.mdx indexer constraints (switch to React.use* in MDX and avoid top‑level declarations)
-- Add SSE reader unit/integration test for the streaming route
 
+- Finalize E2E all green in Chromium (format + mock flows reruns)
+- Storybook build: clean up TechStack.docs.mdx indexer constraints (switch to React.use\* in MDX and avoid top‑level declarations)
+- Add SSE reader unit/integration test for the streaming route

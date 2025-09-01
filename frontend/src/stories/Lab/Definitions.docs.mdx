@@ -17,34 +17,42 @@ Shared vocabulary used across the codebase, docs, and demos.
     { href: "#provider-adapter", label: "Provider adapter" },
     { href: "#cost-telemetry", label: "Cost telemetry" },
     { href: "#quality-scoring", label: "Quality scoring" },
-    { href: "#e2e-mode", label: "E2E mode" }
+    { href: "#e2e-mode", label: "E2E mode" },
   ]}
 />
 
 ## AI Provider {#ai-provider}
+
 A third-party or proprietary model backend (e.g., OpenAI, Anthropic, internal inference service).
 
 ## BYOK {#byok}
+
 Bring Your Own Key. Users provide their own API key which is only used client→server for generation and not stored.
 
 ## SSE {#sse}
+
 Server-Sent Events. A streaming HTTP response used to progressively deliver content/tokens.
 
 ## MSW {#msw}
+
 Mock Service Worker. Intercepts network requests in dev/Storybook to return deterministic mocks.
 
 ## Mock-first {#mock-first}
+
 A development strategy: build the UX and flows against stable mocks first; swap real models later.
 
 ## Provider adapter {#provider-adapter}
+
 An implementation of a small interface (generate, streaming, abort, retries, cost/usage) per provider.
 
 ## Cost telemetry {#cost-telemetry}
+
 Tokens used, model, estimated cost per call — surfaced in UI and logs.
 
 ## Quality scoring {#quality-scoring}
+
 A heuristic score reported alongside results to make perceived output quality explicit.
 
 ## E2E mode {#e2e-mode}
-A deterministic testing mode (NEXT_PUBLIC_E2E=1) used with MSW to stabilize Playwright tests.
 
+A deterministic testing mode (NEXT_PUBLIC_E2E=1) used with MSW to stabilize Playwright tests.

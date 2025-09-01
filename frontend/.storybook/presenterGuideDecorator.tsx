@@ -78,6 +78,17 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // State for current step index - moved before useEffect that references it
+  const [stepIndex, setStepIndex] = React.useState<number>(() => {
+    try {
+      const url = new URL((window.top || window).location.href);
+      const v = Number(url.searchParams.get("presenterStep") || "0");
+      return Number.isFinite(v) && v >= 0 ? v : 0; // steps.length check happens later
+    } catch {
+      return 0;
+    }
+  });
+
   // Hotkeys: 'g' 'g' toggles presenter; 'Escape' closes overlay
   React.useEffect(() => {
     function setPresenter(value: boolean, keepOnLabs?: boolean) {
@@ -117,12 +128,16 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
       }
       if (e.key === "ArrowLeft" && enabled) {
         e.preventDefault();
-        try { navTo(Math.max(0, stepIndex - 1)); } catch {}
+        try {
+          navTo(Math.max(0, stepIndex - 1));
+        } catch {}
         return;
       }
       if (e.key === "ArrowRight" && enabled) {
         e.preventDefault();
-        try { navTo(Math.min(steps.length - 1, stepIndex + 1)); } catch {}
+        try {
+          navTo(Math.min(steps.length - 1, stepIndex + 1));
+        } catch {}
         return;
       }
       if (e.key.toLowerCase() === "g") {
@@ -189,10 +204,7 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
     {
       slug: "labs-ai-service-lab--docs",
       title: "AI Service Lab — Fallback & Cache",
-      why: [
-        "Explain provider fallback chain",
-        "Demonstrate caching and quality scoring",
-      ],
+      why: ["Explain provider fallback chain", "Demonstrate caching and quality scoring"],
     },
     {
       slug: "labs-provider-adapters-lab--docs",
@@ -229,10 +241,7 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
     {
       slug: "docs-status-dashboard--docs",
       title: "Status Dashboard — CI Artifacts",
-      why: [
-        "Badges for unit/E2E/storybook",
-        "Links to coverage and Playwright report",
-      ],
+      why: ["Badges for unit/E2E/storybook", "Links to coverage and Playwright report"],
     },
     {
       slug: "agent-boot--docs",
@@ -253,22 +262,11 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
     {
       slug: "labs-technology-overview-lab--docs",
       title: "Technology Overview — Stack",
-      why: [
-        "Real code references linked",
-        "Wrap-up with architecture view",
-      ],
+      why: ["Real code references linked", "Wrap-up with architecture view"],
     },
   ];
 
-  const [stepIndex, setStepIndex] = React.useState<number>(() => {
-    try {
-      const url = new URL((window.top || window).location.href);
-      const v = Number(url.searchParams.get("presenterStep") || "0");
-      return Number.isFinite(v) && v >= 0 && v < steps.length ? v : 0;
-    } catch {
-      return 0;
-    }
-  });
+  // stepIndex state already moved above useEffect that references it
 
   React.useEffect(() => {
     if (!enabled) return;
@@ -327,8 +325,7 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
           borderRadius: 10,
           boxShadow: "0 12px 40px rgba(0,0,0,0.25)",
           padding: 18,
-          fontFamily:
-            "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+          fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -339,7 +336,7 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
               stepIndex={stepIndex}
               stepsLen={steps.length}
               onNav={navTo}
-              initialEnabled={String(context?.globals?.presenterAuto || 'off') === 'on'}
+              initialEnabled={String(context?.globals?.presenterAuto || "off") === "on"}
               initialSec={Number(context?.globals?.presenterAutoSec || 30)}
             />
             <a
@@ -428,24 +425,23 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
               </ul>
             </div>
 
-            <div style={{ fontSize: 12, color: "#555", borderTop: "1px solid #eee", paddingTop: 8 }}>
+            <div
+              style={{ fontSize: 12, color: "#555", borderTop: "1px solid #eee", paddingTop: 8 }}
+            >
               How it fits together:
               <ul>
                 <li>
                   Journeys define acceptance → TDD enforces correctness → MSW stabilizes flows.
                 </li>
-                <li>
-                  S2S (JSON/SSE) surfaces progress and errors in the UI with explicit events.
-                </li>
+                <li>S2S (JSON/SSE) surfaces progress and errors in the UI with explicit events.</li>
                 <li>
                   AI Service orchestrates provider fallback and caching for reliability and cost.
                 </li>
                 <li>
-                  Provider adapters flip between simulate and SDKs; security (CSP) bounds connectivity.
+                  Provider adapters flip between simulate and SDKs; security (CSP) bounds
+                  connectivity.
                 </li>
-                <li>
-                  Observability (logs/metrics) and Status Dashboard close the feedback loop.
-                </li>
+                <li>Observability (logs/metrics) and Status Dashboard close the feedback loop.</li>
               </ul>
             </div>
 
@@ -479,42 +475,65 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
             </div>
 
             <div style={{ marginTop: 12, fontSize: 12, color: "#666" }}>
-              Tips: Press g then g to toggle overlay; Esc to close. Use Start Presentation on Labs/Index to
-              stay anchored on that page while presenting.
+              Tips: Press g then g to toggle overlay; Esc to close. Use Start Presentation on
+              Labs/Index to stay anchored on that page while presenting.
             </div>
           </div>
         </div>
 
         <div style={{ fontSize: 12, color: "#444", marginTop: 12 }}>
-          Presenter URL params: globals=presenterGuide:true, presenter=labs, presenterStep={stepIndex}
+          Presenter URL params: globals=presenterGuide:true, presenter=labs, presenterStep=
+          {stepIndex}
         </div>
       </div>
     </div>
   );
 
   // Auto-advance controls component
-  function AutoAdvanceControls({ stepIndex, stepsLen, onNav, initialEnabled, initialSec }: { stepIndex: number; stepsLen: number; onNav: (i: number) => void; initialEnabled?: boolean; initialSec?: number }) {
+  function AutoAdvanceControls({
+    stepIndex,
+    stepsLen,
+    onNav,
+    initialEnabled,
+    initialSec,
+  }: {
+    stepIndex: number;
+    stepsLen: number;
+    onNav: (i: number) => void;
+    initialEnabled?: boolean;
+    initialSec?: number;
+  }) {
     const [enabled, setEnabled] = React.useState(Boolean(initialEnabled));
     const [sec, setSec] = React.useState(Number(initialSec || 30));
     React.useEffect(() => {
       if (!enabled) return;
-      const id = setInterval(() => {
-        onNav(Math.min(stepsLen - 1, stepIndex + 1));
-      }, Math.max(5, sec) * 1000);
+      const id = setInterval(
+        () => {
+          onNav(Math.min(stepsLen - 1, stepIndex + 1));
+        },
+        Math.max(5, sec) * 1000,
+      );
       return () => clearInterval(id);
     }, [enabled, sec, stepIndex, stepsLen]);
     return (
-      <div style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
-        <label style={{ fontSize: 12, color: '#444' }}>
-          <input type="checkbox" checked={enabled} onChange={e => setEnabled(e.target.checked)} /> Auto
+      <div style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
+        <label style={{ fontSize: 12, color: "#444" }}>
+          <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />{" "}
+          Auto
         </label>
         <input
           type="number"
           min={5}
           max={600}
           value={sec}
-          onChange={e => setSec(parseInt(e.target.value || '30', 10))}
-          style={{ width: 56, fontSize: 12, padding: '4px 6px', border: '1px solid #e5e7eb', borderRadius: 6 }}
+          onChange={(e) => setSec(parseInt(e.target.value || "30", 10))}
+          style={{
+            width: 56,
+            fontSize: 12,
+            padding: "4px 6px",
+            border: "1px solid #e5e7eb",
+            borderRadius: 6,
+          }}
           title="Seconds between steps"
         />
       </div>
@@ -528,4 +547,3 @@ export const presenterGuideDecorator = (Story: any, context: any) => {
     </div>
   );
 };
-

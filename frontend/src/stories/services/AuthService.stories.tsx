@@ -45,22 +45,6 @@ const AuthServicePlayground: React.FC = () => {
   const [resetEmail, setResetEmail] = useState("");
   const [logs, setLogs] = useState<string[]>([]);
 
-  // Initialize service
-  useEffect(() => {
-    if (!authService) {
-      authService = new MockAuthService({
-        passwordMinLength: 8,
-        passwordRequireUppercase: true,
-        passwordRequireNumbers: true,
-        maxLoginAttempts: 3,
-        lockoutDuration: 900,
-      });
-    }
-
-    // Check for existing session
-    checkSession();
-  }, [checkSession]);
-
   const addLog = (message: string) => {
     setLogs((prev) => [`[${new Date().toLocaleTimeString()}] ${message}`, ...prev].slice(0, 20));
   };
@@ -78,6 +62,22 @@ const AuthServicePlayground: React.FC = () => {
       console.error("Session check failed:", err);
     }
   }, []);
+
+  // Initialize service
+  useEffect(() => {
+    if (!authService) {
+      authService = new MockAuthService({
+        passwordMinLength: 8,
+        passwordRequireUppercase: true,
+        passwordRequireNumbers: true,
+        maxLoginAttempts: 3,
+        lockoutDuration: 900,
+      });
+    }
+
+    // Check for existing session
+    checkSession();
+  }, [checkSession]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();

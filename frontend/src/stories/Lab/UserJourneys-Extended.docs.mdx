@@ -8,86 +8,108 @@ import InlineToc from "../components/InlineToc";
 Curated, learning-centric journeys across UI and mocks. Use x-mock-delay and x-mock-error-rate headers to simulate networks.
 
 <InlineToc
-  items={Array.from({ length: 20 }, (_, i) => ({ href: `#uj-${String(i+1).padStart(2,'0')}`, label: `UJ-${String(i+1).padStart(2,'0')}` }))}
+  items={Array.from({ length: 20 }, (_, i) => ({
+    href: `#uj-${String(i + 1).padStart(2, "0")}`,
+    label: `UJ-${String(i + 1).padStart(2, "0")}`,
+  }))}
 />
 
 ## UJ-01 — Demo: happy path {#uj-01}
+
 - Open /demo
 - Paste product notes, choose blog, click Generate content
 - Expect streaming progress → metrics → export
 
 ## UJ-02 — Demo: rate limit handling {#uj-02}
+
 - Input includes TRIGGER_RATE_LIMIT
 - Expect 429 guidance; try again after backoff
 
 ## UJ-03 — Demo: server error path {#uj-03}
+
 - Input includes TRIGGER_ERROR
 - Expect error panel with retry/backoff messaging
 
 ## UJ-04 — Demo: cached result {#uj-04}
+
 - Input includes TRIGGER_CACHED
 - Expect Instant Result banner and processing_time near zero
 
 ## UJ-05 — Demo: dark mode persistence {#uj-05}
+
 - Toggle dark mode; navigate System → back to Demo
 - Verify class and localStorage persistence
 
 ## UJ-06 — Format: email conversion {#uj-06}
+
 - /format, select email, input meeting notes
 - Format → expect Subject, greeting, body, signoff
 
 ## UJ-07 — Format: blog template {#uj-07}
+
 - /format, select blog, input bullet points
 - Expect headings, intro, conclusion blocks
 
 ## UJ-08 — Format: summary metrics {#uj-08}
+
 - /format, select summary, input long paragraph
 - Expect cost + quality metrics; copy to clipboard
 
 ## UJ-09 — BYOK hint flow {#uj-09}
+
 - /demo without MSW (pretend), missing API key
 - Expect BYOK prompt when provider not mocked
 
 ## UJ-10 — Playground SSE preview {#uj-10}
+
 - Use the app’s streaming playground
 - Expect tokens and meta events in panel
 
 ## UJ-11 — Error injection via headers {#uj-11}
+
 - /demo with x-mock-error-rate: 0.3
 - Generate; observe transient failures; retry UX
 
 ## UJ-12 — Latency shaping {#uj-12}
+
 - /demo with x-mock-delay: 1200
 - Observe spinner duration, progress pacing
 
 ## UJ-13 — Long-input truncation guidance {#uj-13}
+
 - Paste >10k chars on /format
 - Expect validation error; guidance to shorten input
 
 ## UJ-14 — Export UX {#uj-14}
+
 - After generation, click Download as Markdown
 - Verify filename pattern and content
 
 ## UJ-15 — Accessibility quick pass {#uj-15}
+
 - Tab through navigation and controls on /demo
 - Verify focus visibility and roles
 
 ## UJ-16 — Mobile viewport {#uj-16}
+
 - Resize to 375x667 on /demo
 - Verify layout fits without horizontal scroll
 
 ## UJ-17 — Network flake and retry loop {#uj-17}
+
 - Trigger transient 500s; verify backoff attempts and final success
 
 ## UJ-18 — Content safety message (placeholder) {#uj-18}
+
 - Input with policy keywords (mock)
 - Expect gentle guidance (mocked panel)
 
 ## UJ-19 — Multi-step: Demo → Format {#uj-19}
+
 - Generate summary on /demo; copy output
 - Paste into /format and convert to email
 
 ## UJ-20 — Dev tools: requests monitor {#uj-20}
+
 - Open /dev/network (if available)
 - Generate to observe headers, body, and response
-

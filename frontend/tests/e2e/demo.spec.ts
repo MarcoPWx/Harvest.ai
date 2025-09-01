@@ -127,10 +127,12 @@ test("should show realtime progress and streaming output when generating (mock m
   } catch {}
 
   // Streaming output or final result should be visible shortly
-  await expect(Promise.any([
-    streaming.waitFor({ state: 'visible', timeout: 8000 }) as unknown as Promise<void>,
-    resultHeader.waitFor({ state: 'visible', timeout: 8000 }) as unknown as Promise<void>,
-  ])).resolves.toBeUndefined();
+  await expect(
+    Promise.any([
+      streaming.waitFor({ state: "visible", timeout: 8000 }) as unknown as Promise<void>,
+      resultHeader.waitFor({ state: "visible", timeout: 8000 }) as unknown as Promise<void>,
+    ]),
+  ).resolves.toBeUndefined();
 
   // If streaming area appears, it should accumulate some informative text
   if (await streaming.isVisible()) {
@@ -139,7 +141,6 @@ test("should show realtime progress and streaming output when generating (mock m
       timeout: 10000,
     });
   }
-
 });
 
 // Visual regression tests are kept skipped by default to reduce flakiness

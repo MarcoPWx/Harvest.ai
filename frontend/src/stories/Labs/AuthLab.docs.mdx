@@ -6,7 +6,7 @@ import LastUpdated from "../components/LastUpdated";
 
 <Meta title="Labs/Auth Lab" />
 
-Explore the auth service layer and session semantics in a mock‑first environment. Pair with service tests in src/services/auth/__tests__/.
+Explore the auth service layer and session semantics in a mock‑first environment. Pair with service tests in src/services/auth/**tests**/.
 
 <InlineToc
   items={[
@@ -29,7 +29,8 @@ Explore the auth service layer and session semantics in a mock‑first environme
 - src/services/auth/MockAuthService.ts — local mock behaviors, feature flags
 
 Try it:
-- Read the tests in src/services/auth/__tests__/AuthService.test.ts
+
+- Read the tests in src/services/auth/**tests**/AuthService.test.ts
 - Add a scenario for token refresh / session expiry
 
 ## Routes (dev) {#routes}
@@ -47,4 +48,3 @@ npm test -- src/services/auth/__tests__/AuthService.test.ts
 - Expand tests to cover edge cases (e.g., invalid credentials, revoked session)
 
 <LastUpdated file="src/stories/Labs/AuthLab.docs.mdx" />
-

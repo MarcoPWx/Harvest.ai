@@ -9,6 +9,7 @@ Follow this guided sequence to understand the entire flow from the first UI inte
 <Meta title="Labs/First Interaction → Journey → S2S Guided Tour" />
 
 ## 1) First Interaction (UI → API)
+
 - UI: Content generator panel
   - Where: `src/components/content/ContentGenerator.tsx`
 - API: Generate route (JSON + SSE)
@@ -19,16 +20,18 @@ Follow this guided sequence to understand the entire flow from the first UI inte
   - App → /demo (progress + streaming text)
 
 ## 2) User Story Mapping
+
 - Story: “As a user, I can transform content into a professional format.”
   - UI: ContentGenerator
   - API: /api/generate
-  - Mocks: `src/mocks/handlers/generation.ts` (TRIGGER_* cases)
+  - Mocks: `src/mocks/handlers/generation.ts` (TRIGGER\_\* cases)
   - Tests: `tests/e2e/content-generation.spec.ts`, `tests/e2e/demo.spec.ts`
   - Docs: `docs/architecture/GENERATION_FLOW.md`
 - See also (docs in Storybook):
   - Labs → Technology Overview Lab → User stories → technology mapping
 
 ## 3) Streaming (SSE) and Fallbacks
+
 - In‑app SSE client
   - Where: `src/app/playground/sse/page.tsx`
 - Helpers: `src/lib/client/sseParser.ts`, `src/lib/client/useSSEStream.ts`
@@ -37,6 +40,7 @@ Follow this guided sequence to understand the entire flow from the first UI inte
 - Tests: `tests/e2e/generate-stream.spec.ts`, `tests/e2e/threads-stream.spec.ts`
 
 ## 4) S2S (Server‑to‑Server) Concepts
+
 - BYOK AI Gateway (frontend perspective)
   - API: `src/app/api/ai/chat/route.ts` (provider shapes)
   - Hook: `src/hooks/useAIChat.ts` (stream support)
@@ -48,18 +52,21 @@ Follow this guided sequence to understand the entire flow from the first UI inte
   - `docs/S2S_STORIES.md`
 
 ## 5) Observability & Status
+
 - System status (reality): `docs/SYSTEM_STATUS.md`
   - Storybook: Docs → System Status
 - CI aggregator (if present): `docs/status/ci-status.json`
   - Storybook: Docs → Status Dashboard
 
 ## 6) Epics & DevLog (always up‑to‑date in SB)
+
 - Epics source: `docs/roadmap/EPICS.md`
   - Storybook: Command Center → Epics Manager (canonical)
 - DevLog source: `docs/status/DEVLOG.md`
   - Storybook: Command Center → Devlog (canonical)
 
 ## 7) Security & Config
+
 - Security headers: `next.config.mjs` (HSTS, CSP, COOP/COEP)
   - Storybook: Docs → SecurityTrustPlan
 - Remote config: Docs → RemoteConfig
@@ -93,6 +100,7 @@ sequenceDiagram
 ```
 
 ## Quick links (open these in the Storybook search if links don’t resolve)
+
 - Labs/Technology Overview Lab
 - Docs/Tech Stack & API Playground
 - Docs/Playgrounds
@@ -100,4 +108,3 @@ sequenceDiagram
 - Command Center/Epics Manager (canonical)
 - Command Center/Devlog
 - S2SStreaming, S2SRecipes, S2SReference, S2S‑Journeys (Extended)
-

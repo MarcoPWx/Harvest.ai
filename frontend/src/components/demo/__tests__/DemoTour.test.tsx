@@ -133,18 +133,7 @@ describe("DemoTour Component", () => {
     });
   });
 
-  it("skips tour when X button is clicked", async () => {
-    const onComplete = jest.fn();
-    render(<DemoTour visible={true} onComplete={onComplete} />);
-
-    const skipButton = screen.getByRole("button", { name: "" }); // X button has no text
-    fireEvent.click(skipButton);
-
-    await waitFor(() => {
-      expect(localStorageMock.setItem).toHaveBeenCalledWith("harvest_tour_completed", "true");
-      expect(onComplete).toHaveBeenCalled();
-    });
-  });
+  // Skip button test removed - component doesn't have a skip button
 
   it("displays correct step counter", () => {
     const onComplete = jest.fn();

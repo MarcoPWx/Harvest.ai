@@ -54,7 +54,7 @@ const meta = {
   tags: ["autodocs"],
   decorators: [
     (Story, context) => (
-      <ScrollWrapper scrolled={context.args.scrolled}>
+      <ScrollWrapper scrolled={(context.args as any)?.scrolled}>
         <Story />
       </ScrollWrapper>
     ),

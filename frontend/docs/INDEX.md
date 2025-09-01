@@ -20,6 +20,7 @@
 - [System Status - ACTUAL State](/docs/SYSTEM_STATUS.md)
 - [Tech Stack Cheat Sheet (Harvest.ai)](/docs/TECH_STACK_CHEATSHEET.md)
 - [User Stories (Source of Truth)](/docs/USER_STORIES.md)
+
 ## api
 
 - [🔌 Harvest.ai Complete API Specification](/docs/api/COMPLETE_API_SPEC.md)
@@ -78,7 +79,5 @@
 
 - [🚀 Harvest.ai User Journeys & Flows](/docs/user-journeys/USER_FLOWS.md)
 - [Content Transformation User Journey](/docs/user-journeys/CONTENT_TRANSFORMATION.md)
-
-
 
 _This file is generated. Do not edit manually._

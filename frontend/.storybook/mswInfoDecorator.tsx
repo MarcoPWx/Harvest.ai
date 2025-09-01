@@ -30,8 +30,7 @@ export const mswInfoDecorator = (Story: any, context: any) => {
           borderRadius: 10,
           boxShadow: "0 12px 40px rgba(0,0,0,0.25)",
           padding: 16,
-          fontFamily:
-            "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+          fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -66,12 +65,14 @@ export const mswInfoDecorator = (Story: any, context: any) => {
                     const p = h?.info?.path || h?.info?.mask || "";
                     return (
                       <li key={idx}>
-                        <code>{m} {String(p)}</code>
+                        <code>
+                          {m} {String(p)}
+                        </code>
                       </li>
                     );
                   })
                 ) : (
-                  <li style={{ fontSize: 12, color: '#666' }}>No handler metadata available.</li>
+                  <li style={{ fontSize: 12, color: "#666" }}>No handler metadata available.</li>
                 )}
               </ul>
             </div>
@@ -82,7 +83,9 @@ export const mswInfoDecorator = (Story: any, context: any) => {
                   <a href="?path=/docs/mock-status--docs">Docs/Mock Status</a>
                 </li>
                 <li>
-                  <a href="?path=/docs/command-center-s2s-streaming-threads--docs">S2S — Streaming & Threads</a>
+                  <a href="?path=/docs/command-center-s2s-streaming-threads--docs">
+                    S2S — Streaming & Threads
+                  </a>
                 </li>
                 <li>
                   <a href="/docs/mocks/handlers/index.ts" target="_blank" rel="noreferrer">
@@ -93,9 +96,15 @@ export const mswInfoDecorator = (Story: any, context: any) => {
               <div style={{ fontSize: 12, color: "#555" }}>
                 Triggers:
                 <ul>
-                  <li>Include <code>TRIGGER_RATE_LIMIT</code> in input for 429</li>
-                  <li>Include <code>TRIGGER_ERROR</code> in input for 500</li>
-                  <li>Include <code>TRIGGER_CACHED</code> to simulate cached result</li>
+                  <li>
+                    Include <code>TRIGGER_RATE_LIMIT</code> in input for 429
+                  </li>
+                  <li>
+                    Include <code>TRIGGER_ERROR</code> in input for 500
+                  </li>
+                  <li>
+                    Include <code>TRIGGER_CACHED</code> to simulate cached result
+                  </li>
                 </ul>
               </div>
             </div>
@@ -112,4 +121,3 @@ export const mswInfoDecorator = (Story: any, context: any) => {
     </div>
   );
 };
-

@@ -281,7 +281,6 @@ export const DemoTour: React.FC<DemoTourProps> = ({ visible, onComplete, onStepC
     }
   };
 
-
   const handleComplete = () => {
     setIsVisible(false);
     setTimeout(() => {

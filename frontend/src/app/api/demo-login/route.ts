@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       password = String(body?.password || "");
     } else if (contentType.includes("application/x-www-form-urlencoded")) {
       const form = await req.formData();
-      password = String(form.get("password") || "");
+      password = String((form as any).get("password") || "");
     } else {
       // Try JSON by default
       const body = await req.json().catch(() => ({}));
@@ -34,4 +34,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: err?.message || "Login failed" }, { status: 500 });
   }
 }
-

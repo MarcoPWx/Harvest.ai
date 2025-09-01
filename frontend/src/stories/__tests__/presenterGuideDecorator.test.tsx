@@ -20,4 +20,3 @@ describe("Presenter Guide Decorator", () => {
     expect(screen.queryByRole("dialog", { name: /presenter guide/i })).toBeNull();
   });
 });
-

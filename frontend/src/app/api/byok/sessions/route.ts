@@ -17,10 +17,10 @@ import {
 import { validateApiKey } from "@/lib/byok/validators";
 import { createSessionToken, verifySessionToken } from "@/lib/auth/tokens";
 import { getRateLimiter } from "@/lib/rate-limit";
-import { sanitizeLogs } from "@/lib/security/log-sanitizer";
+import { sanitizeForLogs } from "@/lib/security/log-sanitizer";
 
 // In-memory storage for development (replace with database in production)
-const sessions = new Map<string, BYOKSession>();
+const sessionStore = new Map<string, BYOKSession>();
 const sessionTokens = new Map<string, string>(); // token -> sessionId
 
 export async function POST(request: NextRequest) {
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     if (!validation.valid) {
       // Log the attempt (with sanitized data)
       console.warn(
-        sanitizeLogs({
+        sanitizeForLogs({
           event: "byok_validation_failed",
           provider: body.provider,
           error: validation.error,
@@ -138,13 +138,13 @@ export async function POST(request: NextRequest) {
     });
 
     // Store session (in production, use database)
-    sessions.set(sessionId, session);
+    sessionStore.set(sessionId, session);
     sessionTokens.set(token, sessionId);
 
     // Set up auto-cleanup
     setTimeout(
       () => {
-        sessions.delete(sessionId);
+        sessionStore.delete(sessionId);
         sessionTokens.delete(token);
       },
       sessionDuration * 60 * 1000,
@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error) {
-    console.error("BYOK session creation error:", sanitizeLogs({ error }));
+    console.error("BYOK session creation error:", sanitizeForLogs({ error }));
 
     return NextResponse.json<ApiResponse>(
       {
@@ -224,7 +224,7 @@ export async function GET(request: NextRequest) {
     const userId = request.headers.get("x-user-id");
 
     // Filter sessions by user
-    const userSessions = Array.from(sessions.values()).filter(
+    const userSessions = Array.from(sessionStore.values()).filter(
       (s) => !userId || s.userId === userId,
     );
 
@@ -233,7 +233,7 @@ export async function GET(request: NextRequest) {
     const activeSessions = userSessions.filter((s) => {
       const expiresAt = new Date(s.expiresAt);
       if (expiresAt < now) {
-        sessions.delete(s.id);
+        sessionStore.delete(s.id);
         return false;
       }
       return true;
@@ -296,6 +296,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
-// Export for testing
-export { sessions, sessionTokens };

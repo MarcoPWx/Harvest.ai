@@ -30,7 +30,9 @@ describe("/api/generate JSON triggers and caching", () => {
   it("returns 500 for TRIGGER_ERROR", async () => {
     const req = {
       headers: new Headers({ Accept: "application/json" }),
-      async json() { return { input: "please TRIGGER_ERROR now", format: "blog" }; },
+      async json() {
+        return { input: "please TRIGGER_ERROR now", format: "blog" };
+      },
     } as any;
     const { POST } = await import("@/app/api/generate/route");
     const res = await POST(req);
@@ -42,7 +44,9 @@ describe("/api/generate JSON triggers and caching", () => {
   it("caches repeated input (second call cached=true, processing_time=0)", async () => {
     const req1 = {
       headers: new Headers({ Accept: "application/json" }),
-      async json() { return { input: "cache-this", format: "blog" }; },
+      async json() {
+        return { input: "cache-this", format: "blog" };
+      },
     } as any;
     const { POST } = await import("@/app/api/generate/route");
     const r1 = await POST(req1);
@@ -52,7 +56,9 @@ describe("/api/generate JSON triggers and caching", () => {
 
     const req2 = {
       headers: new Headers({ Accept: "application/json" }),
-      async json() { return { input: "cache-this", format: "blog" }; },
+      async json() {
+        return { input: "cache-this", format: "blog" };
+      },
     } as any;
     const r2 = await POST(req2);
     expect(r2.status).toBe(200);
@@ -61,4 +67,3 @@ describe("/api/generate JSON triggers and caching", () => {
     expect(j2?.processing_time).toBe(0);
   });
 });
-

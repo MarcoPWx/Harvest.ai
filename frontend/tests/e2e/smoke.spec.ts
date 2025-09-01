@@ -32,4 +32,3 @@ test("/api/format returns JSON with formatted output", async ({ page }) => {
   expect(json).toHaveProperty("cost");
   expect(json).toHaveProperty("quality");
 });
-

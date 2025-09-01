@@ -36,7 +36,9 @@ export const testsInfoDecorator = (Story: any, context: any) => {
       }
     }
     load();
-    return () => { alive = false };
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const overlay = (
@@ -63,8 +65,7 @@ export const testsInfoDecorator = (Story: any, context: any) => {
           borderRadius: 10,
           boxShadow: "0 12px 40px rgba(0,0,0,0.25)",
           padding: 16,
-          fontFamily:
-            "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+          fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -126,8 +127,12 @@ export const testsInfoDecorator = (Story: any, context: any) => {
         <div style={{ marginTop: 12, fontSize: 12, color: "#555" }}>
           Tips:
           <ul>
-            <li>Run <code>npm run test:coverage</code> to generate coverage artifacts.</li>
-            <li>Run <code>npm run test:e2e:json</code> to generate /playwright-summary.json.</li>
+            <li>
+              Run <code>npm run test:coverage</code> to generate coverage artifacts.
+            </li>
+            <li>
+              Run <code>npm run test:e2e:json</code> to generate /playwright-summary.json.
+            </li>
           </ul>
         </div>
       </div>
@@ -137,20 +142,26 @@ export const testsInfoDecorator = (Story: any, context: any) => {
   // Small persistent badges (top-right) when failures/low coverage are detected
   function CoverageBadge() {
     const pct = cov?.total?.lines?.pct;
-    const low = typeof pct === 'number' ? pct < 80 : false;
+    const low = typeof pct === "number" ? pct < 80 : false;
     if (!low) return null;
     return (
       <a
         href="?path=/docs/tests-unit-status--docs"
         style={{
-          display: 'inline-block', marginLeft: 6,
-          background: '#ffebe6', color: '#b42318', border: '1px solid #ffb4a6',
-          padding: '2px 6px', borderRadius: 6, fontSize: 12, textDecoration: 'none'
+          display: "inline-block",
+          marginLeft: 6,
+          background: "#ffebe6",
+          color: "#b42318",
+          border: "1px solid #ffb4a6",
+          padding: "2px 6px",
+          borderRadius: 6,
+          fontSize: 12,
+          textDecoration: "none",
         }}
       >
-        Coverage < 80%
+        Coverage &lt; 80%
       </a>
-    )
+    );
   }
   function E2EBadge() {
     const failed = pw?.stats?.unexpected || 0;
@@ -159,21 +170,27 @@ export const testsInfoDecorator = (Story: any, context: any) => {
       <a
         href="?path=/docs/tests-e2e-status--docs"
         style={{
-          display: 'inline-block', marginLeft: 6,
-          background: '#ffebe6', color: '#b42318', border: '1px solid #ffb4a6',
-          padding: '2px 6px', borderRadius: 6, fontSize: 12, textDecoration: 'none'
+          display: "inline-block",
+          marginLeft: 6,
+          background: "#ffebe6",
+          color: "#b42318",
+          border: "1px solid #ffb4a6",
+          padding: "2px 6px",
+          borderRadius: 6,
+          fontSize: 12,
+          textDecoration: "none",
         }}
       >
         E2E failing
       </a>
-    )
+    );
   }
 
   return (
     <div style={{ position: "relative" }}>
       <Story />
       {/* badges container */}
-      <div style={{ position: 'fixed', top: 8, right: 8, zIndex: 9996 }}>
+      <div style={{ position: "fixed", top: 8, right: 8, zIndex: 9996 }}>
         <CoverageBadge />
         <E2EBadge />
       </div>
@@ -181,4 +198,3 @@ export const testsInfoDecorator = (Story: any, context: any) => {
     </div>
   );
 };
-

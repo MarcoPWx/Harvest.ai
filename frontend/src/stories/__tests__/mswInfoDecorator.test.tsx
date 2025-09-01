@@ -9,15 +9,14 @@ function FakeStory() {
 
 describe("MSW Info Decorator", () => {
   it("renders overlay when mswInfo='open'", () => {
-    const Comp = () => mswInfoDecorator(FakeStory, { globals: { mswInfo: 'open' } });
+    const Comp = () => mswInfoDecorator(FakeStory, { globals: { mswInfo: "open" } });
     render(<Comp />);
     expect(screen.getByRole("dialog", { name: /msw info/i })).toBeInTheDocument();
   });
 
   it("does not render overlay when mswInfo='closed'", () => {
-    const Comp = () => mswInfoDecorator(FakeStory, { globals: { mswInfo: 'closed' } });
+    const Comp = () => mswInfoDecorator(FakeStory, { globals: { mswInfo: "closed" } });
     render(<Comp />);
     expect(screen.queryByRole("dialog", { name: /msw info/i })).toBeNull();
   });
 });
-

@@ -34,15 +34,18 @@ Update branch protections as desired in your GitHub repo settings.
 ## Environment variables
 
 Production (Vercel):
+
 - NEXT_PUBLIC_TOUR_AUTO=1
 - SITE_USE_LOGIN=1
 - SITE_DEMO_PASSWORD=<choose-a-demo-password>
 
 Optional:
+
 - STORYBOOK_BASIC_AUTH=username:password (protect /storybook if served via Pages or reverse proxy)
 - SITE_BASIC_AUTH=username:password (fallback basic auth if you don’t use the login flow)
 
 Local development:
+
 - You can disable demo tour by NOT setting NEXT_PUBLIC_TOUR_AUTO.
 - You can explicitly suppress the tour via URL only in development: add ?tour=off to any URL.
 - To force mock/demo mode locally, use ?tour=1 or run npm run dev:mock.
@@ -52,23 +55,27 @@ Local development:
 ## Quick start
 
 Install dependencies:
+
 ```bash
 npm ci
 ```
 
 Run app + Storybook (local):
+
 ```bash
 # App with mocks on 3002; Storybook on 6006
 npm run dev:all
 ```
 
 Just the app (no Storybook):
+
 ```bash
 npm run dev           # 3000
 npm run dev:mock      # 3002 (MSW on)
 ```
 
 Just Storybook:
+
 ```bash
 npm run storybook     # 6006
 ```
@@ -77,10 +84,10 @@ npm run storybook     # 6006
 
 ## Demo flow (production)
 
-1) User visits your DNS → /login appears (cookie-based gate)
-2) After login → redirect to /?tour=1
-3) MSW mocks are enabled, Demo Tour starts automatically and cannot be turned off in production
-4) Banner links to Storybook Presenter (tour=1)
+1. User visits your DNS → /login appears (cookie-based gate)
+2. After login → redirect to /?tour=1
+3. MSW mocks are enabled, Demo Tour starts automatically and cannot be turned off in production
+4. Banner links to Storybook Presenter (tour=1)
 
 ---
 
@@ -100,6 +107,7 @@ Workflow: .github/workflows/ci-storybook-tests.yml
   - Deploy Storybook to GitHub Pages on main/master
 
 Artifacts:
+
 - coverage/ (Jest)
 - playwright-report/ (E2E HTML report)
 - public/playwright-summary.json

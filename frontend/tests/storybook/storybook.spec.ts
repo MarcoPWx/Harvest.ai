@@ -23,4 +23,3 @@ test("Presenter hotkey toggles overlay and Open This Step works", async ({ page,
   await page.getByRole("button", { name: /open this step/i }).click();
   await expect(page).toHaveURL(/path=\/docs\//);
 });
-

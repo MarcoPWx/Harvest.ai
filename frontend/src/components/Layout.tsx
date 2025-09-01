@@ -161,7 +161,6 @@ export default function Layout({ children, currentPage = "home" }: LayoutProps) 
         {/* Footer */}
         <Footer darkMode={darkMode} />
       </div>
-
     </div>
   );
 }

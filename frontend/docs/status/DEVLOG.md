@@ -5,12 +5,14 @@ A running log of notable changes while driving the project to "all green" and a 
 ## 2025-08-31 - Final Session: Complete Project Audit & Realistic Scoping
 
 ### ✅ MAJOR ACCOMPLISHMENT: Realistic Project Scope
+
 - **Identified 146 redundant issues** (10x inflation)
 - **Consolidated to 42 real issues** covering all unique work
 - **Eliminated all overlaps** between features, tests, and stories
 - **Created comprehensive documentation** of exclusions and rationale
 
 ### 📊 Final GitHub Issues Structure:
+
 - 20 User Journeys (each includes backend, tests, story)
 - 3 Core Epics (Testing, E2E, Mock Backend)
 - 5 Consolidated S2S Systems (replacing 50 individual flows)
@@ -18,6 +20,7 @@ A running log of notable changes while driving the project to "all green" and a 
 - Total: 42 issues (down from planned 166)
 
 ### 📝 Documentation Created:
+
 1. **EXCLUDED_FEATURES.md** - Lists all 146 excluded items with rationale
 2. **OVERLAP_ANALYSIS.md** - Identified massive duplication (10x inflation)
 3. **COMPLETE_AUDIT.md** - Full analysis showing 19% tracking coverage
@@ -25,19 +28,23 @@ A running log of notable changes while driving the project to "all green" and a 
 5. **ACCOUNTABILITY.md** - Honest assessment of promises vs delivery
 
 ### 🔍 Key Insights:
+
 - We were tracking HOW we build (tests, stories, backend) instead of WHAT we build (features)
 - This is a 30-feature project, not 166
 - Each issue now includes everything needed to complete it
 - Realistic timeline: 2-3 months, not 6 days
 
 ### ⚠️ Reality Check:
+
 - Implementation: <1% complete
 - Tests passing: 5 out of hundreds needed
 - Deployed: Nothing
 - Working features: 0
 
 ### 🎯 Clear Next Step:
+
 **Issue #6: [UJ-01] Demo Happy Path**
+
 - Make ContentGenerator tests pass
 - Implement real API
 - Deploy to Vercel
@@ -46,6 +53,7 @@ A running log of notable changes while driving the project to "all green" and a 
 ---
 
 ## 2025-08-30 (later)
+
 - Agent-driven docs and tooling finalized:
   - Canonicalization enforced (single DevLog, Epics, System Status); removed legacy Epics Board/Editor pages and loaders updated in Storybook
   - Agent-only flow: removed Storybook pre-build hooks and Agent badge/toolbar; no auto scripts; manual timestamps updated for badges
@@ -54,13 +62,14 @@ A running log of notable changes while driving the project to "all green" and a 
   - System Status refreshed; Last Updated set to 2025-08-30
   - docs/status/last-updated.json refreshed for DevLog/Epics/System Status/Agent Boot
 - Next focus (critical path):
-  1) Finish Epic A-1: AIService tests (mock Supabase usage/caching). Goal: all unit green ≥80% coverage
-  2) Establish deterministic E2E smokes (Chromium): stable selectors, offline mocks, clear waits; tag @smoke
-  3) Choose backend path: (3A) minimal Supabase auth+history or (3B) strict mock-first parity (WS events + MSW in Playwright)
-  4) Normalize AI error categories + fallback tests (rate limit, auth, network)
-  5) Add structured request logs + minimal /api/metrics JSON (local)
+  1. Finish Epic A-1: AIService tests (mock Supabase usage/caching). Goal: all unit green ≥80% coverage
+  2. Establish deterministic E2E smokes (Chromium): stable selectors, offline mocks, clear waits; tag @smoke
+  3. Choose backend path: (3A) minimal Supabase auth+history or (3B) strict mock-first parity (WS events + MSW in Playwright)
+  4. Normalize AI error categories + fallback tests (rate limit, auth, network)
+  5. Add structured request logs + minimal /api/metrics JSON (local)
 
 ## 2025-08-30
+
 - E2E: Added smoke specs (home, /api/generate JSON, /api/format JSON) — green
 - E2E: Hardened Format page specs (stable test IDs, longer waits); switched page input to controlled in E2E for reliable CTA enablement
 - E2E: Mock flows (TRIGGER_RATE_LIMIT / TRIGGER_CACHED) now wait for hydration and MSW SW control
@@ -70,8 +79,9 @@ A running log of notable changes while driving the project to "all green" and a 
 - Docs: Added docs/status/EPICS_STATUS.md and updated statuses
 
 ## Next
+
 - Finalize E2E all green in Chromium (format + mock flows reruns)
-- Storybook build: clean up TechStack.docs.mdx indexer constraints (switch to React.use* in MDX and avoid top‑level declarations)
+- Storybook build: clean up TechStack.docs.mdx indexer constraints (switch to React.use\* in MDX and avoid top‑level declarations)
 - Add SSE reader unit/integration test for the streaming route
 
 ---
@@ -172,12 +182,12 @@ Next Action: Fix AIService tests and adjust mocks for fallback/error flows
 
 ## 📊 Metrics (local)
 
-|| Metric | Current | Target |
-|--------|---------|--------|
-| Unit Test Suites | 5/5 passing | 5/5 |
-| Unit Tests | 58/58 passing | 58/58 |
-| E2E Stability | Flaky | Stable |
-| Storybook | Working | All key components covered |
+|                  | Metric        | Current                    | Target |
+| ---------------- | ------------- | -------------------------- | ------ |
+| Unit Test Suites | 5/5 passing   | 5/5                        |
+| Unit Tests       | 58/58 passing | 58/58                      |
+| E2E Stability    | Flaky         | Stable                     |
+| Storybook        | Working       | All key components covered |
 
 ---
 
@@ -199,4 +209,3 @@ Next Action: Fix AIService tests and adjust mocks for fallback/error flows
 ---
 
 This document will be updated as progress is made. See also: ../roadmap/EPICS.md
-

@@ -38,7 +38,7 @@ describe("GET /api/generate/:id", () => {
         error: null,
       });
 
-    const res = await getGeneration({} as any, { params: { id: "gen-1" } });
+    const res = await getGeneration({} as any, { params: Promise.resolve({ id: "gen-1" }) });
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.generation.id).toBe("gen-1");
@@ -52,7 +52,7 @@ describe("GET /api/generate/:id", () => {
       .eq()
       .single.mockResolvedValueOnce({ data: null, error: { message: "Not found" } });
 
-    const res = await getGeneration({} as any, { params: { id: "unknown" } });
+    const res = await getGeneration({} as any, { params: Promise.resolve({ id: "unknown" }) });
     expect(res.status).toBe(404);
   });
 });
@@ -63,7 +63,7 @@ describe("DELETE /api/generate/:id", () => {
     // Final select() after delete resolves without error
     supabaseMock.from().delete().eq().eq().select.mockResolvedValueOnce({ data: [], error: null });
 
-    const res = await deleteGeneration({} as any, { params: { id: "gen-1" } });
+    const res = await deleteGeneration({} as any, { params: Promise.resolve({ id: "gen-1" }) });
     expect(res.status).toBe(200);
     const body = await res.json();
     expect(body.success).toBe(true);
@@ -73,7 +73,7 @@ describe("DELETE /api/generate/:id", () => {
     const supabaseMock = require("@/lib/supabase/server").createClient();
     supabaseMock.auth.getUser.mockResolvedValueOnce({ data: { user: null }, error: null });
 
-    const res = await deleteGeneration({} as any, { params: { id: "gen-1" } });
+    const res = await deleteGeneration({} as any, { params: Promise.resolve({ id: "gen-1" }) });
     expect(res.status).toBe(401);
   });
 });

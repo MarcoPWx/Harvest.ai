@@ -5,18 +5,11 @@ import {
   getIdentifierFromHeaders,
 } from "@/lib/server/ratelimit";
 import { logInfo } from "@/lib/server/log";
+import { getThreadStore } from "./_store";
 
 export const runtime = "nodejs";
 
-// In-memory thread store for dev
-const threads = new Map<
-  string,
-  {
-    created_at: string;
-    title?: string;
-    messages: Array<{ role: "user" | "assistant"; content: string; at: string }>;
-  }
->();
+const threads = getThreadStore();
 
 export async function POST(req: NextRequest) {
   const identifier = getIdentifierFromHeaders(req.headers);
@@ -90,9 +83,4 @@ export async function OPTIONS() {
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     },
   });
-}
-
-// Export store for nested routes (not ideal but fine for dev)
-export function __getThreadStore() {
-  return threads;
 }

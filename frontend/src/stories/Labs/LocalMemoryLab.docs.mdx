@@ -18,47 +18,48 @@ export function LocalMemoryPanel() {
   const [topK, setTopK] = React.useState(3)
   const [log, setLog] = React.useState<string[]>([])
 
-  function push(line: string) {
-    setLog(prev => [new Date().toLocaleTimeString() + ' ' + line, ...prev].slice(0, 300))
-  }
+function push(line: string) {
+setLog(prev => [new Date().toLocaleTimeString() + ' ' + line, ...prev].slice(0, 300))
+}
 
-  function url(path: string) {
-    return mode === 'msw' ? path : `${base}${path}`
-  }
+function url(path: string) {
+return mode === 'msw' ? path : `${base}${path}`
+}
 
-  async function indexDoc() {
-    push('Index: start')
-    const res = await fetch(url('/api/local-memory/index'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ namespace, id: docId, text })
-    })
-    push(`Index: HTTP ${res.status}`)
-  }
+async function indexDoc() {
+push('Index: start')
+const res = await fetch(url('/api/local-memory/index'), {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ namespace, id: docId, text })
+})
+push(`Index: HTTP ${res.status}`)
+}
 
-  async function searchDocs() {
-    push('Search: start')
-    const res = await fetch(url('/api/local-memory/search'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ namespace, query, topK })
-    })
-    const j = await res.json().catch(() => null)
-    push(`Search: HTTP ${res.status} ${j ? JSON.stringify(j).slice(0, 120) + '…' : ''}`)
-  }
+async function searchDocs() {
+push('Search: start')
+const res = await fetch(url('/api/local-memory/search'), {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ namespace, query, topK })
+})
+const j = await res.json().catch(() => null)
+push(`Search: HTTP ${res.status} ${j ? JSON.stringify(j).slice(0, 120) + '…' : ''}`)
+}
 
-  return (
-    <div style={{ border: '1px solid #eee', borderRadius: 8, padding: 12, display: 'grid', gap: 8 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: 8, alignItems: 'center' }}>
-        <label style={{ fontSize: 12 }}>Mode</label>
-        <select value={mode} onChange={e => setMode(e.target.value as any)}>
-          <option value="msw">MSW (Storybook)</option>
-          <option value="dev">Dev server</option>
-        </select>
-        {mode === 'dev' && (
-          <input value={base} onChange={e => setBase(e.target.value)} placeholder="http://localhost:3002" />
-        )}
-      </div>
+return (
+
+<div style={{ border: '1px solid #eee', borderRadius: 8, padding: 12, display: 'grid', gap: 8 }}>
+<div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: 8, alignItems: 'center' }}>
+<label style={{ fontSize: 12 }}>Mode</label>
+<select value={mode} onChange={e => setMode(e.target.value as any)}>
+<option value="msw">MSW (Storybook)</option>
+<option value="dev">Dev server</option>
+</select>
+{mode === 'dev' && (
+<input value={base} onChange={e => setBase(e.target.value)} placeholder="http://localhost:3002" />
+)}
+</div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
         <div>
@@ -82,7 +83,8 @@ export function LocalMemoryPanel() {
         <pre style={{ maxHeight: 220, overflow: 'auto', background: '#fafafa', padding: 8, borderRadius: 6, fontSize: 12 }}>{log.join('\n')}</pre>
       </div>
     </div>
-  )
+
+)
 }
 
 <InlineToc
@@ -130,4 +132,3 @@ curl -sS -X POST -H 'Content-Type: application/json' \
 </Canvas>
 
 <LastUpdated file="src/stories/Labs/LocalMemoryLab.docs.mdx" />
-

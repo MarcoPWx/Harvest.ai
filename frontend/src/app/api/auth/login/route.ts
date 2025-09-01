@@ -26,9 +26,9 @@ export async function POST(req: NextRequest) {
     const user = data.user;
     if (user) {
       try {
-        await supabase
+        await (supabase as any)
           .from("users")
-          .upsert({ id: user.id, email: user.email }, { onConflict: "id" } as any);
+          .upsert({ id: user.id, email: user.email }, { onConflict: "id" });
       } catch {}
     }
 

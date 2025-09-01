@@ -19,11 +19,11 @@ A short playbook for combining user journeys with TDD and mock‑first developme
 
 ## TDD cycle {#cycle}
 
-1) Define acceptance via a small journey (mock‑backed) in Docs/User Journeys
-2) Add/adjust a failing unit test (e.g., src/lib/ai/__tests__/service.test.ts)
-3) Implement logic minimally; keep providers mocked unless you’re validating a real path
-4) Make the journey pass; then stabilize selectors and timing
-5) Refactor; keep the suite green
+1. Define acceptance via a small journey (mock‑backed) in Docs/User Journeys
+2. Add/adjust a failing unit test (e.g., src/lib/ai/**tests**/service.test.ts)
+3. Implement logic minimally; keep providers mocked unless you’re validating a real path
+4. Make the journey pass; then stabilize selectors and timing
+5. Refactor; keep the suite green
 
 ## @smoke subset {#smokes}
 
@@ -34,7 +34,7 @@ A short playbook for combining user journeys with TDD and mock‑first developme
 ## MSW setup {#msw}
 
 - Storybook and dev server both use MSW for consistent mocks
-- Handlers live under src/mocks/handlers/** and support triggers like TRIGGER_RATE_LIMIT
+- Handlers live under src/mocks/handlers/\*\* and support triggers like TRIGGER_RATE_LIMIT
 - Dev flag NEXT_PUBLIC_ENABLE_MSW=1 enables the worker in the app; Storybook initializes its own
 
 ## Coverage & gates {#coverage}
@@ -43,4 +43,3 @@ A short playbook for combining user journeys with TDD and mock‑first developme
 - Keep your thresholds realistic and scoped to core code as you build out tests
 
 <LastUpdated file="src/stories/Journeys/TDD-MSW.docs.mdx" />
-

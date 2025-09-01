@@ -30,11 +30,12 @@ export async function POST(req: NextRequest) {
     const user = data.user;
     if (user) {
       try {
-        await supabase
-          .from("users")
-          .upsert({ id: user.id, email: user.email, full_name: name ?? null }, {
+        await (supabase as any).from("users").upsert(
+          { id: user.id, email: user.email, full_name: name ?? null },
+          {
             onConflict: "id",
-          } as any);
+          },
+        );
       } catch {}
     }
 

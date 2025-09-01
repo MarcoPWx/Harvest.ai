@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { createSseStream } from "@/lib/server/sse";
-import { __getThreadStore } from "@/app/api/threads/route";
+import { getThreadStore } from "../../_store";
 import {
   checkAndConsume,
   buildRateHeaders,
@@ -17,7 +17,7 @@ function composeReply(prompt: string) {
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const threads = __getThreadStore();
+  const threads = getThreadStore();
   const t = threads.get(id);
   if (!t)
     return new Response(JSON.stringify({ error: "thread not found" }), {
@@ -129,18 +129,15 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     provider,
     length: reply.length,
   });
-  return new Response(
-    JSON.stringify({ content: reply, thread_id: id, provider, request_id }),
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type, Accept",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        ...rlHeaders,
-      },
+  return new Response(JSON.stringify({ content: reply, thread_id: id, provider, request_id }), {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type, Accept",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      ...rlHeaders,
     },
-  );
+  });
 }
 
 export async function OPTIONS() {

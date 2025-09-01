@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     // 5. Decrypt API key (in production, use proper encryption)
     // For now, assuming it's stored as-is (YOU MUST ENCRYPT IN PRODUCTION!)
-    const apiKey = apiKeyData.encrypted_key;
+    const apiKey = (apiKeyData as any).encrypted_key;
 
     // 6. Build provider-specific request
     const providerConfig = PROVIDER_CONFIGS[provider as keyof typeof PROVIDER_CONFIGS];
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     });
 
     // 8. Log usage (before making request)
-    const { error: logError } = await supabase.from("ai_usage").insert({
+    const { error: logError } = await (supabase as any).from("ai_usage").insert({
       user_id: user.id,
       provider,
       model,
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
 
       // 11. Update usage in database
       if (parsed.usage) {
-        await supabase
+        await (supabase as any)
           .from("ai_usage")
           .update({
             prompt_tokens: parsed.usage.promptTokens,

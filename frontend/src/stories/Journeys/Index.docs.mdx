@@ -38,7 +38,7 @@ Use Docs/User Journeys (mock‑backed runner) for deterministic flows. Adjust x-
 ## MSW (mock‑first) {#msw}
 
 - Storybook initializes MSW globally (see .storybook/preview.ts)
-- Handlers under src/mocks/handlers/** shape responses and triggers (e.g., TRIGGER_RATE_LIMIT)
+- Handlers under src/mocks/handlers/\*\* shape responses and triggers (e.g., TRIGGER_RATE_LIMIT)
 - You can exercise realistic latency (x-mock-delay) and error rates (x-mock-error-rate) safely
 
 ## TDD workflow {#tdd}
@@ -56,4 +56,3 @@ Use Docs/User Journeys (mock‑backed runner) for deterministic flows. Adjust x-
 - Mock Status (Docs) — MSW setup and status
 
 <LastUpdated file="src/stories/Journeys/Index.docs.mdx" />
-

@@ -11,8 +11,8 @@ const customJestConfig = {
   testEnvironment: "jest-environment-jsdom",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
-    "^msw/node$": "<rootDir>/node_modules/msw/lib/node/index.mjs",
-    "^msw$": "<rootDir>/node_modules/msw/lib/index.mjs",
+    "^msw/node$": "<rootDir>/node_modules/msw/lib/node/index.js",
+    "^msw$": "<rootDir>/node_modules/msw/lib/core/index.js",
   },
   // Ensure Jest can resolve ESM .mjs files (e.g., msw v2)
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node", "mjs"],

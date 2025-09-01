@@ -1,11 +1,11 @@
 import { NextRequest } from "next/server";
-import { __getThreadStore } from "@/app/api/threads/route";
+import { getThreadStore } from "../_store";
 
 export const runtime = "nodejs";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const threads = __getThreadStore();
+  const threads = getThreadStore();
   const t = threads.get(id);
   if (!t)
     return new Response(JSON.stringify({ error: "thread not found" }), {

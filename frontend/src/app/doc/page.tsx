@@ -25,8 +25,13 @@ function Heading({ level, children }: { level: number; children: React.ReactNode
   return <Tag id={id}>{children}</Tag>;
 }
 
-export default async function DocViewer({ searchParams }: { searchParams?: { path?: string } }) {
-  const rel = decodeURIComponent(searchParams?.path || "");
+export default async function DocViewer({
+  searchParams,
+}: {
+  searchParams?: Promise<{ path?: string }>;
+}) {
+  const params = await searchParams;
+  const rel = decodeURIComponent(params?.path || "");
   const root = process.cwd();
   const docsRoot = path.join(root, "docs");
   let abs = "";

@@ -22,7 +22,9 @@ test("TRIGGER_ERROR returns 500", async ({ page }) => {
   expect(res.status()).toBe(500);
 });
 
-test("Cached result on repeated input shows cached=true and processing_time=0", async ({ page }) => {
+test("Cached result on repeated input shows cached=true and processing_time=0", async ({
+  page,
+}) => {
   const input = "This should be cached";
   const r1 = await page.request.post("/api/generate", {
     data: { input, format: "blog" },
@@ -41,4 +43,3 @@ test("Cached result on repeated input shows cached=true and processing_time=0", 
   expect(j2?.metadata?.cached).toBeTruthy();
   expect(j2?.processing_time).toBe(0);
 });
-

@@ -14,4 +14,3 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Chromatic workflow is disabled. Enable by editing .github/workflows/chromatic.yml"
-

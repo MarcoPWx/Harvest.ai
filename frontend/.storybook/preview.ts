@@ -14,7 +14,15 @@ import { tourWatermarkDecorator } from "./tourWatermarkDecorator";
 initialize({ onUnhandledRequest: "bypass" });
 
 const preview: Preview = {
-  decorators: [repoDocDecorator, labsHintDecorator, presenterGuideDecorator, tourWatermarkDecorator, mswInfoDecorator, testsInfoDecorator, mswDecorator],
+  decorators: [
+    repoDocDecorator,
+    labsHintDecorator,
+    presenterGuideDecorator,
+    tourWatermarkDecorator,
+    mswInfoDecorator,
+    testsInfoDecorator,
+    mswDecorator,
+  ],
   parameters: {
     controls: {
       matchers: {

@@ -6,7 +6,7 @@ import LastUpdated from "../components/LastUpdated";
 
 <Meta title="Labs/AI Service Lab" />
 
-Hands-on lab for the AIService (src/lib/ai/service.ts): fallback chain, caching, basic cost/quality scoring, and error classes. Pairs with unit tests in src/lib/ai/__tests__/service.test.ts.
+Hands-on lab for the AIService (src/lib/ai/service.ts): fallback chain, caching, basic cost/quality scoring, and error classes. Pairs with unit tests in src/lib/ai/**tests**/service.test.ts.
 
 <InlineToc
   items={[
@@ -31,11 +31,13 @@ Hands-on lab for the AIService (src/lib/ai/service.ts): fallback chain, caching,
 The service tries the requested provider first, then falls back to others based on availability or errors.
 
 Try it:
-1) Run the dev server with mocks (no real keys needed): `npm run dev:e2e`
-2) Use Command Center → S2S — Streaming & Threads → Generate JSON then SSE
-3) Toggle inputs to include TRIGGER_ERROR to exercise fallback
+
+1. Run the dev server with mocks (no real keys needed): `npm run dev:e2e`
+2. Use Command Center → S2S — Streaming & Threads → Generate JSON then SSE
+3. Toggle inputs to include TRIGGER_ERROR to exercise fallback
 
 Optional (real provider):
+
 - Set PROVIDERS_ON=1 and export specific API keys (do not commit secrets)
 - The provider adapters will use SDKs when keys exist; otherwise mock/simulate
 
@@ -46,6 +48,7 @@ Optional (real provider):
 - Bypass: send header `x-cache-bypass: 1`
 
 Try it:
+
 - Call /api/generate twice with same input: second call should be instant (cached)
 - Add x-cache-bypass to force regeneration
 
@@ -64,6 +67,7 @@ Use TRIGGER_RATE_LIMIT and TRIGGER_ERROR in inputs to exercise paths.
 - Visible in JSON result as `qualityScore`
 
 Try it:
+
 - Compare `length: short|medium|long` and observe changes to `qualityScore`
 
 ## Embeddings {#embeddings}
@@ -72,6 +76,7 @@ Try it:
 - Throws when OPENAI_API_KEY is missing
 
 Try it (optional):
+
 - With OPENAI_API_KEY set, run unit tests for embeddings
 
 ## Unit tests (TDD) {#tests}
@@ -84,4 +89,3 @@ npm test -- src/lib/ai/__tests__/service.test.ts
 - Add cases for new error categories or provider toggles as you extend the service
 
 <LastUpdated file="src/stories/Labs/AIServiceLab.docs.mdx" />
-

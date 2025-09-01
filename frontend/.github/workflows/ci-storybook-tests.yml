@@ -2,9 +2,9 @@ name: Storybook and Tests
 
 on:
   push:
-    branches: [ main, master, staging, dev ]
+    branches: [main, master, staging, dev]
   pull_request:
-    branches: [ "**" ]
+    branches: ["**"]
 
 permissions:
   contents: read
@@ -109,4 +109,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-

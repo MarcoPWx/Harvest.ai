@@ -23,59 +23,60 @@ export function E2ESummary() {
     return () => { alive = false }
   }, [])
 
-  if (err) return <div style={{ fontFamily: 'monospace', color: 'crimson' }}>No Playwright summary found: {err}</div>
-  if (!data) return <div style={{ fontFamily: 'monospace' }}>Loading…</div>
+if (err) return <div style={{ fontFamily: 'monospace', color: 'crimson' }}>No Playwright summary found: {err}</div>
+if (!data) return <div style={{ fontFamily: 'monospace' }}>Loading…</div>
 
-  // Try a few common shapes depending on Playwright version
-  const stats = data?.stats || {}
-  const suites = Array.isArray(data?.suites) ? data.suites : []
+// Try a few common shapes depending on Playwright version
+const stats = data?.stats || {}
+const suites = Array.isArray(data?.suites) ? data.suites : []
 
-  const totalTests = typeof stats.tests === 'number' ? stats.tests : suites.length
-  const ok = stats.expected ?? '?'
-  const failed = stats.unexpected ?? '?'
-  const flaky = stats.flaky ?? '?'
-  const duration = stats.duration ?? stats.totalTime ?? '?'
+const totalTests = typeof stats.tests === 'number' ? stats.tests : suites.length
+const ok = stats.expected ?? '?'
+const failed = stats.unexpected ?? '?'
+const flaky = stats.flaky ?? '?'
+const duration = stats.duration ?? stats.totalTime ?? '?'
 
-  return (
-    <div>
-      <table style={{ borderCollapse: 'collapse', border: '1px solid #eee' }}>
-        <thead>
-          <tr style={{ background: '#f8fafc' }}>
-            <th style={{ textAlign: 'left', padding: '6px 8px' }}>Metric</th>
-            <th style={{ textAlign: 'left', padding: '6px 8px' }}>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style={{ padding: '6px 8px' }}>tests</td>
-            <td style={{ padding: '6px 8px', fontFamily: 'monospace' }}>{totalTests}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: '6px 8px' }}>ok</td>
-            <td style={{ padding: '6px 8px', fontFamily: 'monospace' }}>{ok}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: '6px 8px' }}>failed</td>
-            <td style={{ padding: '6px 8px', fontFamily: 'monospace' }}>{failed}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: '6px 8px' }}>flaky</td>
-            <td style={{ padding: '6px 8px', fontFamily: 'monospace' }}>{flaky}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: '6px 8px' }}>duration (ms)</td>
-            <td style={{ padding: '6px 8px', fontFamily: 'monospace' }}>{duration}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div style={{ marginTop: 8 }}>
-        <a href="/playwright-report/index.html" target="_blank" rel="noreferrer">Open Playwright report</a>
-      </div>
-    </div>
-  )
-}
+return (
+
+<div>
+  <table style={{ borderCollapse: "collapse", border: "1px solid #eee" }}>
+    <thead>
+      <tr style={{ background: "#f8fafc" }}>
+        <th style={{ textAlign: "left", padding: "6px 8px" }}>Metric</th>
+        <th style={{ textAlign: "left", padding: "6px 8px" }}>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style={{ padding: "6px 8px" }}>tests</td>
+        <td style={{ padding: "6px 8px", fontFamily: "monospace" }}>{totalTests}</td>
+      </tr>
+      <tr>
+        <td style={{ padding: "6px 8px" }}>ok</td>
+        <td style={{ padding: "6px 8px", fontFamily: "monospace" }}>{ok}</td>
+      </tr>
+      <tr>
+        <td style={{ padding: "6px 8px" }}>failed</td>
+        <td style={{ padding: "6px 8px", fontFamily: "monospace" }}>{failed}</td>
+      </tr>
+      <tr>
+        <td style={{ padding: "6px 8px" }}>flaky</td>
+        <td style={{ padding: "6px 8px", fontFamily: "monospace" }}>{flaky}</td>
+      </tr>
+      <tr>
+        <td style={{ padding: "6px 8px" }}>duration (ms)</td>
+        <td style={{ padding: "6px 8px", fontFamily: "monospace" }}>{duration}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style={{ marginTop: 8 }}>
+    <a href="/playwright-report/index.html" target="_blank" rel="noreferrer">
+      Open Playwright report
+    </a>
+  </div>
+</div>
+) }
 
 <E2ESummary />
 
 <LastUpdated file="public/playwright-summary.json" />
-

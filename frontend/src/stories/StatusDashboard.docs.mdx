@@ -53,12 +53,12 @@ const sbOk = data?.summary?.storybookInteractions === 'passed'
 
 // Try to load hosted pages.json to show candidate URL
 ;(async () => {
-  try {
-    const r = await fetch('/pages.json')
-    if (r.ok) {
-      const j = await r.json(); setPagesInfo(j)
-    }
-  } catch {}
+try {
+const r = await fetch('/pages.json')
+if (r.ok) {
+const j = await r.json(); setPagesInfo(j)
+}
+} catch {}
 })()
 
 return (
@@ -83,11 +83,13 @@ return (
     )}
   </div>
   {pagesInfo && (
-    <div style={{ marginTop: 12, padding: 8, border: '1px solid #eee', borderRadius: 8 }}>
+    <div style={{ marginTop: 12, padding: 8, border: "1px solid #eee", borderRadius: 8 }}>
       <div style={{ fontWeight: 600, marginBottom: 6 }}>Hosted Storybook (GitHub Pages)</div>
-      <div style={{ fontSize: 12, color: '#444' }}>Candidate URL:</div>
+      <div style={{ fontSize: 12, color: "#444" }}>Candidate URL:</div>
       <div>
-        <a href={pagesInfo.candidate} target="_blank" rel="noreferrer">{pagesInfo.candidate}</a>
+        <a href={pagesInfo.candidate} target="_blank" rel="noreferrer">
+          {pagesInfo.candidate}
+        </a>
       </div>
     </div>
   )}

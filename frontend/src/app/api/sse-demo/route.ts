@@ -13,7 +13,7 @@ export async function OPTIONS() {
 
 export async function GET() {
   const encoder = new TextEncoder();
-  let timer: NodeJS.Timeout | null = null;
+  let timer: ReturnType<typeof setInterval> | null = null;
 
   const stream = new ReadableStream<Uint8Array>({
     start(controller) {

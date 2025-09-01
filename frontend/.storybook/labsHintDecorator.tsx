@@ -22,7 +22,9 @@ export const labsHintDecorator = (Story: any, context: any) => {
         alignItems: "center",
       }}
     >
-      <span>Presenter: press <b>g</b> then <b>g</b> to toggle, <b>Esc</b> to close.</span>
+      <span>
+        Presenter: press <b>g</b> then <b>g</b> to toggle, <b>Esc</b> to close.
+      </span>
       <a
         href="?path=/docs/labs-index--docs&globals=presenterGuide:true&presenter=labs"
         style={{ color: "#93c5fd", textDecoration: "none" }}
@@ -39,4 +41,3 @@ export const labsHintDecorator = (Story: any, context: any) => {
     </div>
   );
 };
-

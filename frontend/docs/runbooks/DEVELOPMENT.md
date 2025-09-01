@@ -454,6 +454,7 @@ ANALYZE=true npm run build
   - System Status: /docs/SYSTEM_STATUS.md
 
 Minimal workflow (no scripts)
+
 - Edit the canonical docs above.
 - Ask the agent: "Update docs now".
   - The agent will: update the three docs as requested and refresh /docs/status/last-updated.json so Storybook badges reflect changes.

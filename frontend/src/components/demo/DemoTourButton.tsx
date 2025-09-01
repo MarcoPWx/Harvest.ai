@@ -32,7 +32,9 @@ export function DemoTourButton() {
       if (typeof window !== "undefined") {
         const url = new URL(window.location.href);
         const tourParam = (url.searchParams.get("tour") || "").toLowerCase();
-        const tourRequested = ["1", "true", "start", "auto", "reset", "again", "fresh"].includes(tourParam);
+        const tourRequested = ["1", "true", "start", "auto", "reset", "again", "fresh"].includes(
+          tourParam,
+        );
         const tourAuto = process.env.NEXT_PUBLIC_TOUR_AUTO === "1";
         if (tourRequested || tourAuto) {
           setIsVisible(true);

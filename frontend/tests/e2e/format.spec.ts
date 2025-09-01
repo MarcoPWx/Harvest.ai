@@ -21,7 +21,10 @@ test.describe("Format Page", () => {
     await page.locator("select").first().selectOption("email");
 
     // Fill content
-    await page.fill("#format-content-input", "Team meeting update: Discussed Q4 roadmap and priorities.");
+    await page.fill(
+      "#format-content-input",
+      "Team meeting update: Discussed Q4 roadmap and priorities.",
+    );
 
     // Click format button
     const btnEmail = page.getByRole("button", { name: /format as/i });
@@ -37,7 +40,10 @@ test.describe("Format Page", () => {
 
   test("should format content as blog", async ({ page }) => {
     await page.locator("select").first().selectOption("blog");
-    await page.fill("#format-content-input", "Harvest.ai transforms content into professional formats.");
+    await page.fill(
+      "#format-content-input",
+      "Harvest.ai transforms content into professional formats.",
+    );
     const btnBlog = page.getByRole("button", { name: /format as/i });
     await expect(btnBlog).toBeEnabled({ timeout: 20000 });
     await btnBlog.click();
@@ -51,7 +57,10 @@ test.describe("Format Page", () => {
 
   test("should show cost and quality metrics after formatting", async ({ page }) => {
     await page.locator("select").first().selectOption("summary");
-    await page.fill("#format-content-input", "This is a long note to be summarized for an executive overview.");
+    await page.fill(
+      "#format-content-input",
+      "This is a long note to be summarized for an executive overview.",
+    );
     const btnSummary1 = page.getByRole("button", { name: /format as/i });
     await expect(btnSummary1).toBeEnabled({ timeout: 20000 });
     await btnSummary1.click();
@@ -64,7 +73,10 @@ test.describe("Format Page", () => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
 
     await page.locator("select").first().selectOption("summary");
-    await page.fill("#format-content-input", "Please summarize this content into key points and takeaways.");
+    await page.fill(
+      "#format-content-input",
+      "Please summarize this content into key points and takeaways.",
+    );
     const btnSummary2 = page.getByRole("button", { name: /format as/i });
     await expect(btnSummary2).toBeEnabled({ timeout: 20000 });
     await btnSummary2.click();

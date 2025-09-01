@@ -6,17 +6,24 @@ import LastUpdated from "../components/LastUpdated";
 
 <Meta title="Labs/Index" />
 
-<div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-  <a href="?path=/docs/labs-index--docs&globals=presenterGuide:true&presenter=labs" style={{
-    textDecoration: 'none',
-    border: '1px solid #e5e7eb',
-    borderRadius: 8,
-    padding: '8px 12px',
-    background: '#0ea5e9',
-    color: 'white',
-    fontSize: 12,
-  }}>Start Presentation</a>
-  <span style={{ fontSize: 12, color: '#555' }}>Hotkey: press g then g to toggle, Esc to close</span>
+<div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+  <a
+    href="?path=/docs/labs-index--docs&globals=presenterGuide:true&presenter=labs"
+    style={{
+      textDecoration: "none",
+      border: "1px solid #e5e7eb",
+      borderRadius: 8,
+      padding: "8px 12px",
+      background: "#0ea5e9",
+      color: "white",
+      fontSize: 12,
+    }}
+  >
+    Start Presentation
+  </a>
+  <span style={{ fontSize: 12, color: "#555" }}>
+    Hotkey: press g then g to toggle, Esc to close
+  </span>
 </div>
 
 A central index for all interactive labs in Storybook. Start here to explore the stack via runnable panels, mock-first flows, and end‑to‑end demos.
@@ -40,12 +47,14 @@ npm run storybook
 ```
 
 Tips:
+
 - Use the Command Center → S2S panels for live JSON/SSE calls to the dev server.
 - Prefer the mocked “Docs/User Journeys” page when you need deterministic flows without network flake.
 
 ## Coverage map {#coverage}
 
 Current interactive coverage in Storybook:
+
 - S2S
   - Command Center/S2S — Streaming & Threads (live)
   - Specs/S2S — Recipes & Flows, Gateway Reference, State & DB Semantics
@@ -64,6 +73,7 @@ Current interactive coverage in Storybook:
   - Docs/Project Docs Reader (renders /docs inside SB)
 
 Added now (new):
+
 - Labs/AI Service Lab — fallback, caching, error classes, embeddings
 - Labs/E2E Smoke Lab — reliable, deterministic smokes w/ MSW
 - Labs/Auth Lab — service layer and session semantics (mock-first)
@@ -84,12 +94,13 @@ Added now (new):
 ## What we added now / next gaps {#next}
 
 Added now:
+
 - New Labs pages (AI Service, E2E Smoke, Auth, Local Memory)
 
 Recommended next labs to add:
+
 - Security Lab (CSP, HSTS, permissions-policy, COOP/COEP)
 - Provider Adapter Lab (OpenAI/Anthropic/Gemini adapter toggles with PROVIDERS_ON)
 - Performance Lab (bundle inspect, lazy routes)
 
 <LastUpdated file="src/stories/Labs/Index.docs.mdx" />
-

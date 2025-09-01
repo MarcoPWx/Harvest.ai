@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 const root = process.cwd();
-const fromDir = path.join(root, 'storybook-static');
-const toDir = path.join(root, 'public', 'storybook');
+const fromDir = path.join(root, "storybook-static");
+const toDir = path.join(root, "public", "storybook");
 
 function copyRecursive(src, dest) {
   if (!fs.existsSync(src)) return;
@@ -21,4 +21,3 @@ function copyRecursive(src, dest) {
 
 copyRecursive(fromDir, toDir);
 console.log(`[storybook-export] Copied ${fromDir} -> ${toDir}`);
-

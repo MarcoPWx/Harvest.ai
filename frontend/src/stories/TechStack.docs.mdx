@@ -39,11 +39,11 @@ This page summarizes the tech stack and provides a small interactive API mock pl
 ## API Mock Playground
 
 function GeneratePlayground() {
-  const [trigger, setTrigger] = React.useState('none');
-  const [input, setInput] = React.useState('Hello from Storybook');
-  const [status, setStatus] = React.useState('');
-  const [body, setBody] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+const [trigger, setTrigger] = React.useState('none');
+const [input, setInput] = React.useState('Hello from Storybook');
+const [status, setStatus] = React.useState('');
+const [body, setBody] = React.useState('');
+const [loading, setLoading] = React.useState(false);
 
 async function callApi() {
 setLoading(true);
@@ -134,14 +134,14 @@ return (
 ## WS vs SSE Fallback Demo (Simulated)
 
 function TransportDemo() {
-  const [simulateWsFailure, setSimulateWsFailure] = React.useState(false);
-  const [running, setRunning] = React.useState(false);
+const [simulateWsFailure, setSimulateWsFailure] = React.useState(false);
+const [running, setRunning] = React.useState(false);
 lse);
-  const [transport, setTransport] = React.useState('');
+const [transport, setTransport] = React.useState('');
 ('');
-  const [events, setEvents] = React.useState([]);
+const [events, setEvents] = React.useState([]);
 ([]);
-  const timerRef = React.useRef(null);
+const timerRef = React.useRef(null);
 
 React.useEffect(() => {
 return () => {
@@ -234,14 +234,14 @@ return (
 ## Live WS → SSE Fallback (Real SSE)
 
 function LiveTransportDemo() {
-  const [wsUrl, setWsUrl] = React.useState('ws://localhost:3002/ws/generation');
-  const [sseUrl, setSseUrl] = React.useState('http://localhost:3002/api/sse-demo');
-  const [simulateWsFailure, setSimulateWsFailure] = React.useState(true);
-  const [transport, setTransport] = useState('');
-  const [events, setEvents] = useState([]);
-  const [running, setRunning] = useState(false);
-  const wsRef = React.useRef(null);
-  const esRef = React.useRef(null);
+const [wsUrl, setWsUrl] = React.useState('ws://localhost:3002/ws/generation');
+const [sseUrl, setSseUrl] = React.useState('http://localhost:3002/api/sse-demo');
+const [simulateWsFailure, setSimulateWsFailure] = React.useState(true);
+const [transport, setTransport] = useState('');
+const [events, setEvents] = useState([]);
+const [running, setRunning] = useState(false);
+const wsRef = React.useRef(null);
+const esRef = React.useRef(null);
 
 function cleanup() {
 if (wsRef.current) {
@@ -409,10 +409,10 @@ return (
 ## SSE Client (connects to /api/sse-demo)
 
 function SSEClient() {
-  const [url, setUrl] = React.useState('http://localhost:3002/api/sse-demo');
-  const [running, setRunning] = React.useState(false);
-  const [lines, setLines] = React.useState([]);
-  const esRef = React.useRef(null);
+const [url, setUrl] = React.useState('http://localhost:3002/api/sse-demo');
+const [running, setRunning] = React.useState(false);
+const [lines, setLines] = React.useState([]);
+const esRef = React.useRef(null);
 
 function start() {
 if (running) return;
@@ -479,11 +479,11 @@ return (
 ## Latency & Error Profiles (demo)
 
 function LatencyProfiles() {
-  const [delay, setDelay] = React.useState(500);
-  const [errorRate, setErrorRate] = React.useState(0);
-  const [status, setStatus] = React.useState('');
-  const [body, setBody] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+const [delay, setDelay] = React.useState(500);
+const [errorRate, setErrorRate] = React.useState(0);
+const [status, setStatus] = React.useState('');
+const [body, setBody] = React.useState('');
+const [loading, setLoading] = React.useState(false);
 
 async function call() {
 setLoading(true);

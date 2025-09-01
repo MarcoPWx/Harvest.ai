@@ -291,7 +291,7 @@ function WsClient() {
   const [events, setEvents] = useState<string[]>([]);
   const [attempt, setAttempt] = useState(0);
   const wsRef = useRef<WebSocket | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(
     () => () => {

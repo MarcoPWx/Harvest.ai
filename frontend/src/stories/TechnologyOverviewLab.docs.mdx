@@ -44,6 +44,7 @@ A comprehensive, example-driven lab to explore Harvest.ai’s frontend technolog
 ## Examples (by tech)
 
 ### Next.js (App Router)
+
 - Used for: UI pages and serverless API routes (JSON + SSE), security headers.
 - Where: `src/app/**/*`, `next.config.mjs`
 - Example: Animated heading in Demo page
@@ -60,6 +61,7 @@ A comprehensive, example-driven lab to explore Harvest.ai’s frontend technolog
 ```
 
 ### Tailwind CSS
+
 - Used for: styling, dark mode, motion-friendly utilities.
 - Where: `tailwind.config.js`
 - Example: safelist + theme extension
@@ -76,6 +78,7 @@ module.exports = {
 ```
 
 ### Radix UI (Select, Switch, Slider, Label)
+
 - Used for: accessible, composable UI primitives.
 - Where: `src/components/ui/*`, used by content generator.
 - Example: Select + Slider + Switch in one panel
@@ -99,40 +102,48 @@ module.exports = {
 ```
 
 ### Framer Motion
+
 - Used for: progressive reveals, dropdowns, floating UI.
 - Where: `src/app/demo/page.tsx`, `src/components/layout/Navigation.tsx`
 - Example: dropdown animation in nav
 
 ```tsx
 // src/components/layout/Navigation.tsx (extract)
-{isProductDropdownOpen && (
-  <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    className="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-xl"
-  >
-    {/* ...items */}
-  </motion.div>
-)}
+{
+  isProductDropdownOpen && (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      className="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-xl"
+    >
+      {/* ...items */}
+    </motion.div>
+  );
+}
 ```
 
 ### React Markdown + remark-gfm
+
 - Used for: rendering repo docs in-app.
 - Where: `src/app/doc/page.tsx`
 - Example: MD rendering with custom heading anchors
 
 ```tsx
 // src/app/doc/page.tsx (extract)
-<ReactMarkdown remarkPlugins={[remarkGfm]} components={{
-  h1: ({ children }) => <Heading level={1}>{children}</Heading>,
-  h2: ({ children }) => <Heading level={2}>{children}</Heading>,
-}}>
+<ReactMarkdown
+  remarkPlugins={[remarkGfm]}
+  components={{
+    h1: ({ children }) => <Heading level={1}>{children}</Heading>,
+    h2: ({ children }) => <Heading level={2}>{children}</Heading>,
+  }}
+>
   {content}
 </ReactMarkdown>
 ```
 
 ### Swagger UI React
+
 - Used for: embedding API docs UI.
 - Where: `src/components/SwaggerUIPage.tsx`
 - Example: mount on `/api/openapi.json`
@@ -143,6 +154,7 @@ module.exports = {
 ```
 
 ### Supabase (SSR + browser)
+
 - Used for: session/DB access; cache/usage logging in AI service.
 - Where: `src/lib/supabase/*`, `src/lib/ai/service.ts`
 - Example: server-side client using Next cookies
@@ -154,12 +166,27 @@ export async function createClient() {
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { cookies: { get: (n) => cookieStore.get(n)?.value, set: (n,v,o) => { try { cookieStore.set({ name:n, value:v, ...o }); } catch {} }, remove: (n,o) => { try { cookieStore.set({ name:n, value:"", ...o }); } catch {} } } },
+    {
+      cookies: {
+        get: (n) => cookieStore.get(n)?.value,
+        set: (n, v, o) => {
+          try {
+            cookieStore.set({ name: n, value: v, ...o });
+          } catch {}
+        },
+        remove: (n, o) => {
+          try {
+            cookieStore.set({ name: n, value: "", ...o });
+          } catch {}
+        },
+      },
+    },
   );
 }
 ```
 
 ### AI SDKs (OpenAI, Anthropic, Google Generative AI)
+
 - Used for: content generation with fallback; embeddings.
 - Where: `src/lib/ai/service.ts`
 - Example: OpenAI generation
@@ -179,6 +206,7 @@ const content = completion.choices[0].message.content || "";
 ```
 
 ### MSW 2 (mock-first)
+
 - Used for: dev/E2E/Storybook API mocking.
 - Where: `src/mocks/*`, `.storybook/preview.ts`
 - Example: `/api/generate` handler with triggers and network controls
@@ -194,6 +222,7 @@ http.post("/api/generate", async ({ request }) => {
 ```
 
 ### Jest + Testing Library
+
 - Used for: component/route unit tests.
 - Where: `src/**/__tests__`, `jest.config.js`
 - Example: Footer content assertions
@@ -206,6 +235,7 @@ expect(screen.getByText(/AI-powered content transformation platform/)).toBeInThe
 ```
 
 ### Playwright + @axe-core/playwright
+
 - Used for: E2E + accessibility checks.
 - Where: `tests/e2e/*.spec.ts`, `playwright.config.ts`
 - Example: Axe scan on home
@@ -219,6 +249,7 @@ expect(severe).toEqual([]);
 ```
 
 ### Security headers (HSTS, CSP, COOP/COEP)
+
 - Used for: secure defaults & cross-origin isolation.
 - Where: `next.config.mjs`
 - Example: CSP connect-src whitelisting providers
@@ -227,38 +258,47 @@ expect(severe).toEqual([]);
 // next.config.mjs (extract)
 headers: [
   { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
-  { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.openai.com https://api.anthropic.com; frame-ancestors 'none'; base-uri 'none'" },
-]
+  {
+    key: "Content-Security-Policy",
+    value:
+      "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.openai.com https://api.anthropic.com; frame-ancestors 'none'; base-uri 'none'",
+  },
+];
 ```
 
 ---
 
 ## User stories → technology mapping
 
-1) As a user, I can transform input content into a professional format
+1. As a user, I can transform input content into a professional format
+
 - UI: `src/components/content/ContentGenerator.tsx` (Radix Select/Slider/Switch)
 - API: `src/app/api/generate/route.ts` (JSON + SSE modes)
-- Mocks: `src/mocks/handlers/generation.ts` (TRIGGER_* cases)
+- Mocks: `src/mocks/handlers/generation.ts` (TRIGGER\_\* cases)
 - Tests: `tests/e2e/content-generation.spec.ts`, `tests/e2e/demo.spec.ts`
 - Docs: `docs/architecture/GENERATION_FLOW.md`
 
-2) As a user, I can browse project documentation inside the app
+2. As a user, I can browse project documentation inside the app
+
 - UI: `src/app/doc/page.tsx` (React Markdown + remark-gfm)
 - Sources: `/docs/**/*`
 - Tests: `tests/e2e/docs-api.spec.ts`
 
-3) As a user, I can try BYOK (Bring Your Own Key) flows
+3. As a user, I can try BYOK (Bring Your Own Key) flows
+
 - Hook: `src/hooks/useAIChat.ts` (streaming support)
 - API: `src/app/api/ai/chat/route.ts` (provider-specific shapes)
 - UI: `src/app/demo/byok/page.tsx`
 - Docs: `docs/api/BYOK_API.md`
 
-4) As a user, I see streaming progress during generation
+4. As a user, I see streaming progress during generation
+
 - UI: `src/app/demo/page.tsx` (progress + stream text)
 - SSE Helpers: `src/app/playground/sse/page.tsx`, `src/lib/client/sseParser.ts`, `src/lib/client/useSSEStream.ts`
 - Tests: `tests/e2e/generate-stream.spec.ts`, `tests/e2e/threads-stream.spec.ts`
 
-5) As a developer, I can run the app entirely with mocks (mock-first)
+5. As a developer, I can run the app entirely with mocks (mock-first)
+
 - Worker: `src/mocks/browser.ts` (public worker), `src/mocks/server.ts` (node)
 - Handlers: `src/mocks/handlers/*.ts`
 - Storybook: `.storybook/preview.ts` wires handlers via msw addon
@@ -305,16 +345,20 @@ while (true) {
 
 ## Hands-on lab tasks
 
-1) Try generation with different triggers (in Storybook API Playground or app demo)
+1. Try generation with different triggers (in Storybook API Playground or app demo)
+
 - Use inputs like `TRIGGER_RATE_LIMIT` and `TRIGGER_ERROR` to exercise error paths.
 
-2) Visualize docs inside the app
+2. Visualize docs inside the app
+
 - Open `/doc?path=docs/SYSTEM_STATUS.md` (Docs → System Status pages exist in Storybook too).
 
-3) Explore streaming
+3. Explore streaming
+
 - Run `npm run dev:e2e` and visit `/playground/sse`; compare with S2S Storybook labs.
 
-4) Add a simple chart (planned)
+4. Add a simple chart (planned)
+
 - Use Recharts to show tokens/cost — see suggested example in Tech Stack page.
 
 ---
@@ -345,39 +389,45 @@ export function DocsStatus() {
     return () => { alive = false }
   }, [])
 
-  function fmt(d?: string) {
-    try { return d ? new Date(d).toLocaleString() : '' } catch { return '' }
-  }
+function fmt(d?: string) {
+try { return d ? new Date(d).toLocaleString() : '' } catch { return '' }
+}
 
-  if (err) return <div style={{ fontFamily: 'monospace', color: 'crimson' }}>DocsStatus error: {err}</div>
-  if (!data) return <div style={{ fontFamily: 'monospace' }}>Loading docs status…</div>
+if (err) return <div style={{ fontFamily: 'monospace', color: 'crimson' }}>DocsStatus error: {err}</div>
+if (!data) return <div style={{ fontFamily: 'monospace' }}>Loading docs status…</div>
 
-  const entries = Array.isArray(data?.tree) ? data.tree : []
-  const find = (name: string) => entries.find((e: any) => e?.name === name || e?.path?.endsWith('/'+name))
-  const devlog = entries.find((e: any) => e?.path?.endsWith('/docs/status/DEVLOG.md') || e?.name === 'DEVLOG.md')
-  const sys = find('SYSTEM_STATUS.md')
-  const epics = entries.find((e: any) => e?.path?.endsWith('/docs/roadmap/EPICS.md') || e?.name === 'EPICS.md')
+const entries = Array.isArray(data?.tree) ? data.tree : []
+const find = (name: string) => entries.find((e: any) => e?.name === name || e?.path?.endsWith('/'+name))
+const devlog = entries.find((e: any) => e?.path?.endsWith('/docs/status/DEVLOG.md') || e?.name === 'DEVLOG.md')
+const sys = find('SYSTEM_STATUS.md')
+const epics = entries.find((e: any) => e?.path?.endsWith('/docs/roadmap/EPICS.md') || e?.name === 'EPICS.md')
 
-  return (
-    <div style={{ border:'1px solid #eee', borderRadius: 8, padding: 12, background: '#fff' }}>
-      <div style={{ fontSize: 12, color: '#666', marginBottom: 6 }}>Manifest: {src}</div>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap: 8 }}>
-        <div>
-          <div style={{ fontWeight:600 }}>DEVLOG.md</div>
-          <div style={{ fontSize:12, color:'#555' }}>mtime: {fmt(devlog?.mtimeIso || devlog?.mtime || devlog?.modifiedAt)} </div>
-        </div>
-        <div>
-          <div style={{ fontWeight:600 }}>SYSTEM_STATUS.md</div>
-          <div style={{ fontSize:12, color:'#555' }}>mtime: {fmt(sys?.mtimeIso || sys?.mtime || sys?.modifiedAt)} </div>
-        </div>
-        <div>
-          <div style={{ fontWeight:600 }}>EPICS.md</div>
-          <div style={{ fontSize:12, color:'#555' }}>mtime: {fmt(epics?.mtimeIso || epics?.mtime || epics?.modifiedAt)} </div>
-        </div>
+return (
+
+<div style={{ border: "1px solid #eee", borderRadius: 8, padding: 12, background: "#fff" }}>
+  <div style={{ fontSize: 12, color: "#666", marginBottom: 6 }}>Manifest: {src}</div>
+  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+    <div>
+      <div style={{ fontWeight: 600 }}>DEVLOG.md</div>
+      <div style={{ fontSize: 12, color: "#555" }}>
+        mtime: {fmt(devlog?.mtimeIso || devlog?.mtime || devlog?.modifiedAt)}{" "}
       </div>
     </div>
-  )
-}
+    <div>
+      <div style={{ fontWeight: 600 }}>SYSTEM_STATUS.md</div>
+      <div style={{ fontSize: 12, color: "#555" }}>
+        mtime: {fmt(sys?.mtimeIso || sys?.mtime || sys?.modifiedAt)}{" "}
+      </div>
+    </div>
+    <div>
+      <div style={{ fontWeight: 600 }}>EPICS.md</div>
+      <div style={{ fontSize: 12, color: "#555" }}>
+        mtime: {fmt(epics?.mtimeIso || epics?.mtime || epics?.modifiedAt)}{" "}
+      </div>
+    </div>
+  </div>
+</div>
+) }
 
 <DocsStatus />
 
@@ -390,4 +440,3 @@ export function DocsStatus() {
 <Meta title="Labs/Technology Overview Lab" />
 
 <LastUpdated file="src/stories/TechnologyOverviewLab.docs.mdx" />
-
