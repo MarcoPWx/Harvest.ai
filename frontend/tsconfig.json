@@ -29,8 +29,11 @@
     "**/*.test.tsx",
     "**/*.spec.ts",
     "**/*.spec.tsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx",
     "src/**/__tests__/**/*",
     "src/mocks/**/*",
+    "src/stories/**/*",
     "test-utils/**/*",
     "tests/**/*"
   ]

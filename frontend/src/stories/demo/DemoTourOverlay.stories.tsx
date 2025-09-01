@@ -18,7 +18,7 @@ const DemoTourWrapper = ({ autoStart = false }: { autoStart?: boolean }) => {
           Launch Tour
         </button>
       )}
-      {isOpen && <DemoTour />}
+      <DemoTour visible={isOpen} onComplete={() => setIsOpen(false)} />
     </>
   );
 };

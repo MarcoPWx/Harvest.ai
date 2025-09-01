@@ -120,7 +120,7 @@ export const FirstTimeVisitor: Story = {
     );
 
     // Check for notification dot
-    const notificationDot = canvas.container.querySelector(".animate-ping");
+    const notificationDot = canvasElement.querySelector(".animate-ping");
     expect(notificationDot).toBeInTheDocument();
   },
 };
@@ -151,7 +151,7 @@ export const ReturningVisitor: Story = {
     );
 
     // Check that notification dot is not present
-    const notificationDot = canvas.container.querySelector(".animate-ping");
+    const notificationDot = canvasElement.querySelector(".animate-ping");
     expect(notificationDot).not.toBeInTheDocument();
   },
 };
@@ -188,7 +188,7 @@ export const HoverState: Story = {
     });
 
     // Check for sparkle effects
-    const sparkles = canvas.container.querySelectorAll("svg.lucide-sparkles");
+    const sparkles = canvasElement.querySelectorAll("svg.lucide-sparkles");
     expect(sparkles.length).toBeGreaterThan(0);
   },
 };
