@@ -11,6 +11,7 @@ const withMDX = createMDX({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+  outputFileTracingRoot: undefined, // This silences the workspace root warning
   async headers() {
     return [
       {
