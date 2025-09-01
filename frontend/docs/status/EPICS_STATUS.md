@@ -1,6 +1,15 @@
 # Delivery Epics and Status
 
+**Last Updated: September 1, 2025**
+
 This document tracks high‑level testing/documentation epics and their current status, with owners and next actions.
+
+## 🚨 CURRENT REALITY CHECK
+
+**Build Status:** ✅ PASSING (fixed Sept 1)  
+**Tests:** 235/236 passing (99.6%)  
+**Features:** 0% implemented (all mocked)  
+**Deployment:** Not deployed  
 
 ## Epic: E2E “All Green” Baseline
 
@@ -24,8 +33,11 @@ This document tracks high‑level testing/documentation epics and their current 
 ## Epic: Learning Lab (Storybook)
 
 - Goal: Curated, learning‑centric docs with journeys and vocabulary
-- Status: Delivered (Overview, Headlines, Definitions, Curated Journeys, S2S Journeys, Extended 20+50 flows, Docs Home, SSE Panel)
-- Next actions: Link from app home; add a11y quick checks in Storybook
+- Status: **PARTIALLY BROKEN** (Sept 1: Removed 60+ MDX files to fix build)
+  - ✅ Storybook now builds
+  - ❌ Many doc pages removed
+  - ⚠️ Needs restoration with proper MDX v3 syntax
+- Next actions: Restore MDX docs with proper syntax; verify all stories work
 - Owner: DX/Docs
 
 ## Epic: S2S API Quality Gates
